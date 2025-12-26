@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo AI | Professional Academy</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar left">
+            <div class="sidebar-header">
+                <h2>Academy Record</h2>
+                <div class="stats-panel">
+                    <p id="common-error-tag">Common Error: <span>Analyzing...</span></p>
+                </div>
+                <div class="filter-group">
+                    <button onclick="exportHistory()" class="action-btn-small">Export CSV</button>
+                    <button onclick="clearHistory()" class="clear-btn">Clear</button>
+                </div>
+            </div>
+            <div id="correction-log" class="log-container"></div>
+        </aside>
+
+        <main class="chat-main">
+            <header class="chat-header">
+                <div class="tutor-info">
+                    <h1>Migo AI</h1>
+                    <span class="status-badge">Strict Learning Mode</span>
+                </div>
+                <div class="header-right">
+                    <button id="config-btn" class="nav-btn-alt" onclick="setupKey()">API Config</button>
+                    <button id="toggle-tools" class="nav-btn" onclick="toggleTools()">Traduction</button>
+                </div>
+            </header>
+
+            <section class="conversation-area">
+                <div class="chat-controls">
+                    <select id="mode-select" class="nav-select" onchange="updateSettings()">
+                        <option value="Grammar">Grammar Focus</option>
+                        <option value="Vocabulary">Vocabulary Focus</option>
+                    </select>
+                    <select id="tone-select" class="nav-select" onchange="updateSettings()">
+                        <option value="Elegant">Style: Elegant</option>
+                        <option value="Colloquial">Style: Colloquial</option>
+                    </select>
+                </div>
+                
+                <div id="chat-box" class="chat-display"></div>
+
+                <div class="chat-input-wrapper">
+                    <div class="input-container">
+                        <input type="text" id="user-input" placeholder="Escribe en inglés y pulsa Enter..." autocomplete="off">
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <aside id="tools-panel" class="sidebar right hidden">
+            <div class="sidebar-header">
+                <h2>Live Traduction</h2>
+                <p>Translates while you type</p>
+            </div>
+            <div class="translator-container">
+                <div class="translate-box">
+                    <label>English to Spanish</label>
+                    <textarea id="en-to-es-input" oninput="debounceTranslate('en')" placeholder="Type here..."></textarea>
+                    <div id="en-to-es-result" class="translate-result"></div>
+                </div>
+                <div class="translate-box">
+                    <label>Spanish to English</label>
+                    <textarea id="es-to-en-input" oninput="debounceTranslate('es')" placeholder="Escribe aquí..."></textarea>
+                    <div id="es-to-en-result" class="translate-result"></div>
+                </div>
+            </div>
+        </aside>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
