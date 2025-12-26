@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo AI | Pro Tutor</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Academy Record</h2>
+                <button onclick="clearHistory()" class="btn-text">Clear All</button>
+            </div>
+            <div id="correction-log" class="log-list"></div>
+        </aside>
+
+        <main class="chat-area">
+            <header class="top-nav">
+                <div class="logo">Migo <span class="badge">AI</span></div>
+                <div class="actions">
+                    <button onclick="setupKey()" class="btn-secondary">API Key</button>
+                    <button onclick="toggleTranslator()" class="btn-primary">Translator</button>
+                </div>
+            </header>
+
+            <div id="chat-box" class="chat-display"></div>
+
+            <div id="block-overlay" class="overlay hidden">
+                <div class="overlay-content">
+                    <p>⚠️ Debes corregir tu último error para continuar.</p>
+                </div>
+            </div>
+
+            <footer class="input-section">
+                <div class="input-wrapper">
+                    <input type="text" id="user-input" placeholder="Escribe en inglés..." autocomplete="off">
+                    <button onclick="sendMessage()" id="send-btn">Send</button>
+                </div>
+            </footer>
+        </main>
+
+        <aside id="translator-panel" class="translator-sidebar hidden">
+            <div class="sidebar-header">
+                <h2>Translation</h2>
+            </div>
+            <div class="trans-group">
+                <label>Español → Inglés</label>
+                <textarea id="es-to-en-input" oninput="debounceTranslate('es')" placeholder="Escribe..."></textarea>
+                <div id="es-to-en-result" class="trans-res"></div>
+            </div>
+            <div class="trans-group">
+                <label>Inglés → Español</label>
+                <textarea id="en-to-es-input" oninput="debounceTranslate('en')" placeholder="Type..."></textarea>
+                <div id="en-to-es-result" class="trans-res"></div>
+            </div>
+        </aside>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

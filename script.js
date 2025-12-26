@@ -4,10 +4,8 @@ let isBlocked = false;
 let lastCorrection = "";
 let translationTimeout;
 
-const API_URL = "https://api.groq.com/openai/v1/chat/completions";
-
 function setupKey() {
-    const key = prompt("Introduce tu Groq API Key:", apiKey);
+    const key = prompt("Pega tu Groq API Key:", apiKey);
     if (key) {
         apiKey = key;
         localStorage.setItem('migo_api_key', key);
@@ -15,7 +13,6 @@ function setupKey() {
     }
 }
 
-// LÓGICA DE TRADUCCIÓN
 function toggleTranslator() {
     document.getElementById('translator-panel').classList.toggle('hidden');
 }
@@ -26,44 +23,41 @@ function debounceTranslate(dir) {
 }
 
 async function runTranslation(dir) {
+    if (!apiKey) return;
     const from = dir === 'es' ? 'Spanish' : 'English';
     const to = dir === 'es' ? 'English' : 'Spanish';
     const text = document.getElementById(`${dir}-to-${dir==='es'?'en':'es'}-input`).value.trim();
     const resultDiv = document.getElementById(`${dir}-to-${dir==='es'?'en':'es'}-result`);
 
-    if (!text || !apiKey) return;
-    resultDiv.innerText = "Translating...";
+    if (!text) return;
+    resultDiv.innerText = "...";
 
     try {
-        const response = await fetch(API_URL, {
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 model: "llama-3.1-8b-instant",
-                messages: [{ role: "system", content: `Translate from ${from} to ${to}. Return ONLY the translation.` }, { role: "user", content: text }],
-                temperature: 0.1
+                messages: [{ role: "system", content: `Translate from ${from} to ${to}. Only text.` }, { role: "user", content: text }]
             })
         });
         const data = await response.json();
         resultDiv.innerText = data.choices[0].message.content;
-    } catch (e) { resultDiv.innerText = "Error..."; }
+    } catch (e) { resultDiv.innerText = "Error"; }
 }
 
-// CHAT Y CORRECCIONES
 async function sendMessage() {
     const input = document.getElementById('user-input');
     const text = input.value.trim();
-
     if (!text || !apiKey) return;
 
-    // Si está bloqueado, verificar si el usuario ha escrito la corrección
     if (isBlocked) {
         if (text.toLowerCase().includes(lastCorrection.toLowerCase().trim())) {
             isBlocked = false;
             document.getElementById('block-overlay').classList.add('hidden');
-            appendMessage('migo', "¡Correcto! Has aplicado la corrección. Podemos continuar.");
+            appendMessage('migo', "Perfect! Corrected. Let's continue.");
         } else {
-            alert(`Para continuar, debes escribir la frase corregida: "${lastCorrection}"`);
+            alert(`Escribe la corrección: "${lastCorrection}"`);
         }
         input.value = '';
         return;
@@ -72,47 +66,41 @@ async function sendMessage() {
     appendMessage('user', text);
     input.value = '';
 
-    const prompt = `You are Migo, a strict English tutor. 
-    RULE: If the user message has ANY grammar/spelling error, you MUST start your response with 'CORRECTION REQUIRED:'. 
-    Provide the correct version after 'Suggested:' and the reason after 'Reason:'. 
-    If it is perfect, respond normally.`;
-
     try {
-        const response = await fetch(API_URL, {
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 model: "llama-3.1-8b-instant",
-                messages: [{ role: "system", content: prompt }, { role: "user", content: text }],
-                temperature: 0.2
+                messages: [
+                    { role: "system", content: "Strict tutor. If error: start with 'CORRECTION REQUIRED:'. Then 'Suggested: [fix]' and 'Reason: [why]'." },
+                    { role: "user", content: text }
+                ]
             })
         });
         const data = await response.json();
         const res = data.choices[0].message.content;
 
         if (res.includes("CORRECTION REQUIRED:")) {
-            const fix = res.match(/Suggested: (.*)/i)?.[1] || "Check grammar";
-            const reason = res.split('Reason:')[1] || "Error detected";
-            
+            const fix = res.match(/Suggested: (.*)/i)?.[1] || "error";
+            const reason = res.split('Reason:')[1] || "grammar";
             lastCorrection = fix;
             isBlocked = true;
-            
             saveToLog(text, fix, reason);
             document.getElementById('block-overlay').classList.remove('hidden');
-            appendMessage('migo', "❌ He detectado un error. Revisa el Academy Record a la izquierda y escribe la frase correcta para desbloquear el chat.");
+            appendMessage('migo', "❌ Mistake detected. Check the record and type the correct version.");
         } else {
             appendMessage('migo', res);
         }
-    } catch (e) { appendMessage('migo', "Error de conexión."); }
+    } catch (e) { appendMessage('migo', "Error."); }
 }
 
 function saveToLog(wrong, fix, reason) {
-    const entry = {
-        date: new Date().toLocaleDateString(),
+    history.push({ 
+        date: new Date().toLocaleDateString(), 
         time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
-        wrong, fix, reason
-    };
-    history.push(entry);
+        wrong, fix, reason 
+    });
     localStorage.setItem('migo_history', JSON.stringify(history));
     renderLog();
 }
@@ -121,8 +109,8 @@ function renderLog() {
     const log = document.getElementById('correction-log');
     log.innerHTML = history.slice().reverse().map(item => `
         <div class="log-card">
-            <div class="log-time">${item.date} | ${item.time}</div>
-            <span class="log-wrong">"${item.wrong}"</span>
+            <small>${item.date} | ${item.time}</small>
+            <span class="log-wrong">${item.wrong}</span>
             <span class="log-fix">→ ${item.fix}</span>
         </div>
     `).join('');
@@ -135,7 +123,7 @@ function appendMessage(s, t) {
     box.appendChild(m); box.scrollTop = box.scrollHeight;
 }
 
-function clearHistory() { if(confirm("¿Borrar historial?")) { history = []; localStorage.removeItem('migo_history'); renderLog(); }}
+function clearHistory() { history = []; localStorage.removeItem('migo_history'); renderLog(); }
 
 document.getElementById('user-input').addEventListener('keypress', e => e.key === 'Enter' && sendMessage());
-window.onload = () => { renderLog(); if(!apiKey) setTimeout(setupKey, 500); };
+window.onload = renderLog;
