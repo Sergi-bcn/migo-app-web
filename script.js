@@ -1,67 +1,26 @@
 const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
-const MODEL_NAME = "llama-3.1-8b-instant"; // Modelo corregido
+const MODEL_NAME = "llama-3.1-8b-instant";
 
 let apiKey = localStorage.getItem('migo_api_key') || "";
 let history = JSON.parse(localStorage.getItem('migo_history')) || [];
-let currentMode = "Grammar";
-let currentTone = "Elegant";
 let translationTimeout;
+
+function toggleSidebar(id) {
+    document.getElementById(id).classList.toggle('mobile-hidden');
+}
 
 function setupKey() {
     const key = prompt("Enter Groq API Key:", apiKey);
-    if (key) {
-        apiKey = key;
-        localStorage.setItem('migo_api_key', key);
-        alert("API Key saved.");
-    }
-}
-
-function updateSettings() {
-    currentMode = document.getElementById('mode-select').value;
-    currentTone = document.getElementById('tone-select').value;
-}
-
-function debounceTranslate(dir) {
-    clearTimeout(translationTimeout);
-    translationTimeout = setTimeout(() => runTranslation(dir), 1000);
-}
-
-async function runTranslation(dir) {
-    if (!apiKey) return;
-    const to = dir === 'en' ? 'Spanish' : 'English';
-    const input = document.getElementById(`${dir}-to-${dir==='en'?'es':'en'}-input`).value.trim();
-    const resultDiv = document.getElementById(`${dir}-to-${dir==='en'?'es':'en'}-result`);
-    
-    if (!input) { resultDiv.innerText = ""; return; }
-    resultDiv.innerText = "Translating...";
-
-    try {
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                model: MODEL_NAME,
-                messages: [{ role: "system", content: `Translate to ${to}. Return ONLY translation.` }, { role: "user", content: input }],
-                temperature: 0.1
-            })
-        });
-        const data = await response.json();
-        resultDiv.innerText = data.choices[0].message.content;
-    } catch (e) { resultDiv.innerText = "Check API Key."; }
+    if (key) { apiKey = key; localStorage.setItem('migo_api_key', key); }
 }
 
 async function sendMessage() {
-    if (!apiKey) { setupKey(); return; }
-    const inputField = document.getElementById('user-input');
-    const text = inputField.value.trim();
-    if (!text) return;
+    const input = document.getElementById('user-input');
+    const text = input.value.trim();
+    if (!text || !apiKey) return;
 
     appendMessage('user', text);
-    inputField.value = '';
-
-    const systemPrompt = `You are Migo, a strict English tutor. Focus: ${currentMode}. Tone: ${currentTone}. 
-    IF ERROR: Start ONLY with 'CORRECTION:'. Provide 'Suggested version: [sentence]' and 'Reason: [why]'.
-    IF PERFECT: Respond normally in ${currentTone} style.`;
+    input.value = '';
 
     try {
         const response = await fetch(apiUrl, {
@@ -69,70 +28,73 @@ async function sendMessage() {
             headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 model: MODEL_NAME,
-                messages: [{ role: "system", content: systemPrompt }, { role: "user", content: text }],
-                temperature: 0.3
+                messages: [
+                    { role: "system", content: "You are Migo, a strict English tutor. If mistake: 'CORRECTION: Suggested version: [fix] Reason: [why]'. If perfect, reply normally." },
+                    { role: "user", content: text }
+                ]
             })
         });
         const data = await response.json();
-        const aiResponse = data.choices[0].message.content;
+        const res = data.choices[0].message.content;
 
-        if (aiResponse.includes("CORRECTION:")) {
-            processCorrection(text, aiResponse);
-            appendMessage('migo', "❌ Mistake detected. Please fix it.");
+        if (res.includes("CORRECTION:")) {
+            saveCorrection(text, res);
+            appendMessage('migo', "❌ Mistake found. Checked your record.");
         } else {
-            appendMessage('migo', aiResponse);
+            appendMessage('migo', res);
         }
-    } catch (e) { appendMessage('migo', "Error. Check API Key."); }
+    } catch (e) { appendMessage('migo', "Error. Check Key."); }
 }
 
-function processCorrection(wrong, feedback) {
-    const fix = feedback.match(/Suggested version: (.*)/i)?.[1] || "Ver log";
-    const reason = feedback.split('Reason:')[1] || "Grammar error";
-    const entry = {
-        date: new Date().toLocaleDateString(),
-        time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
-        wrong, fix, reason: reason.trim()
-    };
-    history.push(entry);
+function saveCorrection(wrong, feedback) {
+    const fix = feedback.match(/Suggested version: (.*)/i)?.[1] || "Error";
+    history.push({ 
+        date: new Date().toLocaleDateString(), 
+        time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), 
+        wrong, fix 
+    });
     localStorage.setItem('migo_history', JSON.stringify(history));
     renderLog();
 }
 
 function renderLog() {
     const container = document.getElementById('correction-log');
-    container.innerHTML = "";
-    history.slice().reverse().forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'log-entry';
-        div.innerHTML = `
+    container.innerHTML = history.slice().reverse().map(item => `
+        <div class="log-entry">
             <small>${item.date} ${item.time}</small><br>
-            <span class="log-wrong">"${item.wrong}"</span>
-            <span class="log-fix">→ ${item.fix}</span>
-        `;
-        container.appendChild(div);
-    });
+            <span style="text-decoration:line-through; color:red;">${item.wrong}</span><br>
+            <strong>→ ${item.fix}</strong>
+        </div>
+    `).join('');
 }
 
-function clearHistory() { if(confirm("Clear?")) { history = []; localStorage.removeItem('migo_history'); renderLog(); } }
-
-function exportHistory() {
-    let csv = "Date,Time,Wrong,Fix\n";
-    history.forEach(h => csv += `${h.date},${h.time},"${h.wrong}","${h.fix}"\n`);
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = 'migo_report.csv'; a.click();
+// Traducción sin botones (Tiempo real)
+function debounceTranslate(dir) {
+    clearTimeout(translationTimeout);
+    translationTimeout = setTimeout(async () => {
+        const input = document.getElementById(`${dir}-to-${dir==='en'?'es':'en'}-input`).value;
+        const result = document.getElementById(`${dir}-to-${dir==='en'?'es':'en'}-result`);
+        if (!input || !apiKey) return;
+        
+        const res = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                model: MODEL_NAME,
+                messages: [{ role: "system", content: "Translate. Only result." }, { role: "user", content: input }]
+            })
+        });
+        const data = await res.json();
+        result.innerText = data.choices[0].message.content;
+    }, 1000);
 }
 
-function appendMessage(sender, text) {
-    const box = document.getElementById('chat-box');
-    const msg = document.createElement('div');
-    msg.className = `message ${sender}`;
-    msg.innerText = text;
-    box.appendChild(msg);
-    box.scrollTop = box.scrollHeight;
+function appendMessage(s, t) {
+    const b = document.getElementById('chat-box');
+    const m = document.createElement('div');
+    m.className = `message ${s}`; m.innerText = t;
+    b.appendChild(m); b.scrollTop = b.scrollHeight;
 }
 
-function toggleTools() { document.getElementById('tools-panel').classList.toggle('hidden'); }
 document.getElementById('user-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
 window.onload = renderLog;

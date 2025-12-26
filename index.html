@@ -2,21 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo AI | Academy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Migo AI | Academy Multi-device</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="app-layout">
-        <aside class="sidebar left">
+        <aside id="left-sidebar" class="sidebar left mobile-hidden">
             <div class="sidebar-header">
-                <h2>Academy Record</h2>
-                <div class="stats-panel">
-                    <p id="common-error-tag">Common Error: <span>Analyzing...</span></p>
+                <div class="header-flex">
+                    <h2>Academy Record</h2>
+                    <button class="close-mobile" onclick="toggleSidebar('left-sidebar')">✕</button>
                 </div>
                 <div class="filter-group">
-                    <button onclick="exportHistory()" class="action-btn-small">Export CSV</button>
+                    <button onclick="exportHistory()" class="action-btn-small">Export</button>
                     <button onclick="clearHistory()" class="clear-btn">Clear</button>
                 </div>
             </div>
@@ -25,25 +25,21 @@
 
         <main class="chat-main">
             <header class="chat-header">
+                <button class="menu-btn mobile-only" onclick="toggleSidebar('left-sidebar')">📜</button>
                 <div class="tutor-info">
                     <h1>Migo AI</h1>
-                    <span class="status-badge">Vercel Pro Mode</span>
                 </div>
                 <div class="header-right">
-                    <button id="config-btn" class="nav-btn-alt" onclick="setupKey()">Config Key</button>
-                    <button id="toggle-tools" class="nav-btn" onclick="toggleTools()">Traduction</button>
+                    <button class="menu-btn mobile-only" onclick="toggleSidebar('tools-panel')">🌐</button>
+                    <button id="config-btn" class="nav-btn-alt desktop-only" onclick="setupKey()">Key</button>
                 </div>
             </header>
 
             <section class="conversation-area">
                 <div class="chat-controls">
                     <select id="mode-select" class="nav-select" onchange="updateSettings()">
-                        <option value="Grammar">Grammar Focus</option>
-                        <option value="Vocabulary">Vocabulary Focus</option>
-                    </select>
-                    <select id="tone-select" class="nav-select" onchange="updateSettings()">
-                        <option value="Elegant">Style: Elegant</option>
-                        <option value="Colloquial">Style: Colloquial</option>
+                        <option value="Grammar">Grammar</option>
+                        <option value="Vocabulary">Vocabulary</option>
                     </select>
                 </div>
                 
@@ -51,25 +47,29 @@
 
                 <div class="chat-input-wrapper">
                     <div class="input-container">
-                        <input type="text" id="user-input" placeholder="Type in English and press Enter..." autocomplete="off">
+                        <input type="text" id="user-input" placeholder="Type here..." autocomplete="off">
+                        <button id="send-btn" onclick="sendMessage()">➤</button>
                     </div>
                 </div>
             </section>
         </main>
 
-        <aside id="tools-panel" class="sidebar right hidden">
+        <aside id="tools-panel" class="sidebar right mobile-hidden">
             <div class="sidebar-header">
-                <h2>Live Traduction</h2>
+                <div class="header-flex">
+                    <h2>Translator</h2>
+                    <button class="close-mobile" onclick="toggleSidebar('tools-panel')">✕</button>
+                </div>
             </div>
             <div class="translator-container">
                 <div class="translate-box">
-                    <label>English to Spanish</label>
-                    <textarea id="en-to-es-input" oninput="debounceTranslate('en')" placeholder="Type here..."></textarea>
+                    <label>EN → ES</label>
+                    <textarea id="en-to-es-input" oninput="debounceTranslate('en')" placeholder="English..."></textarea>
                     <div id="en-to-es-result" class="translate-result"></div>
                 </div>
                 <div class="translate-box">
-                    <label>Spanish to English</label>
-                    <textarea id="es-to-en-input" oninput="debounceTranslate('es')" placeholder="Escribe aquí..."></textarea>
+                    <label>ES → EN</label>
+                    <textarea id="es-to-en-input" oninput="debounceTranslate('es')" placeholder="Español..."></textarea>
                     <div id="es-to-en-result" class="translate-result"></div>
                 </div>
             </div>
