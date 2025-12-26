@@ -3,60 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo AI | Pro Tutor</title>
+    <title>Migo AI | Executive Tutor</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="app-container">
+    <div class="dashboard">
         <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>Academy Record</h2>
-                <button onclick="clearHistory()" class="btn-text">Clear All</button>
+            <div class="brand">
+                <div class="logo-icon">M</div>
+                <span>Migo Academy</span>
             </div>
-            <div id="correction-log" class="log-list"></div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Total Errors</span>
+                    <span id="total-count" class="stat-value">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Most Common</span>
+                    <span id="top-error-type" class="stat-value">-</span>
+                </div>
+            </div>
+
+            <div class="history-controls">
+                <h3>Correction Log</h3>
+                <div class="filter-box">
+                    <select id="error-filter" onchange="renderLog()">
+                        <option value="all">All Errors</option>
+                        <option value="Grammar">Grammar</option>
+                        <option value="Spelling">Spelling</option>
+                        <option value="Vocabulary">Vocabulary</option>
+                    </select>
+                </div>
+            </div>
+            <div id="correction-log" class="log-scroll"></div>
         </aside>
 
-        <main class="chat-area">
-            <header class="top-nav">
-                <div class="logo">Migo <span class="badge">AI</span></div>
-                <div class="actions">
-                    <button onclick="setupKey()" class="btn-secondary">API Key</button>
-                    <button onclick="toggleTranslator()" class="btn-primary">Translator</button>
+        <main class="workspace">
+            <header class="navbar">
+                <div class="nav-left">
+                    <span class="status-dot"></span>
+                    <span id="mode-indicator">Learning Mode: Active</span>
+                </div>
+                <div class="nav-right">
+                    <button onclick="setupKey()" class="btn-ghost">Settings</button>
+                    <button id="toggle-trans" class="btn-accent">Translation Tool</button>
                 </div>
             </header>
 
-            <div id="chat-box" class="chat-display"></div>
+            <div id="chat-box" class="chat-viewport"></div>
 
-            <div id="block-overlay" class="overlay hidden">
-                <div class="overlay-content">
-                    <p>⚠️ Debes corregir tu último error para continuar.</p>
+            <div id="block-overlay" class="lock-screen hidden">
+                <div class="lock-modal">
+                    <div class="lock-icon">🔒</div>
+                    <h3>Correction Required</h3>
+                    <p>Migo has detected an error. Rewrite the corrected sentence to unlock the chat.</p>
                 </div>
             </div>
 
-            <footer class="input-section">
-                <div class="input-wrapper">
-                    <input type="text" id="user-input" placeholder="Escribe en inglés..." autocomplete="off">
-                    <button onclick="sendMessage()" id="send-btn">Send</button>
+            <footer class="input-area">
+                <div class="input-container">
+                    <input type="text" id="user-input" placeholder="Type your sentence in English..." autocomplete="off">
+                    <button onclick="sendMessage()" class="send-circle">↑</button>
                 </div>
             </footer>
         </main>
 
-        <aside id="translator-panel" class="translator-sidebar hidden">
-            <div class="sidebar-header">
-                <h2>Translation</h2>
+        <div id="translator-panel" class="trans-panel hidden">
+            <div class="trans-header">
+                <h3>Quick Translate</h3>
+                <button onclick="document.getElementById('translator-panel').classList.add('hidden')">×</button>
             </div>
-            <div class="trans-group">
-                <label>Español → Inglés</label>
-                <textarea id="es-to-en-input" oninput="debounceTranslate('es')" placeholder="Escribe..."></textarea>
-                <div id="es-to-en-result" class="trans-res"></div>
+            <div class="trans-body">
+                <div class="input-block">
+                    <label>ES → EN</label>
+                    <textarea id="es-to-en-input" oninput="debounceTranslate('es')" placeholder="Escribe algo..."></textarea>
+                    <div id="es-to-en-result" class="live-result"></div>
+                </div>
+                <div class="input-block">
+                    <label>EN → ES</label>
+                    <textarea id="en-to-es-input" oninput="debounceTranslate('en')" placeholder="Type something..."></textarea>
+                    <div id="en-to-es-result" class="live-result"></div>
+                </div>
             </div>
-            <div class="trans-group">
-                <label>Inglés → Español</label>
-                <textarea id="en-to-es-input" oninput="debounceTranslate('en')" placeholder="Type..."></textarea>
-                <div id="en-to-es-result" class="trans-res"></div>
-            </div>
-        </aside>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
