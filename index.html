@@ -2,76 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Migo AI | Academy Multi-device</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo AI | Academy</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="app-layout">
-        <aside id="left-sidebar" class="sidebar left mobile-hidden">
+        <aside class="sidebar left">
             <div class="sidebar-header">
-                <div class="header-flex">
-                    <h2>Academy Record</h2>
-                    <button class="close-mobile" onclick="toggleSidebar('left-sidebar')">✕</button>
-                </div>
-                <div class="filter-group">
-                    <button onclick="exportHistory()" class="action-btn-small">Export</button>
-                    <button onclick="clearHistory()" class="clear-btn">Clear</button>
-                </div>
+                <h2>Academy Record</h2>
+                <div id="correction-log" class="log-container"></div>
             </div>
-            <div id="correction-log" class="log-container"></div>
         </aside>
-
         <main class="chat-main">
             <header class="chat-header">
-                <button class="menu-btn mobile-only" onclick="toggleSidebar('left-sidebar')">📜</button>
-                <div class="tutor-info">
-                    <h1>Migo AI</h1>
-                </div>
-                <div class="header-right">
-                    <button class="menu-btn mobile-only" onclick="toggleSidebar('tools-panel')">🌐</button>
-                    <button id="config-btn" class="nav-btn-alt desktop-only" onclick="setupKey()">Key</button>
+                <h1>Migo AI</h1>
+                <div class="header-btns">
+                    <button onclick="setupKey()" class="nav-btn-alt">API Config</button>
+                    <button onclick="document.getElementById('tools-panel').classList.toggle('hidden')" class="nav-btn">Traduction</button>
                 </div>
             </header>
-
             <section class="conversation-area">
                 <div class="chat-controls">
-                    <select id="mode-select" class="nav-select" onchange="updateSettings()">
-                        <option value="Grammar">Grammar</option>
-                        <option value="Vocabulary">Vocabulary</option>
-                    </select>
+                    <select id="mode-select" class="nav-select"><option value="Grammar">Grammar Focus</option></select>
+                    <select id="tone-select" class="nav-select"><option value="Elegant">Style: Elegant</option></select>
                 </div>
-                
                 <div id="chat-box" class="chat-display"></div>
-
                 <div class="chat-input-wrapper">
-                    <div class="input-container">
-                        <input type="text" id="user-input" placeholder="Type here..." autocomplete="off">
-                        <button id="send-btn" onclick="sendMessage()">➤</button>
-                    </div>
+                    <input type="text" id="user-input" placeholder="Escribe en inglés..." autocomplete="off">
                 </div>
             </section>
         </main>
-
-        <aside id="tools-panel" class="sidebar right mobile-hidden">
-            <div class="sidebar-header">
-                <div class="header-flex">
-                    <h2>Translator</h2>
-                    <button class="close-mobile" onclick="toggleSidebar('tools-panel')">✕</button>
-                </div>
-            </div>
+        <aside id="tools-panel" class="sidebar right hidden">
             <div class="translator-container">
-                <div class="translate-box">
-                    <label>EN → ES</label>
-                    <textarea id="en-to-es-input" oninput="debounceTranslate('en')" placeholder="English..."></textarea>
-                    <div id="en-to-es-result" class="translate-result"></div>
-                </div>
-                <div class="translate-box">
-                    <label>ES → EN</label>
-                    <textarea id="es-to-en-input" oninput="debounceTranslate('es')" placeholder="Español..."></textarea>
-                    <div id="es-to-en-result" class="translate-result"></div>
-                </div>
+                <label>English to Spanish (Real-time)</label>
+                <textarea id="en-to-es-input" oninput="debounceTranslate('en')"></textarea>
+                <div id="en-to-es-result" class="translate-result"></div>
             </div>
         </aside>
     </div>
