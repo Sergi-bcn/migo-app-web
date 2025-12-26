@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo AI | Executive Tutor</title>
+    <title>Migo AI | Academy Pro</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
@@ -27,44 +27,41 @@
             </div>
 
             <div class="history-controls">
-                <h3>Correction Log</h3>
-                <div class="filter-box">
+                <h3>Academy Record</h3>
+                <div class="actions-row">
                     <select id="error-filter" onchange="renderLog()">
-                        <option value="all">All Errors</option>
+                        <option value="all">Ver Todos</option>
                         <option value="Grammar">Grammar</option>
                         <option value="Spelling">Spelling</option>
                         <option value="Vocabulary">Vocabulary</option>
                     </select>
+                    <button onclick="exportToCSV()" class="btn-export" title="Exportar Raport Completo (Excel)">📊 Report</button>
                 </div>
             </div>
             <div id="correction-log" class="log-scroll"></div>
+            <button onclick="clearHistory()" class="btn-clear">Limpiar Historial</button>
         </aside>
 
         <main class="workspace">
             <header class="navbar">
                 <div class="nav-left">
-                    <span class="status-dot"></span>
-                    <span id="mode-indicator">Learning Mode: Active</span>
+                    <span id="status-dot" class="status-dot"></span>
+                    <span id="mode-indicator">Modo Conversación</span>
                 </div>
                 <div class="nav-right">
                     <button onclick="setupKey()" class="btn-ghost">Settings</button>
-                    <button id="toggle-trans" class="btn-accent">Translation Tool</button>
+                    <button id="toggle-trans" class="btn-accent">Translator Tool</button>
                 </div>
             </header>
 
             <div id="chat-box" class="chat-viewport"></div>
 
-            <div id="block-overlay" class="lock-screen hidden">
-                <div class="lock-modal">
-                    <div class="lock-icon">🔒</div>
-                    <h3>Correction Required</h3>
-                    <p>Migo has detected an error. Rewrite the corrected sentence to unlock the chat.</p>
-                </div>
-            </div>
-
             <footer class="input-area">
-                <div class="input-container">
-                    <input type="text" id="user-input" placeholder="Type your sentence in English..." autocomplete="off">
+                <div id="correction-hint" class="correction-hint hidden">
+                    💡 <b>Correction needed:</b> <span id="hint-text"></span>
+                </div>
+                <div class="input-container" id="input-container">
+                    <input type="text" id="user-input" placeholder="Type in English..." autocomplete="off">
                     <button onclick="sendMessage()" class="send-circle">↑</button>
                 </div>
             </footer>
@@ -72,18 +69,18 @@
 
         <div id="translator-panel" class="trans-panel hidden">
             <div class="trans-header">
-                <h3>Quick Translate</h3>
-                <button onclick="document.getElementById('translator-panel').classList.add('hidden')">×</button>
+                <h3>Quick Translator</h3>
+                <button onclick="document.getElementById('translator-panel').classList.add('hidden')" class="close-btn">×</button>
             </div>
             <div class="trans-body">
                 <div class="input-block">
-                    <label>ES → EN</label>
-                    <textarea id="es-to-en-input" oninput="debounceTranslate('es')" placeholder="Escribe algo..."></textarea>
+                    <label>SPANISH → ENGLISH</label>
+                    <textarea id="es-to-en-input" oninput="debounceTranslate('es')"></textarea>
                     <div id="es-to-en-result" class="live-result"></div>
                 </div>
                 <div class="input-block">
-                    <label>EN → ES</label>
-                    <textarea id="en-to-es-input" oninput="debounceTranslate('en')" placeholder="Type something..."></textarea>
+                    <label>ENGLISH → SPANISH</label>
+                    <textarea id="en-to-es-input" oninput="debounceTranslate('en')"></textarea>
                     <div id="en-to-es-result" class="live-result"></div>
                 </div>
             </div>
