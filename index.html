@@ -29,13 +29,13 @@
                 <div class="trans-group">
                     <label>English ➔ Spanish</label>
                     <textarea id="en-input" placeholder="Type English..." oninput="autoTranslate('en-es')"></textarea>
-                    <div id="en-es-result" class="res-box">Result will appear here...</div>
+                    <div id="en-es-result" class="res-box">Result...</div>
                 </div>
                 <div style="height: 30px;"></div>
                 <div class="trans-group">
                     <label>Español ➔ Inglés</label>
                     <textarea id="es-input" placeholder="Escribe español..." oninput="autoTranslate('es-en')"></textarea>
-                    <div id="es-en-result" class="res-box">El resultado aparecerá aquí...</div>
+                    <div id="es-en-result" class="res-box">Resultado...</div>
                 </div>
             </div>
         </aside>
@@ -52,7 +52,7 @@
             <section id="chat-box" class="chat-area"></section>
 
             <footer class="input-footer">
-                <div id="lock-notice" class="lock-message" style="display:none;">⚠️ REWRITE THE SENTENCE CORRECTLY TO CONTINUE</div>
+                <div id="lock-notice" class="lock-message" style="display:none;">⚠️ CHAT LOCKED: REWRITE THE CORRECT SENTENCE</div>
                 <div class="input-wrapper" id="input-container">
                     <input type="text" id="user-input" placeholder="Talk to Migo..." autocomplete="off">
                     <button id="send-btn" onclick="sendMessage()">➤</button>
