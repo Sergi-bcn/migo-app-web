@@ -1,91 +1,58 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo AI | Academy Pro</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Migo AI | English Tutor</title>
+    <link rel="stylesheet" href="style.css?v=2">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="dashboard">
-        <aside class="sidebar">
-            <div class="brand">
-                <div class="logo-icon">M</div>
-                <span>Migo Academy</span>
+    <div class="app-container">
+        <aside id="record-panel" class="side-panel">
+            <div class="panel-header">
+                <h3>📜 Academy Record</h3>
+                <button onclick="toggleRecord()" class="close-panel-btn">✕</button>
             </div>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <span class="stat-label">Total Errors</span>
-                    <span id="total-count" class="stat-value">0</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-label">Most Common</span>
-                    <span id="top-error-type" class="stat-value">-</span>
-                </div>
+            <div id="correction-log" class="log-content"></div>
+            <div class="panel-footer">
+                <button onclick="clearHistory()" class="btn-danger-soft">Clear History</button>
             </div>
-
-            <div class="history-controls">
-                <h3>Academy Record</h3>
-                <div class="actions-row">
-                    <select id="error-filter" onchange="renderLog()">
-                        <option value="all">Ver Todos</option>
-                        <option value="Grammar">Grammar</option>
-                        <option value="Spelling">Spelling</option>
-                        <option value="Vocabulary">Vocabulary</option>
-                    </select>
-                    <button onclick="exportToCSV()" class="btn-export" title="Exportar Raport Completo (Excel)">📊 Report</button>
-                </div>
-            </div>
-            <div id="correction-log" class="log-scroll"></div>
-            <button onclick="clearHistory()" class="btn-clear">Limpiar Historial</button>
         </aside>
 
-        <main class="workspace">
-            <header class="navbar">
-                <div class="nav-left">
-                    <span id="status-dot" class="status-dot"></span>
-                    <span id="mode-indicator">Modo Conversación</span>
-                </div>
-                <div class="nav-right">
-                    <button onclick="setupKey()" class="btn-ghost">Settings</button>
-                    <button id="toggle-trans" class="btn-accent">Translator Tool</button>
+        <main class="main-content">
+            <header class="main-header">
+                <div class="logo">Migo <span>AI</span></div>
+                <div class="header-actions">
+                    <button onclick="toggleRecord()" class="nav-btn mobile-only">📜 Record</button>
+                    <button onclick="toggleTranslator()" class="nav-btn">🌐 Translator</button>
                 </div>
             </header>
 
-            <div id="chat-box" class="chat-viewport"></div>
+            <section id="chat-box" class="chat-area"></section>
 
-            <footer class="input-area">
-                <div id="correction-hint" class="correction-hint hidden">
-                    💡 <b>Correction needed:</b> <span id="hint-text"></span>
-                </div>
-                <div class="input-container" id="input-container">
+            <footer class="input-footer">
+                <div class="input-wrapper">
                     <input type="text" id="user-input" placeholder="Type in English..." autocomplete="off">
-                    <button onclick="sendMessage()" class="send-circle">↑</button>
+                    <button id="send-btn" onclick="sendMessage()">
+                        <span class="desktop-text">Send Message</span>
+                        <span class="mobile-icon">➤</span>
+                    </button>
                 </div>
             </footer>
         </main>
 
-        <div id="translator-panel" class="trans-panel hidden">
-            <div class="trans-header">
-                <h3>Quick Translator</h3>
-                <button onclick="document.getElementById('translator-panel').classList.add('hidden')" class="close-btn">×</button>
-            </div>
-            <div class="trans-body">
-                <div class="input-block">
-                    <label>SPANISH → ENGLISH</label>
-                    <textarea id="es-to-en-input" oninput="debounceTranslate('es')"></textarea>
-                    <div id="es-to-en-result" class="live-result"></div>
+        <div id="translator-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Live Translator</h3>
+                    <button onclick="toggleTranslator()">✕</button>
                 </div>
-                <div class="input-block">
-                    <label>ENGLISH → SPANISH</label>
-                    <textarea id="en-to-es-input" oninput="debounceTranslate('en')"></textarea>
-                    <div id="en-to-es-result" class="live-result"></div>
-                </div>
+                <textarea id="trans-input" placeholder="Translate English to Spanish..." oninput="debounceTranslate()"></textarea>
+                <div id="trans-result" class="result-box">Result will appear here...</div>
             </div>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script src="script.js?v=2"></script>
 </body>
 </html>
