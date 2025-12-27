@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Migo AI | English Tutor</title>
-    <link rel="stylesheet" href="style.css?v=2">
+    <title>Migo AI | Pro Tutor</title>
+    <link rel="stylesheet" href="style.css?v=3.1">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -12,12 +12,10 @@
         <aside id="record-panel" class="side-panel">
             <div class="panel-header">
                 <h3>📜 Academy Record</h3>
-                <button onclick="toggleRecord()" class="close-panel-btn">✕</button>
+                <button onclick="toggleRecord()" class="close-btn">Close ×</button>
             </div>
             <div id="correction-log" class="log-content"></div>
-            <div class="panel-footer">
-                <button onclick="clearHistory()" class="btn-danger-soft">Clear History</button>
-            </div>
+            <div class="panel-footer"><button onclick="clearHistory()" class="btn-danger-soft">Clear History</button></div>
         </aside>
 
         <main class="main-content">
@@ -25,19 +23,17 @@
                 <div class="logo">Migo <span>AI</span></div>
                 <div class="header-actions">
                     <button onclick="toggleRecord()" class="nav-btn mobile-only">📜 Record</button>
-                    <button onclick="toggleTranslator()" class="nav-btn">🌐 Translator</button>
+                    <button onclick="toggleTranslator()" class="nav-btn-alt">🌐 Translator Tools</button>
                 </div>
             </header>
 
             <section id="chat-box" class="chat-area"></section>
 
             <footer class="input-footer">
+                <div id="lock-notice" class="lock-message" style="display:none;">⚠️ Correct your mistake to continue...</div>
                 <div class="input-wrapper">
-                    <input type="text" id="user-input" placeholder="Type in English..." autocomplete="off">
-                    <button id="send-btn" onclick="sendMessage()">
-                        <span class="desktop-text">Send Message</span>
-                        <span class="mobile-icon">➤</span>
-                    </button>
+                    <input type="text" id="user-input" placeholder="Type here..." autocomplete="off">
+                    <button id="send-btn" onclick="sendMessage()">➤</button>
                 </div>
             </footer>
         </main>
@@ -45,14 +41,25 @@
         <div id="translator-modal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3>Live Translator</h3>
-                    <button onclick="toggleTranslator()">✕</button>
+                    <h3>Translator Tools</h3>
+                    <button onclick="toggleTranslator()" class="close-btn">Close ×</button>
                 </div>
-                <textarea id="trans-input" placeholder="Translate English to Spanish..." oninput="debounceTranslate()"></textarea>
-                <div id="trans-result" class="result-box">Result will appear here...</div>
+                
+                <div class="translator-grid">
+                    <div class="trans-box">
+                        <label>English ➔ Spanish</label>
+                        <textarea id="en-input" placeholder="Type English..." oninput="autoTranslate('en-es')"></textarea>
+                        <div id="en-es-result" class="res-box">Result...</div>
+                    </div>
+                    <div class="trans-box">
+                        <label>Español ➔ Inglés</label>
+                        <textarea id="es-input" placeholder="Escribe español..." oninput="autoTranslate('es-en')"></textarea>
+                        <div id="es-en-result" class="res-box">Resultado...</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <script src="script.js?v=2"></script>
+    <script src="script.js?v=3.1"></script>
 </body>
 </html>
