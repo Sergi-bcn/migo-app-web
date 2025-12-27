@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Migo AI | Pro Tutor</title>
-    <link rel="stylesheet" href="style.css?v=6.0">
+    <title>Migo AI | English Tutor</title>
+    <link rel="stylesheet" href="style-v7.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="app-container">
-        <aside id="record-panel" class="side-panel left">
+        <aside id="report-panel" class="side-panel left">
             <div class="panel-header">
-                <h3>📜 Academy Record</h3>
-                <button onclick="toggleRecord()" class="close-panel-btn">✕</button>
+                <h3>📜 Academy Report</h3>
+                <button onclick="toggleReport()" class="close-panel-btn">✕</button>
             </div>
             <div id="correction-log" class="log-content"></div>
             <div class="panel-footer">
@@ -22,20 +22,20 @@
 
         <aside id="translator-panel" class="side-panel right">
             <div class="panel-header">
-                <h3>🌐 Translator Tools</h3>
+                <h3>🌐 Translator Tool</h3>
                 <button onclick="toggleTranslator()" class="close-panel-btn">✕</button>
             </div>
             <div class="log-content">
                 <div class="trans-group">
-                    <label>English to Spanish</label>
-                    <textarea id="en-input" placeholder="Type here..." oninput="autoTranslate('en-es')"></textarea>
-                    <div id="en-es-result" class="res-box">Result...</div>
+                    <label>English ➔ Spanish</label>
+                    <textarea id="en-input" placeholder="Type English..." oninput="autoTranslate('en-es')"></textarea>
+                    <div id="en-es-result" class="res-box">Result will appear here...</div>
                 </div>
-                <div style="height: 2rem;"></div>
+                <div style="height: 30px;"></div>
                 <div class="trans-group">
-                    <label>Español a Inglés</label>
-                    <textarea id="es-input" placeholder="Escribe aquí..." oninput="autoTranslate('es-en')"></textarea>
-                    <div id="es-en-result" class="res-box">Resultado...</div>
+                    <label>Español ➔ Inglés</label>
+                    <textarea id="es-input" placeholder="Escribe español..." oninput="autoTranslate('es-en')"></textarea>
+                    <div id="es-en-result" class="res-box">El resultado aparecerá aquí...</div>
                 </div>
             </div>
         </aside>
@@ -44,7 +44,7 @@
             <header class="main-header">
                 <div class="logo">Migo <span>AI</span></div>
                 <div class="header-actions">
-                    <button onclick="toggleRecord()" class="nav-btn">📜 Record</button>
+                    <button onclick="toggleReport()" class="nav-btn">📜 Report</button>
                     <button onclick="toggleTranslator()" class="nav-btn-alt">🌐 Translator</button>
                 </div>
             </header>
@@ -52,7 +52,7 @@
             <section id="chat-box" class="chat-area"></section>
 
             <footer class="input-footer">
-                <div id="lock-notice" class="lock-message" style="display:none;">⚠️ Correct your mistake to unlock the chat</div>
+                <div id="lock-notice" class="lock-message" style="display:none;">⚠️ REWRITE THE SENTENCE CORRECTLY TO CONTINUE</div>
                 <div class="input-wrapper" id="input-container">
                     <input type="text" id="user-input" placeholder="Talk to Migo..." autocomplete="off">
                     <button id="send-btn" onclick="sendMessage()">➤</button>
@@ -60,6 +60,6 @@
             </footer>
         </main>
     </div>
-    <script src="script.js?v=6.0"></script>
+    <script src="script-v7.js"></script>
 </body>
 </html>
