@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="main-interface">
+        <button class="menu-trigger" onclick="toggleTranslator()">Abrir Traductor</button>
+        <button class="menu-trigger" onclick="toggleRecord()">Abrir Record</button>
+        <button class="menu-trigger" onclick="toggleFocus()">Configuración</button>
+    </div>
+
+    <div id="translator-panel" class="side-panel left-panel">
+        <div class="panel-header">
+            <button onclick="toggleTranslator()" class="arrow-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            </button>
+            <h2>Translator</h2>
+        </div>
+        <div class="panel-body">
+            <textarea id="translate-input" placeholder="Escribe aquí..."></textarea>
+            <div id="translate-result"></div>
+        </div>
+    </div>
+
+    <div id="record-panel" class="side-panel right-panel">
+        <div class="panel-header">
+            <h2>Academy Record</h2>
+            <button onclick="toggleRecord()" class="arrow-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+        </div>
+        <div class="panel-body" id="error-log-container">
+            </div>
+    </div>
+
+    <div id="focus-panel" class="bottom-panel">
+        <div class="panel-header">
+            <h2>Settings</h2>
+            <button onclick="toggleFocus()" class="arrow-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            </button>
+        </div>
+        <div class="panel-body">
+            <p>Ajustes de la aplicación</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
