@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo App - Final Layout</title>
+    <style>
+        :root {
+            --bg-color: #76c1a5;
+            --chat-bg: #ffffff;
+            --accent: #2d3436;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            height: 100vh;
+            background-color: var(--bg-color);
+            background-image: url("https://www.transparenttextures.com/patterns/doodle-weave.png");
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header con botones a la derecha */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .logo { font-size: 24px; font-weight: bold; color: #1a2a3a; }
+        .top-buttons { display: flex; gap: 10px; }
+        .top-btn { background: var(--accent); color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: 500; }
+
+        /* Contenedor Central */
+        .main-layout {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .chat-container {
+            width: 90%;
+            max-width: 600px;
+            background: var(--chat-bg);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            z-index: 5;
+        }
+
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .message { padding: 12px 16px; border-radius: 12px; max-width: 75%; font-size: 14px; }
+        .migo { align-self: flex-start; background: #f1f3f4; border-bottom-left-radius: 2px; }
+        .user { align-self: flex-end; background: #e3f2fd; color: #0d47a1; border-bottom-right-radius: 2px; }
+        .suggestion { color: #d32f2f; font-weight: bold; display: block; margin-top: 5px; font-size: 11px; }
+
+        /* Input area */
+        .input-area { padding: 20px; border-top: 1px solid #eee; display: flex; gap: 10px; }
+        input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 10px; outline: none; }
+
+        /* Paneles Laterales Desplegables (Derecha) */
+        .side-panel {
+            position: absolute;
+            right: -320px; /* Escondido por defecto */
+            top: 10%;
+            width: 280px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            transition: right 0.4s ease;
+            padding: 20px;
+            z-index: 10;
+            height: 70vh;
+            overflow-y: auto;
+        }
+
+        .side-panel.active { right: 20px; }
+        .side-panel h3 { margin-top: 0; font-size: 18px; border-bottom: 2px solid var(--bg-color); padding-bottom: 10px; }
+        
+        /* Estilo de los dos traductores */
+        .trans-block { margin-bottom: 20px; background: #f9f9f9; padding: 10px; border-radius: 8px; border: 1px solid #eee; }
+        .trans-label { font-weight: bold; font-size: 12px; color: #666; display: block; margin-bottom: 5px; }
+        .trans-box { min-height: 40px; font-style: italic; font-size: 14px; color: #333; }
+
+        .error-item { background: #fff1f1; padding: 8px; border-radius: 5px; margin-bottom: 8px; border-left: 3px solid #d32f2f; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Migo App</div>
+        <div class="top-buttons">
+            <button class="top-btn" onclick="togglePanel('traductor-panel')">Traductor Dual</button>
+            <button class="top-btn" onclick="togglePanel('record-panel')">Academy Record</button>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <div class="chat-container">
+            <div class="chat-messages" id="chat">
+                <div class="message migo">Hola, soy Migo. Escribe en inglés para practicar.</div>
+            </div>
+            <div class="input-area">
+                <input type="text" id="userInput" placeholder="Escribe tu mensaje..." onkeypress="handleKey(event)">
+                <button class="top-btn" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+
+        <div id="traductor-panel" class="side-panel">
+            <h3>Traductor Dual</h3>
+            <div class="trans-block">
+                <span class="trans-label">ESPAÑOL → INGLÉS</span>
+                <div id="es-en-box" class="trans-box">...</div>
+            </div>
+            <div class="trans-block">
+                <span class="trans-label">ENGLISH → SPANISH</span>
+                <div id="en-es-box" class="trans-box">...</div>
+            </div>
+        </div>
+
+        <div id="record-panel" class="side-panel">
+            <h3>Academy Record</h3>
+            <div id="error-list">No hay errores registrados aún.</div>
+        </div>
+    </div>
+
+    <script>
+        // Diccionario de apoyo
+        const dict = { "hello": "hola", "car": "coche", "house": "casa", "apple": "manzana", "helo": "hola (error)" };
+
+        function togglePanel(id) {
+            const panel = document.getElementById(id);
+            const isActive = panel.classList.contains('active');
+            document.querySelectorAll('.side-panel').forEach(p => p.classList.remove('active'));
+            if (!isActive) panel.classList.add('active');
+        }
+
+        function handleKey(e) { if (e.key === 'Enter') sendMessage(); }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            addMessage(text, 'user');
+            
+            // Actualizar Traductor Dual
+            const word = text.toLowerCase();
+            document.getElementById('en-es-box').innerText = dict[word] || "Traducción no encontrada";
+            document.getElementById('es-en-box').innerText = text; // Simulación simple
+
+            // Respuesta y Corrección Ágil
+            setTimeout(() => {
+                let response = "I understand!";
+                let suggestion = null;
+
+                if (word === "helo") {
+                    response = "Hello!";
+                    suggestion = "Sugerencia: 'Hello'";
+                    addErrorToRecord(text, "Hello");
+                }
+                addMessage(response, 'migo', suggestion);
+            }, 600);
+
+            input.value = '';
+        }
+
+        function addMessage(text, type, hint = null) {
+            const chat = document.getElementById('chat');
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.innerHTML = text;
+            if (hint) {
+                const span = document.createElement('span');
+                span.className = 'suggestion';
+                span.innerText = "⚠️ " + hint;
+                div.appendChild(span);
+            }
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function addErrorToRecord(orig, fix) {
+            const list = document.getElementById('error-list');
+            if (list.innerText.includes("No hay errores")) list.innerHTML = "";
+            const div = document.createElement('div');
+            div.className = 'error-item';
+            div.innerHTML = `<strong>Error:</strong> ${orig}<br><strong>Correcto:</strong> ${fix}`;
+            list.prepend(div);
+        }
+    </script>
+</body>
+</html>
