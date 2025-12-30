@@ -2,60 +2,257 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo App</title>
+    <title>Migo App - Traductor Funcional</title>
     <style>
-        /* CSS UNIFICADO */
-        body { font-family: sans-serif; background-color: #f0f2f5; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .main-interface { display: flex; gap: 10px; z-index: 10; }
-        .trigger { padding: 12px 20px; background: #000; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        
-        .side-panel { position: fixed; top: 50%; transform: translateY(-50%); width: 320px; height: 75vh; background: white; box-shadow: 0 10px 25px rgba(0,0,0,0.2); border-radius: 15px; transition: 0.4s ease; visibility: hidden; opacity: 0; z-index: 1000; }
-        .left { left: -350px; }
-        .right { right: -350px; }
-        .side-panel.active { visibility: visible; opacity: 1; }
-        .left.active { left: 20px; }
-        .right.active { right: 20px; }
+        :root {
+            --wa-green: #76c1a5;
+            --bubble-migo: #ffffff;
+            --bubble-user: #f1f5f9;
+            --border-color: #e2e8f0;
+        }
 
-        .panel-header { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #eee; }
-        .arrow-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #888; }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: var(--wa-green);
+            background-image: url("https://www.transparenttextures.com/patterns/doodle-weave.png");
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            background: #ffffff;
+            padding: 10px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .main-layout {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+            gap: 20px;
+            overflow: hidden;
+        }
+
+        /* CHAT CENTRAL */
+        #chat-window {
+            flex: 1.8;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        #messages {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .bubble {
+            padding: 12px 16px;
+            border-radius: 14px;
+            max-width: 85%;
+            font-size: 15px;
+            align-self: flex-start;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .migo-msg { background: var(--bubble-migo); border: 1px solid var(--border-color); }
+        .user-msg { background: var(--bubble-user); border: 1px solid #cbd5e1; color: #334155; }
+
+        .hint-text {
+            color: #e11d48; font-weight: bold; font-size: 12px; display: block;
+            margin-top: 6px; border-top: 1px dashed #fda4af; padding-top: 4px;
+        }
+
+        /* COLUMNA DERECHA */
+        .side-column {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .side-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        /* TRADUCTOR CUÁDRUPLE */
+        #translation-multi {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .trans-box { width: 100%; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 13px; box-sizing: border-box; }
+        .label-sm { font-size: 10px; font-weight: bold; color: #64748b; margin-bottom: 2px; display: block; }
         
-        .error-box { margin: 10px; padding: 15px; background: #fff5f5; border: 2px solid #feb2b2; border-radius: 12px; }
-        .wrong { color: #c53030; text-decoration: line-through; display: block; }
-        .correct { color: #2f855a; font-weight: bold; display: block; margin-top: 5px; }
+        .input-trans { height: 70px; resize: none; border-color: #cbd5e1; outline: none; font-family: inherit; }
+        .result-trans { height: 40px; background: #f8fafc; color: #0f172a; font-weight: 500; display: flex; align-items: center; overflow-x: auto; }
+
+        /* ACADEMY RECORD */
+        #academy-record { height: 40%; display: flex; flex-direction: column; overflow: hidden; }
+        #record-list { flex: 1; overflow-y: auto; }
+
+        .error-card {
+            background: #fff1f2; border-left: 4px solid #f43f5e;
+            padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 12px;
+        }
+
+        .time-label { font-size: 10px; color: #94a3b8; font-weight: bold; display: block; }
+
+        /* INPUT CHAT */
+        .input-bar {
+            padding: 15px; background: #f8fafc; display: flex; gap: 10px;
+            border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; border-top: 1px solid #eee;
+        }
+
+        input[type="text"] { flex: 1; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; outline: none; }
+        input.error-shake { border-color: #f43f5e; animation: shake 0.3s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+        .btn-send { background: #1e293b; color: white; border: none; padding: 0 20px; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .btn-settings { background: #64748b; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="main-interface">
-        <button class="trigger" onclick="togglePanel('translator-panel')">Translator</button>
-        <button class="trigger" onclick="togglePanel('record-panel')">Academy Record</button>
-    </div>
 
-    <div id="translator-panel" class="side-panel left">
-        <div class="panel-header">
-            <button class="arrow-btn" onclick="togglePanel('translator-panel')">←</button>
-            <h2>Translator</h2>
-        </div>
-        <div style="padding:15px;"><textarea style="width:100%; height:100px;" placeholder="Type here..."></textarea></div>
-    </div>
+    <header>
+        <div style="font-weight: 800; font-size: 20px; color: #1e293b;">Migo App</div>
+    </header>
 
-    <div id="record-panel" class="side-panel right">
-        <div class="panel-header">
-            <h2>Academy Record</h2>
-            <button class="arrow-btn" onclick="togglePanel('record-panel')">→</button>
+    <div class="main-layout">
+        <div id="chat-window">
+            <div id="messages">
+                <div class="bubble migo-msg"><strong>Migo:</strong> Hi! I'm ready. Let's practice English.</div>
+            </div>
+            <div class="input-bar">
+                <input type="text" id="userInput" placeholder="Escribe al chat..." onkeypress="if(event.key==='Enter') send()">
+                <button class="btn-send" onclick="send()">SEND</button>
+            </div>
         </div>
-        <div id="error-log-container" style="padding:15px;">
-            <div class="error-box">
-                <span class="wrong">Mistake: I has a dog</span>
-                <span class="correct">Correction: I have a dog</span>
+
+        <div class="side-column">
+            <div id="translation-multi" class="side-panel">
+                <span class="label-sm">ESPAÑOL → INGLÉS</span>
+                <textarea id="es-en-in" class="trans-box input-trans" placeholder="Escribe aquí en español..."></textarea>
+                <div id="es-en-out" class="trans-box result-trans">Traducción...</div>
+                
+                <span class="label-sm" style="margin-top:10px;">ENGLISH → ESPAÑOL</span>
+                <textarea id="en-es-in" class="trans-box input-trans" placeholder="Write here in English..."></textarea>
+                <div id="en-es-out" class="trans-box result-trans">Traducción...</div>
+            </div>
+
+            <div id="academy-record" class="side-panel">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <h4 style="margin:0; font-size: 13px; color: #475569;">ACADEMY RECORD</h4>
+                    <button class="btn-settings">Settings</button>
+                </div>
+                <div id="record-list"></div>
             </div>
         </div>
     </div>
 
     <script>
-        /* JS UNIFICADO */
-        function togglePanel(id) {
-            document.getElementById(id).classList.toggle('active');
+        // Diccionario de simulación de traducción (Funcionalidad Local)
+        const dictionary = {
+            "hola": "hello",
+            "perro": "dog",
+            "gato": "cat",
+            "comer": "eat",
+            "gracias": "thanks",
+            "hello": "hola",
+            "dog": "perro",
+            "cat": "gato",
+            "eat": "comer",
+            "thanks": "gracias"
+        };
+
+        function translateSimple(text, lang) {
+            const word = text.toLowerCase().trim();
+            if (!word) return "...";
+            // Simulamos una traducción: si está en el diccionario la da, si no, añade un sufijo para simular proceso
+            if (dictionary[word]) return dictionary[word];
+            return lang === 'es-en' ? `[Translation: ${text}]` : `[Traducción: ${text}]`;
+        }
+
+        // Eventos para traducción automática al escribir
+        document.getElementById('es-en-in').addEventListener('input', function(e) {
+            const result = translateSimple(e.target.value, 'es-en');
+            document.getElementById('es-en-out').innerText = result;
+        });
+
+        document.getElementById('en-es-in').addEventListener('input', function(e) {
+            const result = translateSimple(e.target.value, 'en-es');
+            document.getElementById('en-es-out').innerText = result;
+        });
+
+        function send() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (!text) {
+                input.classList.add('error-shake');
+                setTimeout(() => input.classList.remove('error-shake'), 300);
+                return;
+            }
+
+            addMessage(`<strong>Tú:</strong> ${text}`, 'user-msg');
+            input.value = '';
+
+            setTimeout(() => {
+                let reply = "I understand. Let's keep practicing!";
+                let hint = null;
+                const lower = text.toLowerCase();
+
+                if (lower === "helo") {
+                    reply = "Hello!"; hint = "Sugerencia: 'Hello'";
+                    saveToRecord("helo", "Hello");
+                } else if (lower === "i is") {
+                    reply = "I am ready."; hint = "Sugerencia: 'I am'";
+                    saveToRecord("i is", "I am");
+                }
+
+                addMessage(`<strong>Migo:</strong> ${reply}`, 'migo-msg', hint);
+            }, 600);
+        }
+
+        function addMessage(html, type, hint = null) {
+            const chat = document.getElementById('messages');
+            const div = document.createElement('div');
+            div.className = `bubble ${type}`;
+            div.innerHTML = html;
+            if (hint) {
+                const span = document.createElement('span');
+                span.className = 'hint-text';
+                span.innerText = "⚠️ " + hint;
+                div.appendChild(span);
+            }
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function saveToRecord(orig, corr) {
+            const list = document.getElementById('record-list');
+            const now = new Date();
+            const timeStr = now.toLocaleDateString() + " " + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const entry = document.createElement('div');
+            entry.className = 'error-card';
+            entry.innerHTML = `<span class="time-label">${timeStr}</span><strong>${orig}</strong> → <span style="color:#059669">${corr}</span>`;
+            list.prepend(entry);
         }
     </script>
 </body>
