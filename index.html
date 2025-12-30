@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Migo App - Traductor Funcional</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo App - Vercel Fixed</title>
     <style>
         :root {
             --wa-green: #76c1a5;
@@ -13,7 +14,7 @@
 
         body {
             margin: 0;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             background-color: var(--wa-green);
             background-image: url("https://www.transparenttextures.com/patterns/doodle-weave.png");
             height: 100vh;
@@ -26,16 +27,16 @@
             background: #ffffff;
             padding: 10px 30px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            height: 50px;
         }
 
         .main-layout {
             display: flex;
             flex: 1;
-            padding: 20px;
-            gap: 20px;
+            padding: 15px;
+            gap: 15px;
             overflow: hidden;
         }
 
@@ -51,28 +52,29 @@
 
         #messages {
             flex: 1;
-            padding: 25px;
+            padding: 20px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .bubble {
-            padding: 12px 16px;
-            border-radius: 14px;
+            padding: 10px 15px;
+            border-radius: 12px;
             max-width: 85%;
-            font-size: 15px;
+            font-size: 14px;
             align-self: flex-start;
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            word-wrap: break-word;
         }
 
         .migo-msg { background: var(--bubble-migo); border: 1px solid var(--border-color); }
         .user-msg { background: var(--bubble-user); border: 1px solid #cbd5e1; color: #334155; }
 
         .hint-text {
-            color: #e11d48; font-weight: bold; font-size: 12px; display: block;
-            margin-top: 6px; border-top: 1px dashed #fda4af; padding-top: 4px;
+            color: #e11d48; font-weight: bold; font-size: 11px; display: block;
+            margin-top: 5px; border-top: 1px dashed #fda4af; padding-top: 3px;
         }
 
         /* COLUMNA DERECHA */
@@ -80,29 +82,23 @@
             flex: 1.2;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 10px;
         }
 
         .side-panel {
             background: white;
             border-radius: 15px;
-            padding: 15px;
+            padding: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
 
-        /* TRADUCTOR CUÁDRUPLE */
-        #translation-multi {
-            flex: 1.2;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+        #translation-multi { flex: 1.3; display: flex; flex-direction: column; gap: 5px; }
 
-        .trans-box { width: 100%; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 13px; box-sizing: border-box; }
-        .label-sm { font-size: 10px; font-weight: bold; color: #64748b; margin-bottom: 2px; display: block; }
+        .trans-box { width: 100%; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 13px; box-sizing: border-box; font-family: inherit; }
+        .label-sm { font-size: 10px; font-weight: bold; color: #64748b; display: block; }
         
-        .input-trans { height: 70px; resize: none; border-color: #cbd5e1; outline: none; font-family: inherit; }
-        .result-trans { height: 40px; background: #f8fafc; color: #0f172a; font-weight: 500; display: flex; align-items: center; overflow-x: auto; }
+        .input-trans { height: 70px; resize: none; outline: none; }
+        .result-trans { height: 40px; background: #f8fafc; color: #0f172a; font-weight: 500; display: flex; align-items: center; border: 1px solid #e2e8f0; overflow: hidden; }
 
         /* ACADEMY RECORD */
         #academy-record { height: 40%; display: flex; flex-direction: column; overflow: hidden; }
@@ -110,127 +106,123 @@
 
         .error-card {
             background: #fff1f2; border-left: 4px solid #f43f5e;
-            padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 12px;
+            padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 12px;
         }
 
-        .time-label { font-size: 10px; color: #94a3b8; font-weight: bold; display: block; }
+        .time-label { font-size: 9px; color: #94a3b8; font-weight: bold; display: block; }
 
         /* INPUT CHAT */
         .input-bar {
-            padding: 15px; background: #f8fafc; display: flex; gap: 10px;
+            padding: 12px; background: #f8fafc; display: flex; gap: 8px;
             border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; border-top: 1px solid #eee;
         }
 
-        input[type="text"] { flex: 1; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; outline: none; }
-        input.error-shake { border-color: #f43f5e; animation: shake 0.3s; }
+        #userInput { flex: 1; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; outline: none; }
+        .btn-send { background: #1e293b; color: white; border: none; padding: 0 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        
+        .error-shake { border-color: #f43f5e !important; animation: shake 0.3s; }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
-
-        .btn-send { background: #1e293b; color: white; border: none; padding: 0 20px; border-radius: 10px; cursor: pointer; font-weight: bold; }
-        .btn-settings { background: #64748b; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <header>
-        <div style="font-weight: 800; font-size: 20px; color: #1e293b;">Migo App</div>
+        <div style="font-weight: 800; font-size: 18px; color: #1e293b;">Migo App</div>
     </header>
 
     <div class="main-layout">
         <div id="chat-window">
             <div id="messages">
-                <div class="bubble migo-msg"><strong>Migo:</strong> Hi! I'm ready. Let's practice English.</div>
+                <div class="bubble migo-msg"><strong>Migo:</strong> ¡Hola! Chat y traducción listos. Escribe algo.</div>
             </div>
             <div class="input-bar">
-                <input type="text" id="userInput" placeholder="Escribe al chat..." onkeypress="if(event.key==='Enter') send()">
-                <button class="btn-send" onclick="send()">SEND</button>
+                <input type="text" id="userInput" placeholder="Escribe al chat...">
+                <button class="btn-send" id="sendBtn">SEND</button>
             </div>
         </div>
 
         <div class="side-column">
             <div id="translation-multi" class="side-panel">
                 <span class="label-sm">ESPAÑOL → INGLÉS</span>
-                <textarea id="es-en-in" class="trans-box input-trans" placeholder="Escribe aquí en español..."></textarea>
-                <div id="es-en-out" class="trans-box result-trans">Traducción...</div>
+                <textarea id="es-en-in" class="trans-box input-trans" placeholder="Escribe en español..."></textarea>
+                <div id="es-en-out" class="trans-box result-trans">...</div>
                 
-                <span class="label-sm" style="margin-top:10px;">ENGLISH → ESPAÑOL</span>
-                <textarea id="en-es-in" class="trans-box input-trans" placeholder="Write here in English..."></textarea>
-                <div id="en-es-out" class="trans-box result-trans">Traducción...</div>
+                <span class="label-sm" style="margin-top:5px;">ENGLISH → ESPAÑOL</span>
+                <textarea id="en-es-in" class="trans-box input-trans" placeholder="Write in English..."></textarea>
+                <div id="en-es-out" class="trans-box result-trans">...</div>
             </div>
 
             <div id="academy-record" class="side-panel">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                    <h4 style="margin:0; font-size: 13px; color: #475569;">ACADEMY RECORD</h4>
-                    <button class="btn-settings">Settings</button>
-                </div>
+                <h4 style="margin:0 0 8px 0; font-size: 12px; color: #475569;">ACADEMY RECORD</h4>
                 <div id="record-list"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // Diccionario de simulación de traducción (Funcionalidad Local)
-        const dictionary = {
-            "hola": "hello",
-            "perro": "dog",
-            "gato": "cat",
-            "comer": "eat",
-            "gracias": "thanks",
-            "hello": "hola",
-            "dog": "perro",
-            "cat": "gato",
-            "eat": "comer",
-            "thanks": "gracias"
-        };
-
-        function translateSimple(text, lang) {
-            const word = text.toLowerCase().trim();
-            if (!word) return "...";
-            // Simulamos una traducción: si está en el diccionario la da, si no, añade un sufijo para simular proceso
-            if (dictionary[word]) return dictionary[word];
-            return lang === 'es-en' ? `[Translation: ${text}]` : `[Traducción: ${text}]`;
+        // LÓGICA DE TRADUCCIÓN REAL (Usando una API alternativa compatible con Vercel)
+        async function runTranslation(text, source, target, outputId) {
+            const output = document.getElementById(outputId);
+            if (!text.trim()) {
+                output.innerText = "...";
+                return;
+            }
+            output.innerText = "Traduciendo...";
+            
+            try {
+                const res = await fetch(`https://api.popcat.xyz/translate?to=${target}&text=${encodeURIComponent(text)}`);
+                const data = await res.json();
+                output.innerText = data.translated || "Error";
+            } catch (e) {
+                output.innerText = "Error de conexión";
+            }
         }
 
-        // Eventos para traducción automática al escribir
-        document.getElementById('es-en-in').addEventListener('input', function(e) {
-            const result = translateSimple(e.target.value, 'es-en');
-            document.getElementById('es-en-out').innerText = result;
-        });
+        let transTimer;
+        const debounce = (text, s, t, o) => {
+            clearTimeout(transTimer);
+            transTimer = setTimeout(() => runTranslation(text, s, t, o), 1000);
+        };
 
-        document.getElementById('en-es-in').addEventListener('input', function(e) {
-            const result = translateSimple(e.target.value, 'en-es');
-            document.getElementById('en-es-out').innerText = result;
-        });
+        document.getElementById('es-en-in').addEventListener('input', (e) => debounce(e.target.value, 'es', 'en', 'es-en-out'));
+        document.getElementById('en-es-in').addEventListener('input', (e) => debounce(e.target.value, 'en', 'es', 'en-es-out'));
 
-        function send() {
-            const input = document.getElementById('userInput');
-            const text = input.value.trim();
+        // LÓGICA DEL CHAT
+        const sendBtn = document.getElementById('sendBtn');
+        const userInput = document.getElementById('userInput');
+
+        function sendMessage() {
+            const text = userInput.value.trim();
             if (!text) {
-                input.classList.add('error-shake');
-                setTimeout(() => input.classList.remove('error-shake'), 300);
+                userInput.classList.add('error-shake');
+                setTimeout(() => userInput.classList.remove('error-shake'), 300);
                 return;
             }
 
-            addMessage(`<strong>Tú:</strong> ${text}`, 'user-msg');
-            input.value = '';
+            addMsg(`<strong>Tú:</strong> ${text}`, 'user-msg');
+            userInput.value = '';
 
             setTimeout(() => {
-                let reply = "I understand. Let's keep practicing!";
+                let reply = "Entendido. ¡Sigamos practicando!";
                 let hint = null;
-                const lower = text.toLowerCase();
+                const low = text.toLowerCase();
 
-                if (lower === "helo") {
+                if (low === "helo") {
                     reply = "Hello!"; hint = "Sugerencia: 'Hello'";
-                    saveToRecord("helo", "Hello");
-                } else if (lower === "i is") {
+                    logErr("helo", "Hello");
+                } else if (low === "i is") {
                     reply = "I am ready."; hint = "Sugerencia: 'I am'";
-                    saveToRecord("i is", "I am");
+                    logErr("i is", "I am");
                 }
 
-                addMessage(`<strong>Migo:</strong> ${reply}`, 'migo-msg', hint);
+                addMsg(`<strong>Migo:</strong> ${reply}`, 'migo-msg', hint);
             }, 600);
         }
 
-        function addMessage(html, type, hint = null) {
+        sendBtn.onclick = sendMessage;
+        userInput.onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
+
+        function addMsg(html, type, hint) {
             const chat = document.getElementById('messages');
             const div = document.createElement('div');
             div.className = `bubble ${type}`;
@@ -245,14 +237,14 @@
             chat.scrollTop = chat.scrollHeight;
         }
 
-        function saveToRecord(orig, corr) {
+        function logErr(orig, corr) {
             const list = document.getElementById('record-list');
             const now = new Date();
-            const timeStr = now.toLocaleDateString() + " " + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            const entry = document.createElement('div');
-            entry.className = 'error-card';
-            entry.innerHTML = `<span class="time-label">${timeStr}</span><strong>${orig}</strong> → <span style="color:#059669">${corr}</span>`;
-            list.prepend(entry);
+            const time = now.toLocaleDateString() + " " + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const div = document.createElement('div');
+            div.className = 'error-card';
+            div.innerHTML = `<span class="time-label">${time}</span><strong>${orig}</strong> → <span style="color:#059669">${corr}</span>`;
+            list.prepend(div);
         }
     </script>
 </body>
