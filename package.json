@@ -1,0 +1,12 @@
+{
+  "name": "migo-app",
+  "version": "1.0.0",
+  "description": "Migo App with translation and academy record features",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve ."
+  },
+  "dependencies": {
+    "serve": "^14.2.1"
+  }
+}
