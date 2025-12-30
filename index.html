@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo App - Dinámica</title>
+    <style>
+        :root {
+            --bg-color: #76c1a5;
+            --panel-bg: #eef2f3;
+            --chat-bg: #ffffff;
+            --accent: #2d3436;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            height: 100vh;
+            background-color: var(--bg-color);
+            background-image: url("https://www.transparenttextures.com/patterns/doodle-weave.png");
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            background: rgba(255,255,255,0.1);
+            z-index: 10;
+        }
+
+        .logo { font-size: 24px; font-weight: bold; color: #1a2a3a; }
+        .top-buttons { display: flex; gap: 10px; }
+        .top-btn { 
+            background: var(--accent); color: white; border: none; 
+            padding: 10px 20px; border-radius: 8px; cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* Layout Principal con Paneles Ocultos */
+        .main-layout {
+            display: flex;
+            height: 85vh;
+            padding: 20px;
+            gap: 0; /* Dinámico */
+            transition: all 0.4s ease;
+        }
+
+        /* Paneles Laterales Retráctiles */
+        .side-panel {
+            width: 0;
+            opacity: 0;
+            overflow: hidden;
+            background: var(--panel-bg);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .side-panel.active {
+            width: 250px; /* Tamaño de la imagen de referencia */
+            opacity: 1;
+            padding: 15px;
+            margin: 0 10px;
+        }
+
+        .side-panel h3 { font-size: 16px; border-bottom: 2px solid var(--bg-color); padding-bottom: 5px; }
+
+        /* Contenedor de Chat - Flexible */
+        .chat-container {
+            flex: 1;
+            background: var(--chat-bg);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: all 0.4s ease;
+        }
+
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+
+        /* Mensajes */
+        .message { padding: 12px 16px; border-radius: 12px; max-width: 70%; font-size: 14px; }
+        .migo { align-self: flex-start; background: #f1f3f4; border-bottom-left-radius: 2px; }
+        .user { align-self: flex-end; background: #e3f2fd; color: #0d47a1; border-bottom-right-radius: 2px; }
+        .suggestion { color: #d32f2f; font-weight: bold; display: block; margin-top: 5px; font-size: 12px; }
+
+        .input-area { padding: 20px; border-top: 1px solid #eee; display: flex; gap: 10px; }
+        input { flex: 1; padding: 14px; border: 1px solid #ddd; border-radius: 10px; outline: none; }
+
+        /* Estilos Internos Paneles */
+        #translation-display, #error-log { font-size: 13px; color: #333; }
+        .error-entry { background: white; padding: 10px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #ef4444; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Migo App</div>
+        <div class="top-buttons">
+            <button class="top-btn" onclick="togglePanel('translator')">Translator</button>
+            <button class="top-btn" onclick="togglePanel('record')">Academy Record</button>
+            <button class="top-btn">Settings</button>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <div id="panel-translator" class="side-panel">
+            <h3>Traducción</h3>
+            <div id="translation-display">Escribe un mensaje para traducir...</div>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-messages" id="chat">
+                <div class="message migo">¡Hola! Soy Migo. Tu tutor de inglés ágil.</div>
+            </div>
+            <div class="input-area">
+                <input type="text" id="userInput" placeholder="Escribe en inglés..." onkeypress="handleKey(event)">
+                <button class="top-btn" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+
+        <div id="panel-record" class="side-panel">
+            <h3>Academy Record</h3>
+            <div id="error-log">No hay errores registrados aún.</div>
+        </div>
+    </div>
+
+    <script>
+        // Diccionario interno para agilidad
+        const dictionary = { "hello": "Hola", "car": "Coche", "apple": "Manzana", "helo": "Hola (con error)" };
+
+        function togglePanel(type) {
+            const panel = document.getElementById(`panel-${type}`);
+            panel.classList.toggle('active');
+        }
+
+        function handleKey(e) { if (e.key === 'Enter') sendMessage(); }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            addMessage(text, 'user');
+
+            // 1. Funcionalidad de Traducción
+            const word = text.toLowerCase();
+            document.getElementById('translation-display').innerHTML = 
+                `<strong>"${text}":</strong><br>${dictionary[word] || "Buscando en la nube..."}`;
+
+            // 2. Respuesta de Migo y Detección de Errores
+            setTimeout(() => {
+                let response = "That's correct! Well done.";
+                let hint = null;
+
+                if (word === "helo") {
+                    response = "Hello!";
+                    hint = "Migo suggests: 'Hello'";
+                    logError(text, "Hello");
+                }
+                addMessage(response, 'migo', hint);
+            }, 600);
+
+            input.value = '';
+        }
+
+        function addMessage(text, type, hint = null) {
+            const chat = document.getElementById('chat');
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.innerText = text;
+            if (hint) {
+                const span = document.createElement('span');
+                span.className = 'suggestion';
+                span.innerText = "⚠️ " + hint;
+                div.appendChild(span);
+            }
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function logError(orig, fix) {
+            const log = document.getElementById('error-log');
+            if (log.innerText.includes("No hay errores")) log.innerHTML = "";
+            const entry = document.createElement('div');
+            entry.className = "error-entry";
+            entry.innerHTML = `Escribiste: <strong>${orig}</strong><br>Sugerencia: <strong>${fix}</strong>`;
+            log.prepend(entry);
+        }
+    </script>
+</body>
+</html>
