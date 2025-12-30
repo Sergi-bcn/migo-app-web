@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo App - Estilo Telegram</title>
+    <style>
+        :root {
+            /* Paleta Telegram Web */
+            --tg-bg: #8ba1b2;
+            --tg-chat-bg: #e6eef3;
+            --tg-panel-bg: #ffffff;
+            --tg-accent: #3390ec;
+            --tg-text: #222222;
+            --tg-sub: #707579;
+            --error-red: #e53935;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            background-color: var(--tg-bg);
+            /* Fondo con patrón tipo Telegram */
+            background-image: url("https://www.transparenttextures.com/patterns/pavel-konovalov.png");
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            color: var(--tg-text);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 20px;
+            background: var(--tg-panel-bg);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .logo { font-size: 18px; font-weight: 600; color: var(--tg-accent); }
+        .top-buttons { display: flex; gap: 10px; }
+        
+        .btn { 
+            background: none; color: var(--tg-accent); border: none; 
+            padding: 8px 12px; border-radius: 4px; cursor: pointer; 
+            font-weight: 500; font-size: 13px; transition: background 0.2s;
+        }
+        .btn:hover { background: rgba(51, 144, 236, 0.1); }
+        .btn-primary { background: var(--tg-accent); color: white; }
+        .btn-primary:hover { background: #2b7cd1; }
+
+        .main-layout {
+            display: flex;
+            padding: 10px;
+            flex: 1;
+            gap: 10px;
+            height: calc(100vh - 50px);
+            position: relative;
+        }
+
+        /* LADO IZQUIERDO: Record y Settings */
+        .left-stack {
+            width: 170px; /* 15% más estrecho */
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .record-fixed {
+            flex: 1;
+            background: var(--tg-panel-bg);
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        /* Settings: Mitad hacia abajo izquierda */
+        #panel-settings {
+            height: 0;
+            opacity: 0;
+            overflow: hidden;
+            background: var(--tg-panel-bg);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        #panel-settings.active {
+            height: 40%;
+            opacity: 1;
+            padding: 12px;
+            border-top: 2px solid var(--tg-accent);
+        }
+
+        /* CHAT CENTRAL */
+        .chat-container {
+            flex: 1;
+            background: var(--tg-chat-bg);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* PANEL TRADUCTOR: Derecha, solo mitad vertical */
+        .side-panel-right {
+            width: 0;
+            opacity: 0;
+            overflow: hidden;
+            background: var(--tg-panel-bg);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            height: 50%; /* Solo ocupa la mitad vertical */
+        }
+
+        .side-panel-right.active {
+            width: 200px;
+            opacity: 1;
+            padding: 12px;
+        }
+
+        /* Burbujas Estilo Telegram */
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .message { padding: 8px 12px; border-radius: 10px; max-width: 75%; font-size: 14.5px; box-shadow: 0 1px 1px rgba(0,0,0,0.05); }
+        .migo { align-self: flex-start; background: white; border-bottom-left-radius: 2px; }
+        .user { align-self: flex-end; background: #effdde; border-bottom-right-radius: 2px; }
+        
+        .time-stamp { font-size: 10px; color: var(--tg-sub); display: block; margin-top: 4px; text-align: right; }
+        .hint { color: var(--error-red); font-size: 11px; font-weight: 600; display: block; margin-top: 4px; }
+
+        .input-area { padding: 10px 15px; background: white; display: flex; gap: 10px; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; }
+        input[type="text"] { flex: 1; border: none; padding: 10px; outline: none; font-size: 15px; }
+        
+        h3 { font-size: 13px; margin: 0 0 10px 0; color: var(--tg-accent); text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px;}
+        textarea { width: 100%; border: 1px solid #ddd; border-radius: 5px; padding: 8px; font-size: 12px; resize: none; outline: none; }
+        .res-box { background: #f4f4f5; padding: 8px; border-radius: 5px; margin-top: 5px; font-size: 12px; border-left: 3px solid var(--tg-accent); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Migo App</div>
+        <div class="top-buttons">
+            <button class="btn" onclick="togglePanel('translator')">Traducción</button>
+            <button class="btn" onclick="togglePanel('settings')">Ajustes</button>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <div class="left-stack">
+            <div class="record-fixed">
+                <h3>Record</h3>
+                <div id="error-log" style="font-size: 11px; color: var(--tg-sub);">No hay registros aún.</div>
+            </div>
+            
+            <div id="panel-settings">
+                <h3>Settings</h3>
+                <div style="font-size: 12px;">
+                    <p>🔔 Notificaciones: On</p>
+                    <p>👤 Perfil: Sergi</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-messages" id="chat">
+                <div class="message migo">Hola Sergi. Escribe en inglés. Si fallas (ej: "helo"), lo anotaré con la hora exacta.</div>
+            </div>
+            <div class="input-area">
+                <input type="text" id="userInput" placeholder="Escribe un mensaje..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <button class="btn btn-primary" onclick="sendMessage()">Enviar</button>
+            </div>
+        </div>
+
+        <div id="panel-translator" class="side-panel-right">
+            <h3>Traductor</h3>
+            <div style="margin-bottom: 15px;">
+                <label style="font-size: 11px; font-weight: bold;">ESP > ENG (Intro)</label>
+                <textarea id="es-en-in" rows="2" onkeypress="handleTrans(event, 'es-en')"></textarea>
+                <div class="res-box" id="es-en-out">...</div>
+            </div>
+            <div>
+                <label style="font-size: 11px; font-weight: bold;">ENG > ESP (Intro)</label>
+                <textarea id="en-es-in" rows="2" onkeypress="handleTrans(event, 'en-es')"></textarea>
+                <div class="res-box" id="en-es-out">...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dictionary = { "hola": "hello", "casa": "house", "car": "coche", "helo": "hello", "apple": "manzana" };
+
+        function togglePanel(id) {
+            const t = document.getElementById('panel-translator');
+            const s = document.getElementById('panel-settings');
+            if (id === 'translator') { t.classList.toggle('active'); }
+            else { s.classList.toggle('active'); }
+        }
+
+        // Traducción con Intro
+        function handleTrans(e, mode) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const input = document.getElementById(mode === 'es-en' ? 'es-en-in' : 'en-es-in').value.toLowerCase().trim();
+                const out = document.getElementById(mode === 'es-en' ? 'es-en-out' : 'en-es-out');
+                out.innerText = dictionary[input] || "No encontrado.";
+            }
+        }
+
+        // Conversación y Registro
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            addMsg(text, 'user');
+            
+            setTimeout(() => {
+                let reply = "I'm listening. That sounds interesting!";
+                let suggestion = null;
+
+                if (text.toLowerCase() === "helo") {
+                    reply = "Hello!";
+                    suggestion = "Sugerencia: 'Hello'";
+                    addToRecord(text, "Hello");
+                }
+                addMsg(reply, 'migo', suggestion);
+            }, 600);
+
+            input.value = '';
+        }
+
+        function addMsg(text, type, hint = null) {
+            const chat = document.getElementById('chat');
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.innerHTML = text;
+            if (hint) div.innerHTML += `<span class="hint">⚠️ ${hint}</span>`;
+            
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            div.innerHTML += `<span class="time-stamp">${time}</span>`;
+
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function addToRecord(mistake, correction) {
+            const log = document.getElementById('error-log');
+            if (log.innerText.includes("No hay registros")) log.innerHTML = "";
+            
+            const now = new Date();
+            const dateStr = now.toLocaleDateString();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            const entry = document.createElement('div');
+            entry.style = "background: #fff; padding: 8px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid var(--error-red); font-size: 11px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);";
+            entry.innerHTML = `
+                <div style="color:var(--tg-sub); font-size: 9px; margin-bottom: 3px;">${dateStr} - ${timeStr}</div>
+                <span style="color:var(--error-red)">×</span> ${mistake} <br>
+                <span style="color:#4caf50">✓</span> ${correction}
+            `;
+            log.prepend(entry);
+        }
+    </script>
+</body>
+</html>
