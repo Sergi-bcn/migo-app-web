@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo App - English Academy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="main-interface">
+        <button class="menu-btn" onclick="toggleTranslator()">Translator</button>
+        <button class="menu-btn" onclick="toggleRecord()">Academy Record</button>
+        <button class="menu-btn" onclick="toggleFocus()">Focus</button>
+    </div>
+
+    <div id="translator-panel" class="side-panel left-panel">
+        <div class="panel-header">
+            <button onclick="toggleTranslator()" class="arrow-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <h2>Translator</h2>
+        </div>
+        <div class="panel-body">
+            <textarea id="translate-input" placeholder="Type here to translate and check mistakes..."></textarea>
+            <div id="translate-result" class="result-box"></div>
+        </div>
+    </div>
+
+    <div id="record-panel" class="side-panel right-panel">
+        <div class="panel-header">
+            <h2>Academy Record</h2>
+            <button onclick="toggleRecord()" class="arrow-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+        </div>
+        <div class="panel-body" id="error-log-container">
+            </div>
+    </div>
+
+    <div id="focus-panel" class="bottom-panel">
+        <div class="panel-header">
+            <h2>Settings</h2>
+            <button onclick="toggleFocus()" class="arrow-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+            </button>
+        </div>
+        <div class="panel-body">
+            <p>Ajustes de la sesión y configuración de enfoque.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
