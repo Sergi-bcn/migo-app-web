@@ -1,0 +1,79 @@
+body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; height: 100vh; }
+
+/* Centrado de botones */
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.button-group { display: flex; gap: 15px; }
+
+.btn-black {
+    padding: 15px 25px;
+    background: #000000;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.btn-black:hover { background: #333; }
+
+/* Paneles laterales */
+.side-panel {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 320px;
+    height: 80vh;
+    background: white;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    border-radius: 20px;
+    transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.left { left: -350px; }
+.right { right: -350px; }
+
+/* Animación de entrada */
+.side-panel.active {
+    visibility: visible;
+    opacity: 1;
+}
+.left.active { left: 20px; transform: translateY(-50%); }
+.right.active { right: 20px; transform: translateY(-50%); }
+
+.bottom-panel {
+    position: fixed;
+    bottom: -350px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 450px;
+    height: 300px;
+    background: white;
+    border-radius: 25px 25px 0 0;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
+    transition: 0.5s ease;
+}
+.bottom-panel.active { bottom: 0; }
+
+/* Rectángulos de error */
+.error-box {
+    margin: 12px;
+    padding: 15px;
+    background: #fffafa;
+    border: 2px solid #ffcccc;
+    border-radius: 15px;
+}
+.wrong { color: #e53e3e; text-decoration: line-through; display: block; }
+.correct { color: #38a169; font-weight: bold; display: block; margin-top: 5px; }
+
+.panel-header { display: flex; align-items: center; justify-content: space-between; padding: 20px; border-bottom: 1px solid #f0f0f0; }
+.arrow-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #aaa; }

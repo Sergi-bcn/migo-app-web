@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="button-group">
+            <button class="btn-black" onclick="toggleTranslator()">Translator</button>
+            <button class="btn-black" onclick="toggleRecord()">Academy Record</button>
+            <button class="btn-black" onclick="toggleFocus()">Settings</button>
+        </div>
+    </div>
+
+    <div id="translator-panel" class="side-panel left">
+        <div class="panel-header">
+            <button onclick="toggleTranslator()" class="arrow-btn">←</button>
+            <h2>Translator</h2>
+        </div>
+        <div class="panel-body">
+            <textarea id="text-to-translate" placeholder="Escribe para traducir..."></textarea>
+        </div>
+    </div>
+
+    <div id="record-panel" class="side-panel right">
+        <div class="panel-header">
+            <h2>Academy Record</h2>
+            <button onclick="toggleRecord()" class="arrow-btn">→</button>
+        </div>
+        <div id="error-log-container" class="panel-body">
+            </div>
+    </div>
+
+    <div id="focus-panel" class="bottom-panel">
+        <div class="panel-header">
+            <h2>Settings</h2>
+            <button onclick="toggleFocus()" class="arrow-btn">↑</button>
+        </div>
+        <div class="panel-body">
+            <p>Configuración activa.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
