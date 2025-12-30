@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo App - Modo Corrección Estricta</title>
+    <style>
+        :root {
+            --wa-green: #76c1a5;
+            --bubble-migo: #ffffff;
+            --bubble-user: #f1f5f9;
+            --border-color: #e2e8f0;
+            --error-red: #f43f5e;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--wa-green);
+            background-image: url("https://www.transparenttextures.com/patterns/doodle-weave.png");
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            background: #ffffff;
+            padding: 10px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            height: 50px;
+            z-index: 10;
+        }
+
+        .main-layout {
+            display: flex;
+            flex: 1;
+            padding: 15px;
+            gap: 15px;
+            overflow: hidden;
+        }
+
+        /* CHAT CENTRAL (Más ancho ahora) */
+        #chat-window {
+            flex: 2.5; /* Aumentado para desplazar la columna derecha */
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        #messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .bubble {
+            padding: 10px 15px;
+            border-radius: 12px;
+            max-width: 80%;
+            font-size: 14px;
+            align-self: flex-start;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            word-wrap: break-word;
+            position: relative;
+        }
+
+        .migo-msg { background: var(--bubble-migo); border: 1px solid var(--border-color); }
+        .user-msg { background: var(--bubble-user); border: 1px solid #cbd5e1; color: #334155; }
+        
+        /* Bloqueo Visual */
+        .blocking-msg {
+            border: 2px solid var(--error-red);
+            background: #fff1f2;
+        }
+
+        .hint-text {
+            color: var(--error-red);
+            font-weight: bold;
+            font-size: 12px;
+            display: block;
+            margin-top: 8px;
+            padding-top: 5px;
+            border-top: 1px dashed #fda4af;
+        }
+
+        /* COLUMNA DERECHA (40% más estrecha) */
+        .side-column {
+            flex: 0.7; /* Reducido de 1.2 a 0.7 para cumplir el 40% menos */
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 200px;
+        }
+
+        .side-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        #translation-multi { flex: 1.5; display: flex; flex-direction: column; gap: 5px; }
+        .trans-box { width: 100%; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 12px; box-sizing: border-box; font-family: inherit; }
+        .label-sm { font-size: 10px; font-weight: bold; color: #64748b; display: block; }
+        .input-trans { height: 60px; resize: none; outline: none; }
+        .result-trans { min-height: 35px; background: #f8fafc; color: #0f172a; font-weight: 500; display: flex; align-items: center; border: 1px solid #e2e8f0; padding: 5px; font-size: 12px; }
+
+        /* ACADEMY RECORD */
+        #academy-record { height: 40%; display: flex; flex-direction: column; overflow: hidden; }
+        #record-list { flex: 1; overflow-y: auto; }
+
+        .error-card {
+            background: #fff1f2; border-left: 4px solid var(--error-red);
+            padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 11px;
+        }
+
+        .time-label { font-size: 9px; color: #94a3b8; font-weight: bold; display: block; }
+
+        /* INPUT CHAT */
+        .input-bar {
+            padding: 12px; background: #f8fafc; display: flex; gap: 8px;
+            border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; border-top: 1px solid #eee;
+        }
+
+        #userInput { flex: 1; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; outline: none; }
+        #userInput.locked { background: #fee2e2; border-color: var(--error-red); }
+        .btn-send { background: #1e293b; color: white; border: none; padding: 0 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="font-weight: 800; font-size: 18px; color: #1e293b;">Migo App</div>
+    </header>
+
+    <div class="main-layout">
+        <div id="chat-window">
+            <div id="messages">
+                <div class="bubble migo-msg"><strong>Migo:</strong> Hello! Let's talk. If you make a mistake, you must correct it to continue.</div>
+            </div>
+            <div class="input-bar">
+                <input type="text" id="userInput" placeholder="Type in English...">
+                <button class="btn-send" id="sendBtn">SEND</button>
+            </div>
+        </div>
+
+        <div class="side-column">
+            <div id="translation-multi" class="side-panel">
+                <span class="label-sm">ESP → ENG</span>
+                <textarea id="es-en-in" class="trans-box input-trans" placeholder="Español..."></textarea>
+                <div id="es-en-out" class="trans-box result-trans">...</div>
+                
+                <span class="label-sm" style="margin-top:5px;">ENG → ESP</span>
+                <textarea id="en-es-in" class="trans-box input-trans" placeholder="English..."></textarea>
+                <div id="en-es-out" class="trans-box result-trans">...</div>
+            </div>
+
+            <div id="academy-record" class="side-panel">
+                <h4 style="margin:0 0 8px 0; font-size: 11px; color: #475569;">ACADEMY RECORD</h4>
+                <div id="record-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // TRADUCTOR REAL
+        async function runTranslation(text, target, outputId) {
+            const output = document.getElementById(outputId);
+            if (!text.trim()) { output.innerText = "..."; return; }
+            try {
+                const res = await fetch(`https://api.popcat.xyz/translate?to=${target}&text=${encodeURIComponent(text)}`);
+                const data = await res.json();
+                output.innerText = data.translated || "Error";
+            } catch (e) { output.innerText = "Error"; }
+        }
+
+        document.getElementById('es-en-in').addEventListener('input', (e) => runTranslation(e.target.value, 'en', 'es-en-out'));
+        document.getElementById('en-es-in').addEventListener('input', (e) => runTranslation(e.target.value, 'es', 'en', 'en-es-out'));
+
+        // LÓGICA DE CORRECCIÓN Y BLOQUEO
+        let isLocked = false;
+        let pendingCorrection = "";
+
+        const commonErrors = {
+            "helo": "Hello",
+            "i is": "I am",
+            "you is": "You are",
+            "she are": "She is",
+            "it are": "It is",
+            "apple": "Apple",
+            "i have 20 years": "I am 20 years old",
+            "thanks you": "Thank you"
+        };
+
+        const sendBtn = document.getElementById('sendBtn');
+        const userInput = document.getElementById('userInput');
+
+        function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            // Si estamos en modo bloqueo
+            if (isLocked) {
+                if (text.toLowerCase() === pendingCorrection.toLowerCase()) {
+                    isLocked = false;
+                    pendingCorrection = "";
+                    userInput.classList.remove('locked');
+                    addMsg(`<strong>You:</strong> ${text}`, 'user-msg');
+                    userInput.value = '';
+                    setTimeout(() => {
+                        addMsg(`<strong>Migo:</strong> Perfect! You corrected it. Let's continue.`, 'migo-msg');
+                    }, 600);
+                } else {
+                    userInput.value = '';
+                    addMsg(`<strong>Migo:</strong> No, that's not it. Please write: "<strong>${pendingCorrection}</strong>"`, 'migo-msg blocking-msg');
+                }
+                return;
+            }
+
+            // Flujo normal
+            addMsg(`<strong>You:</strong> ${text}`, 'user-msg');
+            userInput.value = '';
+
+            setTimeout(() => {
+                let lowerText = text.toLowerCase();
+                let foundError = null;
+
+                // Buscar errores
+                for (let key in commonErrors) {
+                    if (lowerText.includes(key)) {
+                        foundError = { original: key, correct: commonErrors[key] };
+                        break;
+                    }
+                }
+
+                if (foundError) {
+                    isLocked = true;
+                    pendingCorrection = foundError.correct;
+                    userInput.classList.add('locked');
+                    
+                    let reply = `Wait! You made a mistake. You said "${foundError.original}".`;
+                    let hint = `Please write the correct version: "${foundError.correct}" to continue.`;
+                    
+                    addMsg(`<strong>Migo:</strong> ${reply}`, 'migo-msg blocking-msg', hint);
+                    logErr(text, foundError.correct);
+                } else {
+                    addMsg(`<strong>Migo:</strong> Great! That is correct. How else can I help you?`, 'migo-msg');
+                }
+            }, 600);
+        }
+
+        sendBtn.onclick = sendMessage;
+        userInput.onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
+
+        function addMsg(html, type, hint) {
+            const chat = document.getElementById('messages');
+            const div = document.createElement('div');
+            div.className = `bubble ${type}`;
+            div.innerHTML = html;
+            if (hint) {
+                const span = document.createElement('span');
+                span.className = 'hint-text';
+                span.innerText = "⚠️ " + hint;
+                div.appendChild(span);
+            }
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function logErr(orig, corr) {
+            const list = document.getElementById('record-list');
+            const now = new Date();
+            const time = now.toLocaleDateString() + " " + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const div = document.createElement('div');
+            div.className = 'error-card';
+            div.innerHTML = `<span class="time-label">${time}</span><strong>Frase:</strong> ${orig}<br><strong>Corrección:</strong> <span style="color:#059669">${corr}</span>`;
+            list.prepend(div);
+        }
+    </script>
+</body>
+</html>
