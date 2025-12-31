@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo App - Ultra Interactive</title>
+    <style>
+        :root {
+            --tg-bg: #8ba1b2;
+            --tg-chat-bg: #e6eef3;
+            --tg-panel-bg: #ffffff;
+            --tg-accent: #3390ec;
+            --error-red: #e53935;
+            --success-green: #4caf50;
+        }
+
+        body {
+            font-family: -apple-system, sans-serif;
+            margin: 0;
+            height: 100vh;
+            background-color: var(--tg-bg);
+            background-image: url("https://www.transparenttextures.com/patterns/pavel-konovalov.png");
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 20px;
+            background: var(--tg-panel-bg);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .main-layout {
+            display: flex;
+            padding: 10px;
+            flex: 1;
+            gap: 10px;
+            height: calc(100vh - 60px);
+        }
+
+        /* LADO IZQUIERDO: Record */
+        .record-fixed {
+            width: 170px;
+            background: var(--tg-panel-bg);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* CHAT CENTRAL */
+        .chat-container {
+            flex: 1;
+            background: var(--tg-chat-bg);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* LADO DERECHO: Traducción arriba, Settings abajo */
+        .right-stack {
+            width: 0;
+            transition: width 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .right-stack.active { width: 240px; }
+
+        .side-panel {
+            background: var(--tg-panel-bg);
+            border-radius: 10px;
+            padding: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .right-stack.active .side-panel { opacity: 1; }
+        
+        #panel-translator { height: 60%; }
+        #panel-settings { height: 40%; }
+
+        /* Estilos de entrada y botones */
+        .input-group { display: flex; gap: 5px; margin-top: 5px; }
+        input { 
+            flex: 1; border: 1px solid #ddd; padding: 8px; border-radius: 5px; outline: none; font-size: 13px;
+        }
+        input.locked { border: 2px solid var(--error-red); background: #fff5f5; }
+
+        .btn-send { 
+            background: var(--tg-accent); color: white; border: none; 
+            padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 11px;
+        }
+
+        /* Mensajes */
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .message { padding: 8px 12px; border-radius: 10px; max-width: 80%; font-size: 14px; box-shadow: 0 1px 1px rgba(0,0,0,0.05); }
+        .migo { align-self: flex-start; background: white; }
+        .user { align-self: flex-end; background: #effdde; }
+
+        .time-stamp { font-size: 9px; color: #888; display: block; margin-top: 4px; text-align: right; }
+        .res-box { background: #f0f4f8; padding: 6px; border-radius: 4px; margin-top: 5px; font-size: 12px; border-left: 3px solid var(--tg-accent); min-height: 16px; }
+        h3 { font-size: 11px; margin: 0 0 5px 0; color: var(--tg-accent); text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="font-weight: bold; color: var(--tg-accent);">Migo App</div>
+        <button class="btn-send" onclick="toggleTools()">Herramientas</button>
+    </header>
+
+    <div class="main-layout">
+        <div class="record-fixed">
+            <h3>Record</h3>
+            <div id="error-log" style="font-size: 11px; overflow-y: auto;"></div>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-messages" id="chat">
+                <div class="message migo">Hola Sergi. Escribe en inglés. Si fallas, el chat se bloqueará hasta que escribas la palabra correcta.</div>
+            </div>
+            <div class="input-area" style="padding: 10px; background: white; display: flex; gap: 10px;">
+                <input type="text" id="userInput" placeholder="Escribe aquí..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <button class="btn-send" style="padding: 10px 20px;" onclick="sendMessage()">SEND</button>
+            </div>
+        </div>
+
+        <div id="right-stack" class="right-stack">
+            <div id="panel-translator" class="side-panel">
+                <h3>Traductor</h3>
+                <div style="margin-bottom:15px">
+                    <small>Español > Inglés</small>
+                    <div class="input-group">
+                        <input type="text" id="es-en-in" placeholder="Hola..." onkeypress="if(event.key==='Enter') runTrans('es-en')">
+                        <button class="btn-send" onclick="runTrans('es-en')">SEND</button>
+                    </div>
+                    <div class="res-box" id="es-en-out">...</div>
+                </div>
+                <div>
+                    <small>Inglés > Español</small>
+                    <div class="input-group">
+                        <input type="text" id="en-es-in" placeholder="Hello..." onkeypress="if(event.key==='Enter') runTrans('en-es')">
+                        <button class="btn-send" onclick="runTrans('en-es')">SEND</button>
+                    </div>
+                    <div class="res-box" id="en-es-out">...</div>
+                </div>
+            </div>
+            <div id="panel-settings" class="side-panel">
+                <h3>Settings</h3>
+                <div style="font-size: 11px;">Perfil: Sergi<br>Modo: Estricto</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dictionary = { 
+            "hola": "hello", "casa": "house", "coche": "car", "perro": "dog",
+            "hello": "hola", "house": "casa", "car": "coche", "dog": "perro",
+            "helo": "hello"
+        };
+        
+        let isLocked = false;
+        let requiredWord = "";
+
+        function toggleTools() { document.getElementById('right-stack').classList.toggle('active'); }
+
+        // --- TRADUCCIÓN ---
+        function runTrans(mode) {
+            const inputId = mode === 'es-en' ? 'es-en-in' : 'en-es-in';
+            const outputId = mode === 'es-en' ? 'es-en-out' : 'en-es-out';
+            const val = document.getElementById(inputId).value.toLowerCase().trim();
+            const outBox = document.getElementById(outputId);
+            
+            if(!val) return;
+            outBox.innerText = dictionary[val] || "No encontrado.";
+        }
+
+        // --- CONVERSACIÓN ---
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            // Lógica de Bloqueo
+            if (isLocked) {
+                if (text.toLowerCase() === requiredWord.toLowerCase()) {
+                    unlockChat();
+                    addMsg("¡Perfecto! Has corregido el error. Continuemos.", "migo");
+                } else {
+                    input.classList.add('locked');
+                    // Opcional: añadir mensaje de "Sigue intentándolo"
+                }
+                input.value = '';
+                return;
+            }
+
+            addMsg(text, 'user');
+
+            // Detección de error
+            if (text.toLowerCase() === "helo") {
+                lockChat("Hello");
+            } else {
+                setTimeout(() => addMsg("I understand. Keep practicing!", "migo"), 600);
+            }
+            input.value = '';
+        }
+
+        function lockChat(correct) {
+            isLocked = true;
+            requiredWord = correct;
+            const input = document.getElementById('userInput');
+            input.placeholder = `BLOQUEADO. Escribe "${correct}"...`;
+            input.classList.add('locked');
+            
+            addToRecord("helo", correct);
+            addMsg(`¡Error detectado! El chat se ha congelado. Escribe exactamente "${correct}" para desbloquearlo.`, "migo");
+        }
+
+        function unlockChat() {
+            isLocked = false;
+            const input = document.getElementById('userInput');
+            input.placeholder = "Escribe un mensaje...";
+            input.classList.remove('locked');
+        }
+
+        // --- UTILIDADES ---
+        function addMsg(text, type) {
+            const chat = document.getElementById('chat');
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.innerText = text;
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            div.innerHTML += `<span class="time-stamp">${time}</span>`;
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function addToRecord(mistake, correction) {
+            const log = document.getElementById('error-log');
+            const now = new Date();
+            const entry = document.createElement('div');
+            entry.style = "background:#fff; padding:6px; border-radius:5px; margin-bottom:8px; border-left:3px solid var(--error-red); font-size:10px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);";
+            entry.innerHTML = `
+                <div style="color:#888; font-size:8px;">${now.toLocaleDateString()} ${now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
+                <b style="color:var(--error-red)">×</b> ${mistake} → <b style="color:var(--success-green)">${correction}</b>
+            `;
+            log.prepend(entry);
+        }
+    </script>
+</body>
+</html>
