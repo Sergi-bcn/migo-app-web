@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo Web - Elite Coach</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bright-yellow: #fffde7;
+            --joy-yellow: #fff59d;
+            --active-green: #4caf50;
+            --joy-orange: #ff9800;
+            --sidebar-joy: #fbc02d;
+            --error-red: #ff5252;
+            --text-main: #2c3e50;
+            --web-bg: #e1eee3;
+            --icon-dark: #5d4037;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0; height: 100vh;
+            background-color: var(--web-bg);
+            display: flex; overflow: hidden; color: var(--text-main);
+        }
+
+        /* BARRA LATERAL */
+        .side-nav {
+            width: 75px; background: var(--sidebar-joy);
+            display: flex; flex-direction: column; align-items: center;
+            padding: 20px 0; justify-content: flex-end; flex-shrink: 0;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.1); z-index: 1100; gap: 15px;
+        }
+
+        .icon-wrapper {
+            width: 45px; height: 45px; background: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: relative;
+        }
+        .icon-wrapper:hover { transform: scale(1.05); background: var(--bright-yellow); }
+
+        /* TOOLTIPS POSICIONADOS */
+        .icon-wrapper::after {
+            content: attr(data-title);
+            position: absolute; background: rgba(44, 62, 80, 0.95);
+            color: white; padding: 5px 10px; border-radius: 6px;
+            font-size: 11px; white-space: nowrap; opacity: 0;
+            visibility: hidden; transition: all 0.2s ease; z-index: 9999;
+        }
+        .side-nav .icon-wrapper:hover::after { opacity: 1; visibility: visible; left: 55px; top: 50%; transform: translateY(-50%); }
+        .header-unit .icon-wrapper:hover::after { opacity: 1; visibility: visible; top: 60px; right: 0; }
+
+        .profile-circle {
+            width: 50px; height: 50px; background: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: var(--sidebar-joy); font-weight: bold; font-size: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); border: 2px solid #fff;
+        }
+
+        /* LAYOUT PRINCIPAL */
+        .main-app { display: flex; flex: 1; padding: 20px; gap: 20px; width: calc(100% - 75px); }
+        .section-card { background: white; border-radius: 30px; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.06); overflow: hidden; }
+
+        /* VENTANA DE LOG (CORRECCIONES) */
+        .record-fixed { width: 320px; flex-shrink: 0; }
+        .log-container { flex: 1; padding: 15px; overflow-y: auto; background: #fafafa; display: flex; flex-direction: column; gap: 12px; }
+        .log-entry { padding: 12px; border-left: 4px solid var(--error-red); background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .log-time { font-size: 10px; color: #999; font-weight: 800; margin-bottom: 5px; }
+
+        /* CHAT */
+        .chat-container { flex: 2; position: relative; }
+        .header-unit { height: 90px; display: flex; align-items: center; border-bottom: 3px solid var(--joy-yellow); padding: 0 25px; background: white; justify-content: space-between; }
+        
+        .migo-brand { 
+            color: var(--joy-orange); 
+            font-size: 36px; 
+            font-weight: 900; 
+            letter-spacing: -1.5px;
+            -webkit-text-stroke: 1.2px var(--joy-orange);
+        }
+
+        .chat-messages { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background-color: #f4f7f4; }
+        .message { padding: 12px 18px; border-radius: 20px; max-width: 75%; font-size: 15px; }
+        
+        /* POSICIONES CHAT: Humano Izquierda, Migo Derecha */
+        .user { background: white; align-self: flex-start; border-bottom-left-radius: 4px; border-left: 5px solid #2196f3; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .migo { background: #fff9c4; align-self: flex-end; border-bottom-right-radius: 4px; border-right: 5px solid var(--joy-orange); }
+
+        /* AREA DE ENTRADA */
+        .input-area { padding: 20px; background: white; }
+        .input-wrapper { display: flex; align-items: center; background: #f8f9fa; border-radius: 35px; border: 2px solid #eee; padding: 5px 15px; }
+        .input-wrapper textarea { flex: 1; border: none; background: transparent; outline: none; padding: 12px; resize: none; font-size: 15px; font-family: inherit; }
+        
+        /* BOTÓN NARANJA */
+        .send-btn { width: 40px; height: 40px; background: var(--joy-orange); border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .send-btn:hover { transform: scale(1.1); background: #e68a00; }
+
+        /* TRADUCTOR */
+        .side-panels { width: 340px; display: flex; flex-direction: column; flex-shrink: 0; position: relative; }
+    </style>
+</head>
+<body>
+
+<nav class="side-nav">
+    <div class="icon-wrapper" data-title="Configuración"><svg width="24" height="24" viewBox="0 0 24 24" fill="var(--icon-dark)"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58z"/></svg></div>
+    <div class="profile-circle">S</div>
+</nav>
+
+<main class="main-app">
+    <div class="section-card record-fixed">
+        <header class="header-unit"><span style="font-weight: 800; font-size: 14px;">LOG DE CORRECCIONES</span></header>
+        <div class="log-container" id="logBox">
+            <div style="text-align: center; color: #ccc; margin-top: 50px;">Esperando errores...</div>
+        </div>
+    </div>
+
+    <div class="section-card chat-container">
+        <header class="header-unit">
+            <span class="migo-brand">Migo web</span>
+            <div style="display: flex; gap: 10px;">
+                <div class="icon-wrapper" data-title="Conversación"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>
+                <div class="icon-wrapper" data-title="Traductor" onclick="toggleTrans()"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04z"/></svg></div>
+            </div>
+        </header>
+
+        <div class="chat-messages" id="chatBox">
+            <div class="message migo">¡Hola Sergi! Soy Migo. Escribe algo en inglés y te ayudaré a corregirlo en el panel de la izquierda.</div>
+        </div>
+
+        <div class="input-area">
+            <div class="input-wrapper">
+                <textarea id="userInput" rows="1" placeholder="Escribe en inglés..." onkeypress="checkEnter(event)"></textarea>
+                <button class="send-btn" onclick="processConversation()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="side-panels section-card" id="translator" style="display:none;">
+        <header class="header-unit"><span style="font-weight: 800;">TRADUCTOR</span></header>
+        <div style="padding: 20px;">
+            <textarea id="trans-in" style="width:100%; height:100px; border:1px solid #eee; border-radius:15px; padding:10px; outline:none;" placeholder="Texto a traducir..."></textarea>
+            <button onclick="quickTranslate()" style="width:100%; background:var(--joy-orange); color:white; border:none; padding:10px; border-radius:10px; margin-top:10px; cursor:pointer;">Traducir</button>
+            <div id="trans
