@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo App - Hybrid Mode</title>
+    <style>
+        :root {
+            --tg-green-bg: #98bc90;
+            --tg-chat-bg: #e6eef3;
+            --tg-panel-bg: #ffffff;
+            --tg-accent: #3390ec;
+            --error-red: #e53935;
+            --success-green: #4caf50;
+            --gemini-blue: #1a73e8;
+        }
+
+        body {
+            font-family: 'Calibri', sans-serif;
+            margin: 0;
+            height: 100vh;
+            background-color: var(--tg-green-bg);
+            background-image: url("https://www.transparenttextures.com/patterns/pavel-konovalov.png");
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Aviso de Conexión */
+        #offline-banner {
+            display: none;
+            background: #ffeb3b;
+            color: #333;
+            text-align: center;
+            padding: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: var(--tg-panel-bg);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .main-layout {
+            display: flex;
+            padding: 10px;
+            flex: 1;
+            gap: 10px;
+            height: calc(100vh - 65px);
+            position: relative;
+        }
+
+        /* REGISTRO IZQUIERDA (16px) */
+        .record-fixed {
+            width: 220px;
+            background: var(--tg-panel-bg);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        #error-log { font-size: 16px; overflow-y: auto; flex: 1; }
+
+        /* CHAT CENTRAL */
+        .chat-container {
+            flex: 1;
+            background: rgba(230, 238, 243, 0.95);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* VENTANA TRADUCCIÓN SUAVE */
+        #panel-translator {
+            width: 0;
+            opacity: 0;
+            overflow: hidden;
+            background: var(--tg-panel-bg);
+            border-radius: 12px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        #panel-translator.active { width: 320px; opacity: 1; padding: 15px; margin-left: 10px; }
+
+        /* SETTINGS FLOTANTE (15px) */
+        #panel-settings {
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            width: 220px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            padding: 10px;
+            z-index: 2000;
+            border: 1px solid #eee;
+            font-size: 15px;
+        }
+        #panel-settings.active { display: flex; }
+
+        .header-icons { display: flex; gap: 15px; }
+        .icon-btn { background: none; border: none; cursor: pointer; padding: 5px; border-radius: 50%; }
+        .icon-btn svg { width: 26px; height: 26px; fill: var(--tg-accent); }
+
+        .input-wrapper { 
+            display: flex; align-items: center; background: white; 
+            border-radius: 10px; border: 1px solid #ddd; padding: 5px 10px;
+            margin-bottom: 5px;
+        }
+        .input-wrapper textarea { flex: 1; border: none; outline: none; padding: 5px; font-size: 14px; resize: none; font-family: 'Calibri'; }
+        .wrapper-locked { border: 2px solid var(--error-red) !important; background: #fff5f5 !important; }
+
+        .res-box { background: #f1f3f4; padding: 10px; border-radius: 8px; font-size: 14px; color: #1a0dab; margin-bottom: 15px; min-height: 20px; }
+        
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .message { padding: 12px 15px; border-radius: 15px; max-width: 85%; font-size: 15px; align-self: flex-start; }
+        .migo { background: white; border-top-left-radius: 2px; }
+        .user { background: #d2e3fc; border-top-left-radius: 2px; border-left: 4px solid var(--tg-accent); }
+
+        h3 { font-size: 14px; margin: 0 0 10px 0; color: #5f6368; text-transform: uppercase; border-bottom: 1px solid #eee; }
+    </style>
+</head>
+<body>
+
+    <div id="offline-banner">
+        ⚠️ Sin conexión. Funcionalidad limitada. / No internet. Limited functionality.
+    </div>
+
+    <header>
+        <div style="font-weight: bold; color: var(--tg-accent); font-size: 20px;">Migo App</div>
+        <div class="header-icons">
+            <button class="icon-btn" onclick="openTranslator()"><svg viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg></button>
+            <button class="icon-btn" onclick="toggleSettings()"><svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <div class="record-fixed">
+            <h3>Registro Errores</h3>
+            <div id="error-log"></div>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-messages" id="chat">
+                <div class="message migo">Hello Sergi! Let's practice. Remember: if you type "helo", I will stop and help you.</div>
+            </div>
+            <div style="padding: 15px;">
+                <div class="input-wrapper" id="main-input-wrap" style="border-radius: 25px;">
+                    <textarea id="userInput" rows="1" placeholder="Type here..." onkeypress="if(event.key==='Enter'){event.preventDefault(); sendMessage();}"></textarea>
+                    <button class="icon-btn" onclick="sendMessage()"><svg viewBox="0 0 24 24" style="width:22px; height:22px; fill:var(--tg-accent)"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="panel-translator">
+            <h3>Traductor</h3>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <small>Español > Inglés</small>
+                <button class="icon-btn" onclick="clearTr('es-en')" style="padding:0"><svg style="width:14px; fill:#999" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></button>
+            </div>
+            <div class="input-wrapper">
+                <textarea id="es-en-in" rows="2" placeholder="..." onkeypress="if(event.key==='Enter'){event.preventDefault(); translate('es','en');}"></textarea>
+                <button class="icon-btn" onclick="translate('es','en')"><svg style="width:20px; fill:var(--tg-accent)" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg></button>
+            </div>
+            <div class="res-box" id="es-en-out">...</div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <small>Inglés > Español</small>
+                <button class="icon-btn" onclick="clearTr('en-es')" style="padding:0"><svg style="width:14px; fill:#999" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></button>
+            </div>
+            <div class="input-wrapper">
+                <textarea id="en-es-in" rows="2" placeholder="..." onkeypress="if(event.key==='Enter'){event.preventDefault(); translate('en','es');}"></textarea>
+                <button class="icon-btn" onclick="translate('en','es')"><svg style="width:20px; fill:var(--tg-accent)" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg></button>
+            </div>
+            <div class="res-box" id="en-es-out">...</div>
+        </div>
+
+        <div id="panel-settings">
+            <div style="padding: 5px; border-bottom: 1px solid #eee; font-weight: bold;">Opciones</div>
+            <div style="padding: 8px;">👤 Perfil: Sergi</div>
+            <div style="padding: 8px;">📶 Modo Híbrido Activado</div>
+            <div style="padding: 8px; color: red; cursor:pointer;" onclick="localStorage.clear(); location.reload();">🔄 Reiniciar Todo</div>
+        </div>
+    </div>
+
+    <script>
+        let isLocked = false;
+        let requiredWord = "";
+        
+        // Diccionario de emergencia Offline
+        const offlineDict = {"hola": "hello", "gracias": "thank you", "ayuda": "help", "comida": "food", "agua": "water"};
+
+        // Detección de conexión
+        function updateOnlineStatus() {
+            const banner = document.getElementById('offline-banner');
+            banner.style.display = navigator.onLine ? "none" : "block";
+        }
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        updateOnlineStatus();
+
+        function openTranslator() {
+            document.getElementById('panel-settings').classList.remove('active');
+            document.getElementById('panel-translator').classList.toggle('active');
+        }
+        function toggleSettings() {
+            document.getElementById('panel-settings').classList.toggle('active');
+        }
+        function clearTr(id) { document.getElementById(id+'-in').value = ""; document.getElementById(id+'-out').innerText = "..."; }
+
+        // Traducción Híbrida
+        async function translate(sl, tl) {
+            const text = document.getElementById(`${sl}-${tl}-in`).value;
+            const out = document.getElementById(`${sl}-${tl}-out`);
+            if(!text) return;
+            
+            if(navigator.onLine) {
+                try {
+                    const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURI(text)}`);
+                    const data = await res.json();
+                    out.innerText = data[0][0][0];
+                } catch { out.innerText = "Error (usando offline...)"; }
+            } else {
+                const words = text.toLowerCase().split(" ");
+                out.innerText = words.map(w => offlineDict[w] || "["+w+"]").join(" ");
+            }
+        }
+
+        // Conversación Dinámica
+        const migoAnswers = [
+            "That sounds great! Tell me more about your day.",
+            "I understand. Practice makes perfect!",
+            "Interesting! How do you say that in Spanish?",
+            "You are doing a good job with your English!",
+            "Let's keep talking. What do you like to do?"
+        ];
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const wrap = document.getElementById('main-input-wrap');
+            const text = input.value.trim();
+            if (!text) return;
+
+            if (isLocked) {
+                if (text.toLowerCase() === requiredWord.toLowerCase()) {
+                    addMsg(text, 'user');
+                    unlockChat();
+                    addMsg("Perfect! You got it. Let's continue.", "migo");
+                } else {
+                    wrap.classList.add('wrapper-locked');
+                    setTimeout(() => wrap.classList.remove('wrapper-locked'), 300);
+                }
+                input.value = '';
+                return;
+            }
+
+            addMsg(text, 'user');
+
+            if (text.toLowerCase().includes("helo")) {
+                lockChat("Hello");
+            } else {
+                setTimeout(() => {
+                    const resp = migoAnswers[Math.floor(Math.random() * migoAnswers.length)];
+                    addMsg(resp, "migo");
+                }, 800);
+            }
+            input.value = '';
+        }
+
+        function lockChat(correct) {
+            isLocked = true;
+            requiredWord = correct;
+            document.getElementById('main-input-wrap').classList.add('wrapper-locked');
+            addToRecord("helo", correct);
+            addMsg(`Wait! You wrote "helo". Please write "${correct}" to unlock the chat.`, "migo");
+        }
+
+        function unlockChat() {
+            isLocked = false;
+            document.getElementById('main-input-wrap').classList.remove('wrapper-locked');
+        }
+
+        function addMsg(text, type) {
+            const chat = document.getElementById('chat');
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.innerText = text;
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function addToRecord(mistake, correction) {
+            const log = document.getElementById('error-log');
+            const entry = document.createElement('div');
+            const now = new Date();
+            entry.style = "background:#fff; padding:10px; border-radius:8px; margin-bottom:10px; border-left:4px solid var(--error-red); shadow: 0 1px 3px rgba(0,0,0,0.1);";
+            entry.innerHTML = `<small style="color:#999">${now.toLocaleDateString()} ${now.toLocaleTimeString()}</small><br><b>×</b> ${mistake} → <b style="color:var(--success-green)">${correction}</b>`;
+            log.prepend(entry);
+        }
+    </script>
+</body>
+</html>
