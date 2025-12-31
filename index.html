@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo - Joyful Growth</title>
+    <style>
+        :root {
+            --bright-yellow: #fffde7;
+            --joy-yellow: #fff176;
+            --soft-green: #f1f8e9;
+            --active-green: #4caf50;
+            --joy-orange: #ff9800;
+            --sidebar-bg: #2e3b2e;
+            --error-red: #ff5252;
+            --text-main: #37474f;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            height: 100vh;
+            background-color: var(--bright-yellow);
+            /* Doodle de crecimiento estilo telegram (naturaleza) */
+            background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png"), url("https://www.transparenttextures.com/patterns/leaves.png");
+            display: flex;
+            overflow: hidden;
+            color: var(--text-main);
+        }
+
+        .app-container { display: flex; flex: 1; width: 100vw; height: 100vh; }
+
+        /* SIDEBAR */
+        .side-nav {
+            width: 65px; background: var(--sidebar-bg);
+            display: flex; flex-direction: column; align-items: center;
+            padding: 20px 0; justify-content: flex-end; gap: 20px;
+        }
+        .profile-circle {
+            width: 42px; height: 42px; background: var(--active-green);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: bold; cursor: pointer;
+        }
+
+        /* LOGS */
+        .record-fixed {
+            width: 260px; background: rgba(255,255,255,0.9);
+            border-right: 1px solid #e0e0e0; padding: 20px;
+            display: flex; flex-direction: column;
+        }
+        #error-log { overflow-y: auto; flex: 1; margin-top: 10px; font-size: 18px; }
+
+        /* CHAT */
+        .chat-container {
+            flex: 1; background: rgba(241, 248, 233, 0.7);
+            display: flex; flex-direction: column; position: relative;
+        }
+
+        header {
+            padding: 15px 25px; background: #fffde7; border-bottom: 2px solid var(--joy-yellow);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .message { padding: 12px 16px; border-radius: 18px; max-width: 80%; font-size: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .migo { background: white; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .user { background: #e8f5e9; align-self: flex-start; border-left: 5px solid var(--active-green); border-bottom-left-radius: 4px; }
+
+        /* INPUT AREA */
+        .input-area { padding: 15px 25px; background: #fffde7; border-top: 1px solid #eee; }
+        .input-wrapper { 
+            display: flex; align-items: center; background: white; 
+            border-radius: 25px; border: 2px solid var(--joy-yellow); padding: 5px 15px;
+        }
+        .input-wrapper textarea { flex: 1; border: none; outline: none; padding: 10px; resize: none; font-family: inherit; font-size: 16px; }
+        .wrapper-locked { border-color: var(--error-red) !important; background: #ffebee !important; }
+
+        /* PANELS */
+        .floating-panel {
+            background: white; position: absolute; right: 20px; top: 80px;
+            width: 320px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: none; flex-direction: column; padding: 20px; z-index: 1000;
+            border: 3px solid var(--joy-yellow);
+        }
+        .active { display: flex !important; }
+
+        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .close-arrow { cursor: pointer; fill: #999; transition: 0.3s; }
+        .close-arrow:hover { fill: var(--active-green); transform: translateX(5px); }
+
+        /* TRANSLATOR UI */
+        .trans-unit { margin-bottom: 15px; }
+        .trans-unit label { font-size: 12px; font-weight: bold; color: var(--active-green); display: block; margin-bottom: 5px; }
+        .trans-input-box { display: flex; gap: 8px; align-items: center; }
+        .trans-input-box input { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #eee; outline: none; }
+        
+        .play-btn { 
+            background: var(--joy-orange); border: none; border-radius: 50%; 
+            width: 38px; height: 38px; cursor: pointer; display: flex; 
+            align-items: center; justify-content: center; transition: 0.2s;
+        }
+        .play-btn:hover { transform: scale(1.1); background: var(--active-green); }
+        .play-btn svg { fill: white; width: 20px; height: 20px; }
+
+        .res-box { background: #fffde7; padding: 12px; border-radius: 10px; margin-top: 8px; font-size: 15px; color: #2e7d32; border-left: 4px solid var(--active-green); min-height: 20px; }
+
+        .icon-btn { background: none; border: none; cursor: pointer; padding: 5px; }
+        .icon-btn svg { width: 28px; height: 28px; fill: #78909c; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <nav class="side-nav">
+        <div class="side-icon" style="margin-bottom: auto; cursor: pointer;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff176"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
+        </div>
+        <div class="profile-circle">S</div>
+    </nav>
+
+    <div class="record-fixed">
+        <h3 style="color: var(--active-green); font-size: 18px; border-bottom: 2px solid var(--joy-yellow); padding-bottom: 5px;">🌱 PROGRESS LOG</h3>
+        <div id="error-log"></div>
+    </div>
+
+    <div class="chat-container">
+        <header>
+            <div style="font-weight: bold; font-size: 20px; color: var(--active-green);">☀️ Migo: Joyful Learning</div>
+            <div style="display: flex; gap: 15px;">
+                <button class="icon-btn" onclick="togglePanel('panel-translator')"><svg viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg></button>
+                <button class="icon-btn" onclick="togglePanel('panel-settings')"><svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
+            </div>
+        </header>
+
+        <div class="chat-messages" id="chat">
+            <div class="message migo">Hello Sergi! Every step is growth. / ¡Hola Sergi! Cada paso es crecimiento. ✨</div>
+        </div>
+
+        <div class="input-area">
+            <div class="input-wrapper" id="main-input-wrap">
+                <textarea id="userInput" rows="1" placeholder="Type here... / Escribe aquí..." onkeypress="handleChatKey(event)"></textarea>
+                <button class="icon-btn" onclick="sendMessage()"><svg viewBox="0 0 24 24" fill="var(--active-green)"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg></button>
+            </div>
+        </div>
+
+        <div id="panel-translator" class="floating-panel">
+            <div class="panel-header">
+                <span style="font-weight: bold; color: var(--joy-orange);">🌍 QUICK TRANSLATE</span>
+                <svg class="close-arrow" onclick="togglePanel('panel-translator')" width="28" height="28" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            </div>
+            
+            <div class="trans-unit">
+                <label>ESPAÑOL ➜ ENGLISH</label>
+                <div class="trans-input-box">
+                    <input type="text" id="es-in" placeholder="¿Cómo se dice...?">
+                    <button class="play-btn" onclick="runTranslate('es', 'en')"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+                </div>
+                <div class="res-box" id="es-out">...</div>
+            </div>
+
+            <div class="trans-unit">
+                <label>ENGLISH ➜ ESPAÑOL</label>
+                <div class="trans-input-box">
+                    <input type="text" id="en-in" placeholder="How do you say...?">
+                    <button class="play-btn" onclick="runTranslate('en', 'es')"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+                </div>
+                <div class="res-box" id="en-out">...</div>
+            </div>
+        </div>
+
+        <div id="panel-settings" class="floating-panel">
+            <div class="panel-header">
+                <span style="font-weight: bold;">⚙️ SETTINGS</span>
+                <svg class="close-arrow" onclick="togglePanel('panel-settings')" width="28" height="28" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            </div>
+            <p>👤 Usuario: Sergi</p>
+            <button onclick="location.reload()" style="padding: 12px; background: #ffebee; border: none; border-radius: 12px; cursor: pointer; color: var(--error-red); font-weight: bold; width: 100%;">REINICIAR APP</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let isLocked = false;
+    let requiredWord = "";
+
+    function togglePanel(id) {
+        const panels = ['panel-translator', 'panel-settings'];
+        panels.forEach(p => {
+            if(p === id) document.getElementById(p).classList.toggle('active');
+            else document.getElementById(p).classList.remove('active');
+        });
+    }
+
+    // ARREGLO DE TRADUCCIÓN: Uso de API corregida
+    async function runTranslate(sl, tl) {
+        const inputField = document.getElementById(`${sl}-in`);
+        const text = inputField.value.trim();
+        const out = document.getElementById(`${sl}-out`);
+        
+        if(!text) return;
+        out.innerText = "Thinking/Pensando...";
+
+        try {
+            // Usamos un proxy/URL limpia para evitar el 404
+            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('Network error');
+            const data = await response.json();
+            out.innerText = data[0][0][0];
+        } catch (e) {
+            out.innerText = "Error de conexión. Intenta de nuevo.";
+            console.error(e);
+        }
+    }
+
+    function handleChatKey(e) { if(e.key === 'Enter') { e.preventDefault(); sendMessage(); } }
+
+    function sendMessage() {
+        const input = document.getElementById('userInput');
+        const wrap = document.getElementById('main-input-wrap');
+        const text = input.value.trim();
+        if(!text) return;
+
+        if(isLocked) {
+            if(text.toLowerCase() === requiredWord.toLowerCase()) {
+                addMsg(text, 'user');
+                isLocked = false;
+                wrap.classList.remove('wrapper-locked');
+                setTimeout(() => addMsg("Excellent! Let's continue growing. / ¡Excelente! Sigamos creciendo.", "migo"), 500);
+            } else {
+                wrap.classList.add('wrapper-locked');
+                setTimeout(() => wrap.classList.remove('wrapper-locked'), 300);
+                addMsg(`Please write: "${requiredWord}" / Por favor escribe: "${requiredWord}"`, "migo");
+            }
+            input.value = '';
+            return;
+        }
+
+        addMsg(text, 'user');
+
+        // Lógica de corrección
+        if(text.toLowerCase().includes("helo")) {
+            isLocked = true;
+            requiredWord = "Hello";
+            wrap.classList.add('wrapper-locked');
+            addToRecord("helo", "Hello");
+            setTimeout(() => addMsg(`Spelling! Write "${requiredWord}" to unlock. / ¡Ortografía! Escribe "${requiredWord}" para desbloquear.`, "migo"), 400);
+        } else {
+            setTimeout(() => {
+                addMsg("Tell me more about your day! / ¡Cuéntame más sobre tu día!", "migo");
+            }, 800);
+        }
+        input.value = '';
+    }
+
+    function addMsg(text, type) {
+        const chat = document.getElementById('chat');
+        const div = document.createElement('div');
+        div.className = `message ${type}`;
+        div.innerText = text;
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight;
+    }
+
+    function addToRecord(mistake, correction) {
+        const log = document.getElementById('error-log');
+        const entry = document.createElement('div');
+        entry.style = "background:white; padding:15px; border-radius:15px; margin-bottom:12px; border-left:5px solid var(--error-red); box-shadow: 0 4px 6px rgba(0,0,0,0.05); animation: slideIn 0.3s ease;";
+        entry.innerHTML = `<b style="color:var(--error-red)">×</b> ${mistake} → <b style="color:var(--active-green)">${correction}</b><br><small style="color:#aaa">You got this!</small>`;
+        log.prepend(entry);
+    }
+</script>
+</body>
+</html>
