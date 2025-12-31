@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo App - Pro Translator</title>
+    <style>
+        :root {
+            --tg-green-bg: #98bc90;
+            --tg-chat-bg: #e6eef3;
+            --tg-panel-bg: #ffffff;
+            --tg-accent: #3390ec;
+            --error-red: #e53935;
+            --success-green: #4caf50;
+            --gemini-blue: #1a73e8;
+        }
+
+        /* Tipografía Calibri en toda la app */
+        body {
+            font-family: 'Calibri', 'Candara', 'Segoe UI', sans-serif;
+            margin: 0;
+            height: 100vh;
+            background-color: var(--tg-green-bg);
+            background-image: url("https://www.transparenttextures.com/patterns/pavel-konovalov.png");
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: var(--tg-panel-bg);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .main-layout {
+            display: flex;
+            padding: 10px;
+            flex: 1;
+            gap: 10px;
+            height: calc(100vh - 65px);
+        }
+
+        /* LADO IZQUIERDO: Record (Letra más grande) */
+        .record-fixed {
+            width: 200px; /* Un poco más ancho para el texto grande */
+            background: var(--tg-panel-bg);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        #error-log {
+            font-size: 14px; /* Registro más grande */
+            overflow-y: auto;
+        }
+
+        /* CHAT CENTRAL */
+        .chat-container {
+            flex: 1;
+            background: rgba(230, 238, 243, 0.95);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* PANELES DERECHOS: Traducción arriba, Settings abajo */
+        .right-stack {
+            width: 0;
+            transition: width 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .right-stack.active { width: 300px; }
+
+        .side-panel {
+            background: var(--tg-panel-bg);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        #panel-translator { height: 65%; overflow-y: auto; }
+        #panel-settings { height: 35%; }
+
+        /* Botones y Flechas */
+        .arrow-btn {
+            background: none; border: none; cursor: pointer;
+            display: flex; align-items: center; padding: 2px;
+        }
+        .arrow-btn svg { width: 24px; height: 24px; fill: var(--gemini-blue); }
+
+        /* Mensajes */
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .message { padding: 12px 15px; border-radius: 15px; max-width: 85%; font-size: 15px; align-self: flex-start; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .migo { background: white; border-top-left-radius: 2px; }
+        .user { background: #d2e3fc; border-top-left-radius: 2px; border-left: 4px solid var(--tg-accent); }
+
+        /* Inputs Estilo Google Translator */
+        .input-wrapper { 
+            display: flex; align-items: center; background: white; 
+            border-radius: 10px; border: 1px solid #ddd; padding: 5px 10px;
+            margin-bottom: 5px;
+        }
+        .input-wrapper textarea { 
+            flex: 1; border: none; outline: none; padding: 5px; 
+            font-size: 14px; resize: none; font-family: 'Calibri';
+        }
+        .wrapper-locked { border: 2px solid var(--error-red) !important; background: #fff5f5 !important; }
+
+        .res-box { 
+            background: #f1f3f4; padding: 10px; border-radius: 8px; 
+            font-size: 14px; min-height: 40px; color: #1a0dab;
+            border: 1px solid #e0e0e0; margin-bottom: 15px;
+        }
+
+        h3 { font-size: 12px; margin: 0 0 10px 0; color: #5f6368; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px;}
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="font-weight: bold; color: var(--tg-accent); font-size: 20px;">Migo Pro</div>
+        <div style="display: flex; gap: 10px;">
+            <button class="arrow-btn" onclick="toggleRightPanel()" title="Herramientas">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <div class="record-fixed">
+            <h3 style="font-size: 14px;">Registro de Errores</h3>
+            <div id="error-log"></div>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-messages" id="chat">
+                <div class="message migo">Hello Sergi! I'm your Migo Pro. I'll correct your long sentences now.</div>
+            </div>
+            <div style="padding: 15px;">
+                <div class="input-wrapper" id="main-input-wrap" style="border-radius: 25px;">
+                    <textarea id="userInput" rows="1" placeholder="Escribe en inglés..." onkeypress="if(event.key==='Enter') { event.preventDefault(); sendMessage(); }"></textarea>
+                    <button class="arrow-btn" id="sendBtn" onclick="sendMessage()">
+                        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="right-stack" class="right-stack">
+            <div id="panel-translator" class="side-panel">
+                <h3>Traductor Inteligente</h3>
+                
+                <small>Español > Inglés</small>
+                <div class="input-wrapper">
+                    <textarea id="es-en-in" rows="2" placeholder="Introduce frase larga..." onkeypress="handleTrans(event, 'es', 'en')"></textarea>
+                    <button class="arrow-btn" onclick="translateText('es-en-in', 'es-en-out', 'es', 'en')"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg></button>
+                </div>
+                <div class="res-box" id="es-en-out">Traducción...</div>
+
+                <small>Inglés > Español</small>
+                <div class="input-wrapper">
+                    <textarea id="en-es-in" rows="2" placeholder="Type long sentence..." onkeypress="handleTrans(event, 'en', 'es')"></textarea>
+                    <button class="arrow-btn" onclick="translateText('en-es-in', 'en-es-out', 'en', 'es')"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg></button>
+                </div>
+                <div class="res-box" id="en-es-out">Translation...</div>
+            </div>
+
+            <div id="panel-settings" class="side-panel">
+                <h3>Settings</h3>
+                <div style="font-size: 13px; color: #555;">
+                    <p><b>Usuario:</b> Sergi</p>
+                    <p><b>Nivel:</b> Avanzado</p>
+                    <p><b>Tipografía:</b> Calibri (Set)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isLocked = false;
+        let requiredCorrection = "";
+
+        function toggleRightPanel() {
+            document.getElementById('right-stack').classList.toggle('active');
+        }
+
+        // FUNCIÓN GOOGLE TRANSLATOR (API Gratuita)
+        async function translateText(sourceId, targetId, sl, tl) {
+            const text = document.getElementById(sourceId).value;
+            const out = document.getElementById(targetId);
+            if (!text) return;
+            
+            out.innerText = "Traduciendo...";
+            try {
+                const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURI(text)}`);
+                const data = await res.json();
+                out.innerText = data[0][0][0];
+            } catch (err) {
+                out.innerText = "Error en conexión.";
+            }
+        }
+
+        function handleTrans(e, sl, tl) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const mode = sl === 'es' ? 'es-en' : 'en-es';
+                translateText(`${mode}-in`, `${mode}-out`, sl, tl);
+            }
+        }
+
+        // LÓGICA DE CHAT
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const wrap = document.getElementById('main-input-wrap');
+            const text = input.value.trim();
+            if (!text) return;
+
+            if (isLocked) {
+                if (text.toLowerCase() === requiredCorrection.toLowerCase()) {
+                    addMsg(text, 'user');
+                    unlockChat();
+                    addMsg("Well done! Correction accepted.", "migo");
+                } else {
+                    wrap.classList.add('wrapper-locked');
+                    setTimeout(() => wrap.classList.remove('wrapper-locked'), 300);
+                }
+                input.value = '';
+                return;
+            }
+
+            addMsg(text, 'user');
+            if (text.toLowerCase() === "helo") {
+                lockChat("Hello");
+            } else {
+                setTimeout(() => addMsg("I understand. Your English is improving!", "migo"), 800);
+            }
+            input.value = '';
+        }
+
+        function lockChat(correct) {
+            isLocked = true;
+            requiredCorrection = correct;
+            document.getElementById('main-input-wrap').classList.add('wrapper-locked');
+            document.getElementById('sendBtn').disabled = true;
+            addToRecord("helo", correct);
+            addMsg(`Mistake! Please write exactly: "${correct}"`, "migo");
+        }
+
+        function unlockChat() {
+            isLocked = false;
+            document.getElementById('main-input-wrap').classList.remove('wrapper-locked');
+            document.getElementById('sendBtn').disabled = false;
+        }
+
+        function addMsg(text, type) {
+            const chat = document.getElementById('chat');
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.innerText = text;
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            div.innerHTML += `<span style="font-size:10px; display:block; margin-top:5px; color:#888;">${time}</span>`;
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function addToRecord(mistake, correction) {
+            const log = document.getElementById('error-log');
+            const now = new Date();
+            const entry = document.createElement('div');
+            entry.style = "background:#fff; padding:10px; border-radius:8px; margin-bottom:10px; border-left:4px solid var(--error-red); box-shadow: 0 1px 3px rgba(0,0,0,0.1);";
+            entry.innerHTML = `
+                <div style="font-size:10px; color:#999; margin-bottom:5px;">${now.toLocaleDateString()} ${now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
+                <b style="color:var(--error-red)">×</b> ${mistake}<br>
+                <b style="color:var(--success-green)">✓</b> ${correction}
+            `;
+            log.prepend(entry);
+        }
+    </script>
+</body>
+</html>
