@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo App - Happy Growth Mode</title>
+    <style>
+        :root {
+            --bright-yellow: #fff9c4;
+            --soft-green: #e8f5e9;
+            --active-green: #4caf50;
+            --tg-chat-bg: #fdfdf5;
+            --tg-panel-bg: #ffffff;
+            --tg-accent: #fbc02d;
+            --sidebar-bg: #2e3b2e; /* Verde oscuro para contraste lateral */
+            --error-red: #f15c5c;
+            --wa-gray: #54656f;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Calibri', sans-serif;
+            margin: 0;
+            height: 100vh;
+            background-color: var(--bright-yellow);
+            background-image: url("https://www.transparenttextures.com/patterns/cream-paper.png");
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            flex: 1;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* BARRA LATERAL IZQUIERDA */
+        .side-nav {
+            width: 60px;
+            background: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 0;
+            justify-content: flex-end; 
+            gap: 20px;
+        }
+
+        .profile-circle {
+            width: 40px; height: 40px;
+            background: var(--active-green);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: bold; font-size: 14px;
+            cursor: pointer; margin-bottom: 10px;
+        }
+
+        .side-icon { cursor: pointer; fill: #aebac1; }
+
+        /* REGISTRO IZQUIERDA */
+        .record-fixed {
+            width: 250px;
+            background: var(--soft-green);
+            border-right: 1px solid #d0e0d0;
+            padding: 15px;
+            display: flex; flex-direction: column;
+            font-size: 18px; 
+        }
+        #error-log { overflow-y: auto; flex: 1; }
+
+        /* CHAT CENTRAL */
+        .chat-container {
+            flex: 1;
+            background-color: var(--tg-chat-bg); 
+            background-image: url("https://www.transparenttextures.com/patterns/leaves.png"); 
+            display: flex; flex-direction: column;
+            position: relative;
+        }
+
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 20px; background: #fffde7;
+            border-bottom: 1px solid #e0e0b0;
+        }
+
+        .icon-btn { background: none; border: none; cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; }
+        .icon-btn svg { width: 24px; height: 24px; fill: var(--wa-gray); }
+
+        .input-wrapper { 
+            display: flex; align-items: center; background: white; 
+            border-radius: 12px; border: 1px solid #d0d0a0; padding: 5px 12px;
+            margin-bottom: 8px;
+        }
+        .input-wrapper textarea { flex: 1; border: none; outline: none; padding: 8px; font-size: 14px; resize: none; font-family: inherit; }
+        .wrapper-locked { border: 2px solid var(--error-red) !important; background: #fff5f5 !important; }
+
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .message { padding: 10px 14px; border-radius: 10px; max-width: 80%; font-size: 15px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .migo { background: white; align-self: flex-start; }
+        .user { background: #e8f5e9; align-self: flex-start; border-left: 4px solid var(--active-green); }
+
+        /* VENTANAS FLOTANTES CON FLECHA DE CIERRE */
+        .floating-panel {
+            background: var(--tg-panel-bg);
+            box-shadow: -2px 0 15px rgba(0,0,0,0.1);
+            display: flex; flex-direction: column;
+            border-left: 1px solid #ddd;
+            transition: width 0.3s ease, opacity 0.2s;
+            overflow: hidden;
+        }
+
+        #panel-translator { width: 0; opacity: 0; }
+        #panel-translator.active { width: 330px; opacity: 1; padding: 15px; }
+
+        #panel-settings {
+            position: absolute; top: 60px; right: 20px;
+            width: 260px; background: white; border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            display: none; flex-direction: column; padding: 15px;
+            z-index: 2000; border: 1px solid #e0e0a0;
+        }
+        #panel-settings.active { display: flex; }
+
+        .close-row {
+            display: flex; justify-content: flex-end; margin-bottom: 10px;
+        }
+
+        .arrow-close {
+            cursor: pointer; fill: var(--wa-gray); transform: rotate(0deg); transition: 0.2s;
+        }
+        .arrow-close:hover { fill: var(--active-green); }
+
+        h3 { font-size: 14px; margin: 0 0 10px 0; color: var(--active-green); text-transform: uppercase; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 5px;}
+        .res-box { background: #f9fbe7; padding: 12px; border-radius: 8px; font-size: 15px; color: #33691e; margin-bottom: 15px; border-left: 4px solid var(--active-green); }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <nav class="side-nav">
+            <div class="side-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5,0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.85,9.48l2.03,1.58C4.84,11.36,4.81,11.69,4.81,12c0,0.31,0.02,0.65,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.5c-1.93,0-3.5-1.57-3.5-3.5 s1.57-3.5,3.5-3.5s3.5,1.57,3.5,3.5S13.93,15.5,12,15.5z"/></svg>
+            </div>
+            <div class="profile-circle">S</div>
+        </nav>
+
+        <div class="record-fixed">
+            <h3>🌱 Progress / Registro</h3>
+            <div id="error-log"></div>
+        </div>
+
+        <div class="chat-container">
+            <header>
+                <div style="font-weight: bold; color: #2e7d32;">☀️ Migo Happy Learning</div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="icon-btn" onclick="openTranslator()"><svg viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg></button>
+                    <button class="icon-btn" onclick="toggleSettings()"><svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
+                </div>
+            </header>
+            
+            <div class="chat-messages" id="chat">
+                <div class="message migo">Hello Sergi! Let's grow together today. / Hola Sergi! Crezcamos juntos hoy. ✨</div>
+            </div>
+
+            <div style="padding: 10px 20px; background: #fffde7;">
+                <div class="input-wrapper" id="main-input-wrap">
+                    <textarea id="userInput" rows="1" placeholder="Type here... / Escribe aquí..." onkeypress="handleKeyChat(event)"></textarea>
+                    <button class="icon-btn" onclick="sendMessage()"><svg viewBox="0 0 24 24" fill="#4caf50"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg></button>
+                </div>
+            </div>
+
+            <div id="panel-settings">
+                <div class="close-row">
+                    <svg class="arrow-close" onclick="toggleSettings()" width="24" height="24" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+                </div>
+                <h3>⚙️ Settings / Config</h3>
+                <p>👤 User: Sergi</p>
+                <button style="background: #ffebee; border: 1px solid #ffcdd2; padding: 8px; border-radius: 5px; cursor: pointer;" onclick="location.reload()">RESTART APP</button>
+            </div>
+        </div>
+
+        <div id="panel-translator" class="floating-panel">
+            <div class="close-row">
+                <svg class="arrow-close" onclick="openTranslator()" width="24" height="24" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            </div>
+            <h3>🌍 Translator / Traductor</h3>
+            <div class="input-wrapper">
+                <textarea id="es-en-in" rows="1" placeholder="ES > EN"></textarea>
+                <button class="icon-btn" onclick="runTranslate('es','en')">➡️</button>
+            </div>
+            <div class="res-box" id="es-en-out">...</div>
+            <div class="input-wrapper">
+                <textarea id="en-es-in" rows="1" placeholder="EN > ES"></textarea>
+                <button class="icon-btn" onclick="runTranslate('en','es')">➡️</button>
+            </div>
+            <div class="res-box" id="en-es-out">...</div>
+        </div>
+    </div>
+
+    <script>
+        let isLocked = false;
+        let requiredWord = "";
+
+        function openTranslator() { 
+            document.getElementById('panel-settings').classList.remove('active');
+            document.getElementById('panel-translator').classList.toggle('active'); 
+        }
+        function toggleSettings() { 
+            document.getElementById('panel-translator').classList.remove('active');
+            document.getElementById('panel-settings').classList.toggle('active'); 
+        }
+
+        async function runTranslate(sl, tl) {
+            const text = document.getElementById(`${sl}-${tl}-in`).value.trim();
+            const out = document.getElementById(`${sl}-${tl}-out`);
+            if(!text) return;
+            out.innerText = "Thinking...";
+            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURI(text)}`;
+            const res = await fetch(url);
+            const data = await res.json();
+            out.innerText = data[0][0][0];
+        }
+
+        function handleKeyChat(e) { if(e.key === 'Enter') { e.preventDefault(); sendMessage(); } }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const wrap = document.getElementById('main-input-wrap');
+            const text = input.value.trim();
+            if(!text) return;
+
+            if(isLocked) {
+                if(text.toLowerCase() === requiredWord.toLowerCase()) {
+                    addMsg(text, 'user');
+                    isLocked = false;
+                    wrap.classList.remove('wrapper-locked');
+                    setTimeout(() => addMsg("Great! Let's keep going. / ¡Genial! Sigamos.", "migo"), 500);
+                } else {
+                    wrap.classList.add('wrapper-locked');
+                    addMsg(`Mistake! Type: "${requiredWord}" / Escribe: "${requiredWord}"`, "migo");
+                }
+                input.value = '';
+                return;
+            }
+
+            addMsg(text, 'user');
+            if(text.toLowerCase().includes("helo")) {
+                isLocked = true;
+                requiredWord = "Hello";
+                wrap.classList.add('wrapper-locked');
+                addToRecord("helo", "Hello");
+                setTimeout(() => addMsg(`Spelling check! Write "${requiredWord}" to unlock. / Escribe "${requiredWord}" para desbloquear.`, "migo"), 400);
+            }
+            input.value = '';
+        }
+
+        function addMsg(text, type) {
+            const chat = document.getElementById('chat');
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.innerText = text;
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function addToRecord(mistake, correction) {
+            const log = document.getElementById('error-log');
+            const entry = document.createElement('div');
+            entry.style = "background:#fff; padding:10px; border-radius:8px; margin-bottom:10px; border-left:4px solid var(--error-red); shadow: 0 1px 2px rgba(0,0,0,0.05);";
+            entry.innerHTML = `<b>×</b> ${mistake} → <b style="color:green">${correction}</b>`;
+            log.prepend(entry);
+        }
+    </script>
+</body>
+</html>
