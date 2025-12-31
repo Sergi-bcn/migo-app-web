@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo - Joyful & Dynamic</title>
+    <style>
+        :root {
+            --bright-yellow: #fffde7;
+            --joy-yellow: #fff59d;
+            --active-green: #4caf50;
+            --joy-orange: #ff9800;
+            --sidebar-joy: #fbc02d;
+            --error-red: #ff5252;
+            --text-main: #37474f;
+            --bg-soft: #f1f8e9;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0; height: 100vh;
+            background-color: var(--bright-yellow);
+            background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+            display: flex; overflow: hidden; color: var(--text-main);
+        }
+
+        /* BARRA LATERAL IZQUIERDA */
+        .side-nav {
+            width: 70px; background: var(--sidebar-joy);
+            display: flex; flex-direction: column; align-items: center;
+            padding: 20px 0; justify-content: space-between; flex-shrink: 0;
+        }
+        .side-icon-gear { fill: #5d4037; opacity: 0.7; cursor: default; }
+        .profile-circle {
+            width: 45px; height: 45px; background: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: var(--sidebar-joy); font-weight: bold; font-size: 20px;
+        }
+
+        .main-app { display: flex; flex: 1; padding: 15px; gap: 15px; width: calc(100% - 70px); }
+
+        /* SECCIONES ESTILO CARD */
+        .section-card {
+            background: white; border-radius: 20px;
+            display: flex; flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            overflow: hidden; transition: all 0.3s ease;
+        }
+
+        .record-fixed { width: 260px; flex-shrink: 0; }
+        .chat-container { flex: 2; position: relative; } /* Crece más que el resto */
+        .side-panels { width: 320px; display: flex; flex-direction: column; flex-shrink: 0; }
+
+        /* CABECERAS Y LÍNEA AMARILLA ALINEADA */
+        .header-unit {
+            height: 70px; display: flex; align-items: center;
+            border-bottom: 4px solid var(--joy-yellow);
+            padding: 0 20px; background: white; justify-content: space-between;
+        }
+        .header-title { font-weight: bold; color: var(--active-green); font-size: 16px; letter-spacing: 0.5px; }
+
+        /* CHAT */
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: var(--bg-soft); }
+        .message { padding: 12px 18px; border-radius: 18px; max-width: 80%; font-size: 16px; line-height: 1.4; box-shadow: 0 2px 5px rgba(0,0,0,0.03); }
+        .migo { background: white; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .user { background: #e8f5e9; align-self: flex-start; border-left: 5px solid var(--active-green); border-bottom-left-radius: 4px; }
+
+        /* INPUT */
+        .input-area { padding: 15px 20px; background: white; }
+        .input-wrapper { 
+            display: flex; align-items: center; background: #fffde7; 
+            border-radius: 30px; border: 2px solid var(--joy-yellow); padding: 5px 20px;
+        }
+        .input-wrapper textarea { flex: 1; border: none; background: transparent; outline: none; padding: 10px; resize: none; font-size: 16px; }
+        .wrapper-locked { border-color: var(--error-red) !important; background: #ffebee !important; }
+
+        /* TRADUCTOR */
+        .trans-unit { margin-bottom: 20px; }
+        .trans-label { font-size: 12px; font-weight: bold; color: #888; margin-bottom: 5px; display: block; }
+        .trans-input-box { 
+            display: flex; align-items: center; background: #f9f9f9; 
+            border-radius: 12px; padding: 8px 12px; border: 1px solid #eee; gap: 10px;
+        }
+        .trans-input-box input { flex: 1; border: none; background: transparent; outline: none; font-size: 14px; }
+        .btn-action { 
+            background: var(--joy-orange); border: none; border-radius: 50%; 
+            width: 32px; height: 32px; cursor: pointer; display: flex; 
+            align-items: center; justify-content: center; fill: white; 
+        }
+        .res-box { background: #fffde7; padding: 12px; border-radius: 10px; margin-top: 8px; font-size: 14px; border-left: 4px solid var(--active-green); min-height: 20px; }
+
+        /* MENÚ OPCIONES */
+        #panel-options {
+            display: none; position: absolute; top: 75px; right: 20px; 
+            width: 220px; z-index: 1000; background: white; 
+            border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 2px solid var(--joy-yellow);
+        }
+        .option-item { padding: 12px 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 10px; }
+        .option-item:hover { background: var(--bright-yellow); }
+
+        /* LOGS */
+        .log-entry { padding: 12px; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+        .log-time { font-size: 10px; color: #aaa; margin-bottom: 4px; display: block; }
+
+        .icon-btn { cursor: pointer; background: none; border: none; display: flex; align-items: center; padding: 5px; }
+        .arrow-right { transform: rotate(0deg); transition: 0.3s; fill: #999; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<nav class="side-nav">
+    <div class="side-icon-gear">
+        <svg width="32" height="32" viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5,0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.85,9.48l2.03,1.58C4.84,11.36,4.81,11.69,4.81,12c0,0.31,0.02,0.65,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.5c-1.93,0-3.5-1.57-3.5-3.5 s1.57-3.5,3.5-3.5s3.5,1.57,3.5,3.5S13.93,15.5,12,15.5z"/></svg>
+    </div>
+    <div class="profile-circle">S</div>
+</nav>
+
+<main class="main-app">
+    <div class="section-card record-fixed">
+        <div class="header-unit"><span class="header-title">REGISTRO DE ERRORES</span></div>
+        <div id="error-log" style="overflow-y: auto;"></div>
+    </div>
+
+    <div class="section-card chat-container" id="chat-panel">
+        <header class="header-unit">
+            <span class="header-title">☀️ MIGO CONVERSATION</span>
+            <div style="display: flex; gap: 10px;">
+                <button class="icon-btn" onclick="toggleTranslator()">
+                    <svg width="24" height="24" fill="#5f6368" viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
+                </button>
+                <button class="icon-btn" onclick="toggleOptions()">
+                    <svg width="24" height="24" fill="#5f6368" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="chat-messages" id="chat">
+            <div class="message migo">Hello Sergi! I'm ready to talk. If you write "helo", I'll stop you to practice! / ¡Hola Sergi! Estoy listo para hablar. ✨</div>
+        </div>
+
+        <div class="input-area">
+            <div class="input-wrapper" id="main-input-wrap">
+                <textarea id="userInput" rows="1" placeholder="Chat with Migo in English..." onkeypress="handleChatKey(event)"></textarea>
+                <button class="icon-btn" onclick="sendMessage()">
+                    <svg width="28" height="28" fill="var(--active-green)" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="panel-options">
+            <div class="option-item">👤 Perfil de Sergi</div>
+            <div class="option-item">🛡️ Modo Estricto ON</div>
+            <div class="option-item" onclick="location.reload()" style="color:var(--error-red)">🔄 Reiniciar App</div>
+        </div>
+    </div>
+
+    <div class="side-panels" id="side-right">
+        <div class="section-card" style="flex: 1;">
+            <div class="header-unit">
+                <span class="header-title">TRADUCTOR PRO</span>
+                <button class="icon-btn" onclick="toggleTranslator()">
+                    <svg class="arrow-right" width="24" height="24" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                </button>
+            </div>
+            <div style="padding: 20px;">
+                <div class="trans-unit">
+                    <span class="trans-label">ESPAÑOL > INGLÉS</span>
+                    <div class="trans-input-box">
+                        <input type="text" id="es-in" placeholder="Escribe y pulsa Enter..." onkeypress="if(event.key==='Enter') runTranslate('es','en')">
+                        <button class="btn-action" onclick="runTranslate('es','en')">
+                            <svg width="16" height="16" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                    </div>
+                    <div class="res-box" id="es-out">...</div>
+                </div>
+                <div class="trans-unit">
+                    <span class="trans-label">INGLÉS > ESPAÑOL</span>
+                    <div class="trans-input-box">
+                        <input type="text" id="en-in" placeholder="Type and press Enter..." onkeypress="if(event.key==='Enter') runTranslate('en','es')">
+                        <button class="btn-action" onclick="runTranslate('en','es')">
+                            <svg width="16" height="16" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                    </div>
+                    <div class="res-box" id="en-out">...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    let isLocked = false;
+
+    function toggleTranslator() {
+        const side = document.getElementById('side-right');
+        side.classList.toggle('hidden');
+    }
+
+    function toggleOptions() {
+        const opt = document.getElementById('panel-options');
+        opt.style.display = opt.style.display === 'block' ? 'none' : 'block';
+    }
+
+    async function runTranslate(sl, tl) {
+        const text = document.getElementById(sl+'-in').value;
+        const out = document.getElementById(sl+'-out');
+        if(!text) return;
+        out.innerText = "Traduciendo...";
+        try {
+            const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`);
+            const data = await res.json();
+            out.innerText = data[0][0][0];
+        } catch(e) { out.innerText = "Error API"; }
+    }
+
+    function handleChatKey(e) { if(e.key === 'Enter') { e.preventDefault(); sendMessage(); } }
+
+    function sendMessage() {
+        const input = document.getElementById('userInput');
+        const text = input.value.trim();
+        const wrap = document.getElementById('main-input-wrap');
+        if(!text) return;
+
+        if(isLocked) {
+            if(text.toLowerCase() === "hello") {
+                addMsg(text, 'user');
+                isLocked = false;
+                wrap.classList.remove('wrapper-locked');
+                setTimeout(() => addMsg("Excellent! You unlocked the chat. Let's keep talking!", "migo"), 600);
+            } else {
+                addMsg("Still not correct. Write 'Hello' to continue.", "migo");
+            }
+            input.value = '';
+            return;
+        }
+
+        addMsg(text, 'user');
+
+        if(text.toLowerCase().includes("helo")) {
+            isLocked = true;
+            wrap.classList.add('wrapper-locked');
+            addToLog("helo", "Hello");
+            setTimeout(() => addMsg("Spelling alert! Write 'Hello' to unlock the chat.", "migo"), 600);
+        } else {
+            // MOTOR DE CONVERSACIÓN FLUIDA: Migo siempre responde
+            setTimeout(() => {
+                const responses = [
+                    "That's very interesting, Sergi! Tell me more.",
+                    "I love your English! What else did you do today?",
+                    "That sounds like a great plan. Do you enjoy doing that?",
+                    "I see! You are doing an amazing job practicing with me.",
+                    "Indeed! And what do you think about learning more vocabulary?"
+                ];
+                addMsg(responses[Math.floor(Math.random() * responses.length)], "migo");
+            }, 800);
+        }
+        input.value = '';
+    }
+
+    function addMsg(t, type) {
+        const chat = document.getElementById('chat');
+        const div = document.createElement('div');
+        div.className = `message ${type}`;
+        div.innerText = t;
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight;
+    }
+
+    function addToLog(m, c) {
+        const log = document.getElementById('error-log');
+        const now = new Date();
+        const time = now.toLocaleDateString() + " " + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        const entry = document.createElement('div');
+        entry.className = "log-entry";
+        entry.innerHTML = `<span class="log-time">${time}</span> ❌ <b>${m}</b> → ✅ <b>${c}</b>`;
+        log.prepend(entry);
+    }
+</script>
+</body>
+</html>
