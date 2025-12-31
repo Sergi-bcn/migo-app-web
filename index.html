@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo - Professional Growth Interface</title>
+    <style>
+        :root {
+            --bg-main: #f0f4f7;
+            --sidebar-white: #ffffff;
+            --chat-blue-bg: #e3effa;
+            --accent-blue: #3390ec;
+            --user-green: #eeffde;
+            --migo-white: #ffffff;
+            --text-dark: #222222;
+            --error-red: #ff5252;
+            --border-light: #e0e6ed;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            background-color: var(--bg-main);
+            display: flex;
+            color: var(--text-dark);
+            overflow: hidden;
+        }
+
+        /* SIDEBAR ESTILO IMAGEN */
+        .side-nav {
+            width: 75px;
+            background: var(--sidebar-white);
+            border-right: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            justify-content: space-between;
+        }
+
+        .side-icon-top { 
+            width: 45px; height: 45px; background: var(--accent-blue); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: bold; font-size: 20px;
+        }
+
+        .side-icon-bottom {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: #e1f5fe; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.3s;
+        }
+        .side-icon-bottom:hover { background: var(--accent-blue); fill: white !important; }
+
+        /* REGISTRO IZQUIERDA */
+        .record-panel {
+            width: 280px;
+            background: var(--sidebar-white);
+            border-right: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .record-panel h3 { font-size: 16px; color: #707579; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        #error-log { overflow-y: auto; flex: 1; font-size: 14px; }
+
+        /* CHAT CONTAINER CON DOODLE DE CRECIMIENTO */
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--chat-blue-bg);
+            /* Doodle alegre: motivo de hojas/crecimiento natural estilo telegram */
+            background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png"), url("https://www.transparenttextures.com/patterns/sprinkles.png");
+            position: relative;
+        }
+
+        header {
+            background: white;
+            padding: 10px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .header-actions { display: flex; gap: 15px; align-items: center; }
+
+        .chat-messages { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        
+        /* BURBUJAS DE CHAT ESTILO MODERNO */
+        .message { 
+            max-width: 75%; padding: 12px 16px; border-radius: 15px; 
+            font-size: 15px; line-height: 1.5; box-shadow: 0 1px 2px rgba(0,0,0,0.08); 
+        }
+        .migo { background: var(--migo-white); align-self: flex-start; border-bottom-left-radius: 2px; }
+        .user { background: var(--user-green); align-self: flex-end; border-bottom-right-radius: 2px; border-left: 4px solid #4caf50; }
+
+        /* AREA DE ENTRADA */
+        .input-container { background: white; padding: 20px; border-top: 1px solid var(--border-light); }
+        .input-bar { 
+            background: #f1f4f7; border-radius: 12px; display: flex; align-items: center; 
+            padding: 10px 15px; border: 1px solid transparent; transition: 0.3s;
+        }
+        .input-bar:focus-within { background: white; border-color: var(--accent-blue); }
+        .input-bar textarea { 
+            flex: 1; border: none; outline: none; background: transparent; 
+            resize: none; font-size: 15px; font-family: inherit;
+        }
+
+        /* VENTANAS FLOTANTES */
+        #panel-translator, #panel-settings {
+            position: absolute; right: 20px; top: 70px; width: 320px;
+            background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: none; flex-direction: column; padding: 20px; z-index: 1000;
+        }
+        #panel-translator.active, #panel-settings.active { display: flex; }
+
+        .btn-close { align-self: flex-end; cursor: pointer; color: #aaa; font-size: 18px; margin-bottom: 10px; }
+        .icon-btn { cursor: pointer; fill: #707579; background: none; border: none; display: flex; align-items: center; }
+        .icon-btn:hover { fill: var(--accent-blue); }
+
+        .res-box { background: #f8fafd; padding: 12px; border-radius: 10px; color: var(--accent-blue); margin-top: 10px; font-size: 14px; border-left: 3px solid var(--accent-blue); }
+        .wrapper-locked { border: 2px solid var(--error-red) !important; background: #fff5f5 !important; animation: shake 0.2s; }
+        @keyframes shake { 0%,100% {transform: translateX(0);} 25% {transform: translateX(5px);} 75% {transform: translateX(-5px);} }
+    </style>
+</head>
+<body>
+
+    <nav class="side-nav">
+        <div class="side-icon-top">M</div>
+        <div class="side-icon-bottom" title="Settings / Configuración">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#707579"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.85,9.48l2.03,1.58C4.84,11.36,4.81,11.69,4.81,12c0,0.31,0.02,0.65,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.5c-1.93,0-3.5-1.57-3.5-3.5 s1.57-3.5,3.5-3.5s3.5,1.57,3.5,3.5S13.93,15.5,12,15.5z"/></svg>
+        </div>
+    </nav>
+
+    <div class="record-panel">
+        <h3>LOGS / REGISTRO 🌱</h3>
+        <div id="error-log"></div>
+    </div>
+
+    <div class="chat-main">
+        <header>
+            <div style="font-weight: bold; font-size: 18px;">Migo (Growth Support)</div>
+            <div class="header-actions">
+                <button class="icon-btn" onclick="openTranslator()" title="Translator">
+                    <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
+                </button>
+                <button class="icon-btn" onclick="toggleSettings()">
+                    <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="chat-messages" id="chat">
+            <div class="message migo">Welcome Sergi! Every mistake is a step towards success. / ¡Bienvenido Sergi! Cada error es un paso hacia el éxito. 🚀</div>
+        </div>
+
+        <div class="input-container">
+            <div class="input-bar" id="main-input-wrap">
+                <textarea id="userInput" rows="1" placeholder="Type a message / Escribe un mensaje..." onkeypress="handleKeyChat(event)"></textarea>
+                <button class="icon-btn" onclick="sendMessage()"><svg width="24" height="24" viewBox="0 0 24 24" fill="#3390ec"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg></button>
+            </div>
+        </div>
+
+        <div id="panel-settings">
+            <div class="btn-close" onclick="toggleSettings()">×</div>
+            <h3>CONFIGURATION / CONFIGURACIÓN</h3>
+            <p>👤 User: Sergi</p>
+            <p>📈 Goal: Language Growth</p>
+            <button style="background: #ffeded; border: none; color: #ff5252; padding: 10px; border-radius: 8px; cursor:pointer;" onclick="location.reload()">RESTART APP / REINICIAR</button>
+        </div>
+
+        <div id="panel-translator">
+            <div class="btn-close" onclick="openTranslator()">×</div>
+            <h3>TRANSLATOR / TRADUCTOR</h3>
+            <small>ESPAÑOL > ENGLISH</small>
+            <div class="input-bar" style="margin: 10px 0;">
+                <textarea id="es-en-in" rows="1" onkeypress="handleKeyTrans(event, 'es', 'en')"></textarea>
+                <button class="icon-btn" onclick="runTranslate('es','en')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#3390ec"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg></button>
+            </div>
+            <div class="res-box" id="es-en-out">...</div>
+            <small>ENGLISH > ESPAÑOL</small>
+            <div class="input-bar" style="margin: 10px 0;">
+                <textarea id="en-es-in" rows="1" onkeypress="handleKeyTrans(event, 'en', 'es')"></textarea>
+                <button class="icon-btn" onclick="runTranslate('en','es')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#3390ec"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg></button>
+            </div>
+            <div class="res-box" id="en-es-out">...</div>
+        </div>
+    </div>
+
+    <script>
+        let isLocked = false;
+        let requiredWord = "";
+
+        function openTranslator() {
+            document.getElementById('panel-settings').classList.remove('active');
+            document.getElementById('panel-translator').classList.toggle('active');
+        }
+        function toggleSettings() {
+            document.getElementById('panel-translator').classList.remove('active');
+            document.getElementById('panel-settings').classList.toggle('active');
+        }
+
+        async function runTranslate(sl, tl) {
+            const text = document.getElementById(`${sl}-${tl}-in`).value.trim();
+            const out = document.getElementById(`${sl}-${tl}-out`);
+            if(!text) return;
+            out.innerText = "Thinking/Pensando...";
+            try {
+                const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURI(text)}`;
+                const res = await fetch(url);
+                const data = await res.json();
+                out.innerText = data[0][0][0];
+            } catch (e) { out.innerText = "Error (Check Connection)"; }
+        }
+
+        function handleKeyTrans(e, sl, tl) { if(e.key === 'Enter') { e.preventDefault(); runTranslate(sl, tl); } }
+        function handleKeyChat(e) { if(e.key === 'Enter') { e.preventDefault(); sendMessage(); } }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const wrap = document.getElementById('main-input-wrap');
+            const text = input.value.trim();
+            if(!text) return;
+
+            if(isLocked) {
+                if(text.toLowerCase() === requiredWord.toLowerCase()) {
+                    addMsg(text, 'user');
+                    isLocked = false;
+                    wrap.classList.remove('wrapper-locked');
+                    setTimeout(() => addMsg("Well done! Let's continue. / ¡Bien hecho! Continuemos.", "migo"), 500);
+                } else {
+                    wrap.classList.add('wrapper-locked');
+                    setTimeout(() => wrap.classList.remove('wrapper-locked'), 300);
+                    addMsg(`Incorrect. Please write: "${requiredWord}" / Incorrecto. Por favor escribe: "${requiredWord}"`, "migo");
+                }
+                input.value = '';
+                return;
+            }
+
+            addMsg(text, 'user');
+
+            if(text.toLowerCase().includes("helo")) {
+                isLocked = true;
+                requiredWord = "Hello";
+                wrap.classList.add('wrapper-locked');
+                addToRecord("helo", "Hello");
+                setTimeout(() => addMsg(`Spelling error! Please write "${requiredWord}" to unlock. / ¡Error ortográfico! Escribe "${requiredWord}" para desbloquear.`, "migo"), 400);
+            } else {
+                setTimeout(() => addMsg("I understand. Tell me more about your day! / Te entiendo. ¡Cuéntame más sobre tu día!", "migo"), 800);
+            }
+            input.value = '';
+        }
+
+        function addMsg(text, type) {
+            const chat = document.getElementById('chat');
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.innerText = text;
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function addToRecord(mistake, correction) {
+            const log = document.getElementById('error-log');
+            const entry = document.createElement('div');
+            entry.style = "background:#f9fafd; padding:12px; border-radius:10px; margin-bottom:10px; border-left:4px solid var(--error-red);";
+            entry.innerHTML = `<b style="color:var(--error-red)">×</b> ${mistake} → <b style="color:#4caf50">${correction}</b><br><small style="color:#999;">Correction / Corrección</small>`;
+            log.prepend(entry);
+        }
+    </script>
+</body>
+</html>
