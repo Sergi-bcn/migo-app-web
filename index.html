@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo - Joyful Partner Elite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bright-yellow: #fffde7;
+            --joy-yellow: #fff59d;
+            --active-green: #4caf50;
+            --joy-orange: #ff9800;
+            --sidebar-joy: #fbc02d;
+            --error-red: #ff5252;
+            --text-main: #2c3e50;
+            --web-bg: #e1eee3;
+            --icon-dark: #5d4037;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0; height: 100vh;
+            background-color: var(--web-bg);
+            display: flex; overflow: hidden; color: var(--text-main);
+        }
+
+        /* BARRA LATERAL */
+        .side-nav {
+            width: 75px; background: var(--sidebar-joy);
+            display: flex; flex-direction: column; align-items: center;
+            padding: 20px 0; justify-content: flex-end; flex-shrink: 0;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.1); z-index: 1100; gap: 15px;
+        }
+
+        .icon-wrapper {
+            width: 45px; height: 45px; background: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: relative;
+        }
+        .icon-wrapper:hover { transform: scale(1.05); background: var(--bright-yellow); }
+        .icon-wrapper svg { fill: var(--icon-dark); }
+
+        /* TOOLTIPS */
+        .icon-wrapper::after {
+            content: attr(data-title);
+            position: absolute; background: rgba(44, 62, 80, 0.95);
+            color: white; padding: 5px 10px; border-radius: 6px;
+            font-size: 11px; white-space: nowrap; opacity: 0;
+            visibility: hidden; transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 9999;
+        }
+        .side-nav .icon-wrapper:hover::after { opacity: 1; visibility: visible; left: 55px; top: 50%; transform: translateY(-50%); }
+        .header-unit .icon-wrapper:hover::after { opacity: 1; visibility: visible; top: 55px; right: 0; transform: translateY(0); }
+
+        .profile-circle {
+            width: 50px; height: 50px; background: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: var(--sidebar-joy); font-weight: bold; font-size: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); border: 2px solid #fff;
+        }
+
+        .main-app { display: flex; flex: 1; padding: 20px; gap: 20px; width: calc(100% - 75px); }
+        .section-card { background: white; border-radius: 30px; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.06); overflow: hidden; }
+        .record-fixed { width: 280px; flex-shrink: 0; }
+        .chat-container { flex: 2; position: relative; }
+
+        .header-unit { height: 90px; display: flex; align-items: center; border-bottom: 3px solid var(--joy-yellow); padding: 0 25px; background: white; justify-content: space-between; }
+
+        /* MIGO WEB TÍTULO */
+        .migo-brand { 
+            color: var(--joy-orange); 
+            font-size: 36px; 
+            font-weight: 900; 
+            letter-spacing: -1px;
+            -webkit-text-stroke: 1px var(--joy-orange);
+        }
+
+        /* CHAT CORREGIDO: Humano izquierda, Migo derecha */
+        .chat-messages { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background-color: #f4f7f4; }
+        .message { padding: 12px 18px; border-radius: 20px; max-width: 75%; font-size: 15px; line-height: 1.4; box-shadow: 0 2px 5px rgba(0,0,0,0.03); }
+        
+        .user { 
+            background: #ffffff; 
+            align-self: flex-start; /* Izquierda */
+            border-bottom-left-radius: 4px; 
+            border-left: 5px solid #2196f3; 
+        }
+        
+        .migo { 
+            background: #fff9c4; 
+            align-self: flex-end; /* Derecha */
+            border-bottom-right-radius: 4px; 
+            border-right: 5px solid var(--joy-orange); 
+        }
+
+        .input-area { padding: 20px; background: white; }
+        .input-wrapper { display: flex; align-items: center; background: #f8f9fa; border-radius: 35px; border: 2px solid #eee; padding: 5px 15px; }
+        .input-wrapper textarea { flex: 1; border: none; background: transparent; outline: none; padding: 12px; resize: none; font-size: 15px; font-family: inherit; }
+
+        /* Botón de envío ahora Naranja */
+        .send-btn { width: 35px; height: 35px; background: var(--joy-orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; border: none; }
+        .send-btn:hover { transform: scale(1.1); background: #e68a00; }
+
+        /* TRADUCTOR */
+        .side-panels { width: 340px; display: flex; flex-direction: column; flex-shrink: 0; position: relative; }
+        .trans-card { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .trans-box { background: #f9f9f9; padding: 15px; border-radius: 20px; border: 1px solid #eee; position: relative; }
+        
+        .refresh-btn { position: absolute; top: 12px; right: 15px; cursor: pointer; color: #ccc; font-size: 10px; font-weight: bold; text-transform: uppercase; }
+        .trans-arrow { position: absolute; bottom: 12px; right: 12px; background: transparent; cursor: pointer; fill: var(--icon-dark); border: none; opacity: 0.5; transition: 0.2s; }
+        .trans-arrow:hover { opacity: 1; fill: var(--joy-orange); }
+
+        /* POPUPS */
+        .popup-panel { display: none; position: absolute; background: white; border-radius: 22px; box-shadow: 0 15px 50px rgba(0,0,0,0.12); border: 1px solid #eee; z-index: 2000; padding: 20px; }
+        .btn-close-popup { position: absolute; top: 12px; right: 12px; background: #f0f0f0; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #888; }
+        .btn-close-popup:hover { background: var(--error-red); color: white; }
+        .settings-panel { bottom: 85px; left: 85px; width: 250px; }
+        .mode-menu { top: 95px; right: 25px; width: 280px; }
+        .mode-option { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 12px; cursor: pointer; font-size: 14px; margin-bottom: 2px; transition: 0.2s; border: 1px solid transparent; }
+        .mode-option.active { background: #e8f5e9; border-color: var(--active-green); color: var(--active-green); font-weight: bold; }
+        .st-label { font-size: 10px; color: #999; margin-top: 8px; }
+        .st-value { font-size: 13px; font-weight: 700; color: var(--text-main); }
+    </style>
+</head>
+<body>
+
+<nav class="side-nav">
+    <div class="popup-panel settings-panel" id="panel-settings">
+        <button class="btn-close-popup" onclick="closePopups()">✕</button>
+        <div class="st-label">USUARIO</div>
+        <div class="st-value">Sergi Pérez</div>
+        <div class="st-label">FECHA INSCRIPCIÓN</div>
+        <div class="st-value">31 de Diciembre, 2025</div>
+        <div style="margin-top:10px; border-top: 1px solid #eee; padding-top:10px;">
+            <div class="st-label">NIVEL RIGOR</div>
+            <div class="st-value" id="st-rigor">Relajado</div>
+            <div class="st-label">ESTILO CHAT</div>
+            <div class="st-value" id="st-style">Normal</div>
+        </div>
+        <button onclick="location.reload()" style="width:100%; padding:10px; border-radius:10px; border:none; background:#fff5f5; color:var(--error-red); cursor:pointer; font-weight:600; margin-top:15px;">Reiniciar App</button>
+    </div>
+    <div class="icon-wrapper" data-title="Ajustes" onclick="toggleElement('panel-settings')">
+        <svg width="24" height="24" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+    </div>
+    <div class="profile-circle">S</div>
+</nav>
+
+<main class="main-app">
+    <div class="section-card record-fixed">
+        <div class="header-unit"><span class="header-title">LOG</span></div>
+        <div id="log" style="padding:15px; font-size:11px; color:#888;">Chat inicializado...</div>
+    </div>
+
+    <div class="section-card chat-container">
+        <header class="header-unit">
+            <span class="migo-brand">Migo web</span>
+            <div style="display: flex; gap: 10px;">
+                <div class="icon-wrapper" data-title="Modo Conversación" onclick="toggleElement('mode-menu')">
+                    <svg width="22" height="22" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                </div>
+                <div class="icon-wrapper" data-title="Traductor" onclick="toggleElement('panel-trans')">
+                    <svg width="22" height="22" viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
+                </div>
+            </div>
+        </header>
+
+        <div class="popup-panel mode-menu" id="mode-menu">
+            <button class="btn-close-popup" onclick="closePopups()">✕</button>
+            <div class="mode-option active" data-type="rigor" onclick="setRigor('Relajado', this)">🔓 Relajado</div>
+            <div class="mode-option" data-type="rigor" onclick="setRigor('Estricto', this)">🔒 Estricto</div>
+            <div style="margin:10px 0; border-top:1px solid #eee;"></div>
+            <div class="mode-option active" data-type="style" onclick="setStyle('Normal', this)">📝 Normal</div>
+            <div class="mode-option" data-type="style" onclick="setStyle('Coloquial', this)">✍️ Coloquial</div>
+        </div>
+
+        <div class="chat-messages" id="chat">
+            <div class="message migo">Hola Sergi, soy Migo. ¿Quieres hablar en español o prefieres practicar inglés?</div>
+        </div>
+
+        <div class="input-area">
+            <div class="input-wrapper">
+                <textarea id="userInput" rows="1" placeholder="Escribe aquí..." onkeypress="checkEnter(event)"></textarea>
+                <button class="send-btn" onclick="send()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="side-panels section-card" id="panel-trans" style="display:none;">
+        <button class="btn-close-popup" onclick="toggleElement('panel-trans')">✕</button>
+        <header class="header-unit"><span class="header-title">TRADUCTOR</span></header>
+        <div class="trans-card">
+            <div class="trans-box">
+                <div class="refresh-btn" onclick="clearTrans('es')">refresh</div>
+                <textarea id="es-in" style="width:100%; border:none; background:transparent; outline:none; font-family:inherit;" placeholder="Español..." onkeypress="checkEnterTrans(event, 'es', 'en')"></textarea>
+                <button class="trans-arrow" onclick="translateMe('es','en')">
+                    <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+                </button>
+                <div id="es-out" style="color:var(--active-green); font-weight:700; font-size:14px; margin-top:10px;"></div>
+            </div>
+            <div class="trans-box">
+                <div class="refresh-btn" onclick="clearTrans('en')">refresh</div>
+                <textarea id="en-in" style="width:100%; border:none; background:transparent; outline:none; font-family:inherit;" placeholder="English..." onkeypress="checkEnterTrans(event, 'en', 'es')"></textarea>
+                <button class="trans-arrow" onclick="translateMe('en','es')">
+                    <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+                </button>
+                <div id="en-out" style="color:var(--active-green); font-weight:700; font-size:14px; margin-top:10px;"></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    function toggleElement(id) {
+        const el = document.getElementById(id);
+        const isHidden = (el.style.display === 'none' || el.style.display === '');
+        if (id !== 'panel-trans') closePopups();
+        el.style.display = isHidden ? (id === 'panel-trans' ? 'flex' : 'block') : 'none';
+    }
+
+    function closePopups() {
+        document.querySelectorAll('.popup-panel').forEach(p => p.style.display = 'none');
+    }
+
+    function setRigor(val, el) {
+        document.getElementById('st-rigor').innerText = val;
+        document.querySelectorAll('.mode-option[data-type="rigor"]').forEach(opt => opt.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function setStyle(val, el) {
+        document.getElementById('st-style').innerText = val;
+        document.querySelectorAll('.mode-option[data-type="style"]').forEach(opt => opt.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    // Lógica de Traducción
+    async function translateMe(sl, tl) {
+        const text = document.getElementById(sl+'-in').value;
+        if(!text) return;
+        const out = document.getElementById(sl+'-out');
+        out.innerText = "Traduciendo...";
+        try {
+            const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`);
+            const data = await res.json();
+            out.innerText = data[0][0][0];
+        } catch(e) { out.innerText = "Error de conexión"; }
+    }
+
+    function checkEnterTrans(e, sl, tl) { if(e.key === 'Enter') { e.preventDefault(); translateMe(sl, tl); } }
+
+    function clearTrans(lang) {
+        document.getElementById(lang+'-in').value = '';
+        document.getElementById(lang+'-out').innerText = '';
+    }
+
+    // Lógica de CHAT Real
+    function send() {
+        const input = document.getElementById('userInput');
+        const text = input.value.trim();
+        if(!text) return;
+        
+        addMsg(text, 'user');
+        input.value = '';
+
+        // Detección simple para simular chat en inglés
+        setTimeout(() => {
+            const engWords = ['hello', 'hi', 'how', 'is', 'good', 'the', 'what', 'you', 'are'];
+            const isEnglish = engWords.some(word => text.toLowerCase().includes(word));
+            
+            let response = isEnglish 
+                ? "That's great! I can help you practice your English. What else is on your mind?"
+                : "¡Perfecto! Te entiendo bien en español. ¿En qué más puedo asistirte hoy?";
+            
+            addMsg(response, 'migo');
+        }, 700);
+    }
+
+    function addMsg(t, type) {
+        const chat = document.getElementById('chat');
+        const div = document.createElement('div');
+        div.className = `message ${type}`;
+        div.innerText = t;
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight;
+        
+        // Registrar en LOG
+        const log = document.getElementById('log');
+        const entry = document.createElement('div');
+        entry.innerText = `> ${type}: ${t.substring(0, 20)}...`;
+        log.prepend(entry);
+    }
+
+    function checkEnter(e) { if(e.key === 'Enter') { e.preventDefault(); send(); } }
+
+    window.onclick = function(event) {
+        if (!event.target.closest('.icon-wrapper') && !event.target.closest('.popup-panel') && !event.target.closest('.side-panels')) {
+            closePopups();
+        }
+    }
+</script>
+</body>
+</html>
