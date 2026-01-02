@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo Web - English Tutor Elite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bright-yellow: #fffde7;
+            --joy-yellow: #fff59d;
+            --active-green: #4caf50;
+            --joy-orange: #ff9800;
+            --sidebar-joy: #fbc02d;
+            --error-red: #ff5252;
+            --text-main: #2c3e50;
+            --web-bg: #e1eee3;
+            --selected-bg: #e8f5e9;
+            --selected-border: #4caf50;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0; height: 100vh;
+            background-color: var(--web-bg);
+            display: flex; overflow: hidden; color: var(--text-main);
+        }
+
+        /* BARRA LATERAL */
+        .side-nav {
+            width: 85px; background: var(--sidebar-joy);
+            display: flex; flex-direction: column; align-items: center;
+            padding: 30px 0; justify-content: flex-end; flex-shrink: 0;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1); z-index: 1100; gap: 20px;
+        }
+
+        .icon-wrapper {
+            width: 50px; height: 50px; background: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative;
+        }
+        
+        .icon-wrapper:hover { transform: scale(1.1); }
+
+        /* TOOLTIPS CONFIGURADOS */
+        .icon-wrapper::after {
+            content: attr(data-label);
+            position: absolute; 
+            top: 60px; 
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2c3e50; 
+            color: white; 
+            padding: 6px 12px;
+            border-radius: 8px; 
+            font-size: 11px; 
+            font-weight: 700;
+            white-space: nowrap; 
+            opacity: 0; 
+            pointer-events: none;
+            transition: all 0.2s ease; 
+            z-index: 3000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .side-nav .icon-wrapper::after {
+            left: 70px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .icon-wrapper:hover::after { 
+            opacity: 1; 
+            margin-top: 5px; 
+        }
+
+        .profile-circle {
+            width: 55px; height: 55px; background: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: var(--joy-orange); font-weight: 800; font-size: 22px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15); border: 3px solid #fff;
+            transition: 0.3s; cursor: pointer;
+        }
+
+        /* APP LAYOUT */
+        .main-app { display: flex; flex: 1; padding: 20px; gap: 20px; width: calc(100% - 85px); }
+        .section-card {
+            background: white; border-radius: 35px;
+            display: flex; flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.06); overflow: hidden; 
+        }
+
+        .record-fixed { width: 320px; flex-shrink: 0; }
+        .header-unit {
+            height: 90px; display: flex; align-items: center;
+            border-bottom: 2px solid #f9f9f9;
+            padding: 0 25px; background: white; justify-content: space-between;
+        }
+
+        .chat-container { flex: 2; position: relative; }
+        .migo-brand { color: var(--joy-orange); font-size: 42px; font-weight: 800; }
+
+        .chat-messages { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background-color: #fcfcfc; }
+        .message { padding: 15px 22px; border-radius: 25px; max-width: 80%; font-size: 16px; align-self: flex-start; }
+        .migo { background: #fff59d; border-bottom-left-radius: 5px; border-left: 5px solid var(--joy-orange); }
+        .user { background: white; border: 1px solid #eee; border-bottom-left-radius: 5px; border-left: 5px solid #2196f3; }
+
+        .input-area { padding: 25px; background: white; }
+        .input-wrapper { display: flex; align-items: center; background: #f8f9fa; border-radius: 35px; padding: 8px 18px; border: 1px solid #eee; }
+        textarea { flex: 1; border: none; background: transparent; outline: none; resize: none; font-size: 16px; font-family: inherit; }
+
+        /* POPUPS */
+        .popup-panel {
+            display: none; position: absolute; background: white; border-radius: 25px; 
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1); border: 1px solid #f0f0f0; z-index: 2000; padding: 20px;
+        }
+        .btn-close-pop { position: absolute; top: 15px; right: 15px; cursor: pointer; color: #ccc; font-size: 14px; background: #f5f5f5; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; }
+
+        /* TRADUCTOR */
+        .panel-translator { top: 100px; right: 40px; width: 360px; }
+        .translator-title { font-weight: 700; font-size: 18px; margin-bottom: 25px; color: #455a64; letter-spacing: 0.5px; }
+        
+        .trans-box { 
+            background: #f8f9fa; border-radius: 25px; padding: 20px; 
+            margin-bottom: 20px; position: relative; border: 1px solid #f1f3f4;
+        }
+        .trans-label { font-size: 11px; color: #90a4ae; font-weight: 700; margin-bottom: 12px; display: flex; justify-content: space-between; }
+        .btn-refresh { cursor: pointer; color: #cfd8dc; font-weight: 800; transition: 0.2s; }
+        .btn-refresh:hover { color: var(--joy-orange); }
+
+        .trans-textarea { 
+            width: 100%; border: none; background: transparent; outline: none; 
+            resize: none; font-family: inherit; font-size: 16px; color: #546e7a;
+            padding-right: 45px; box-sizing: border-box;
+        }
+
+        .btn-send-green { 
+            background: var(--active-green); border: none; width: 40px; height: 40px; 
+            border-radius: 50%; cursor: pointer; position: absolute; bottom: 15px; right: 15px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3); transition: 0.2s;
+        }
+        .btn-send-green:hover { transform: scale(1.1); }
+        .trans-output { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e0e0e0; color: var(--active-green); font-weight: 700; font-size: 15px; min-height: 20px; }
+
+        /* MENÚ MODOS */
+        .menu-modes { top: 100px; right: 40px; width: 300px; }
+        .popup-section-title { font-size: 11px; color: #bbb; font-weight: 800; margin-bottom: 12px; margin-top: 10px; text-transform: uppercase; }
+        .mode-option {
+            display: flex; align-items: center; gap: 12px; padding: 12px 18px;
+            border-radius: 20px; cursor: pointer; margin-bottom: 8px;
+            border: 1px solid transparent; transition: 0.2s; color: #555; font-weight: 500;
+        }
+        .mode-option.active { background: var(--selected-bg); border-color: var(--selected-border); color: #2e7d32; font-weight: 700; }
+
+        /* PERFIL */
+        .panel-profile-attached { bottom: 30px; left: 95px; width: 280px; }
+
+        /* LOG CORRECCIONES */
+        .log-entry { padding: 15px; border-bottom: 1px solid #f5f5f5; animation: slideIn 0.3s ease; }
+        .log-wrong { color: var(--error-red); text-decoration: line-through; font-size: 15px; display: block; margin-bottom: 2px; }
+        .log-right { color: var(--active-green); font-weight: 800; font-size: 16px; display: block; margin-bottom: 8px; }
+        .log-time { color: #b0bec5; font-size: 11px; font-weight: 700; display: block; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+    </style>
+</head>
+<body>
+
+<nav class="side-nav">
+    <div class="icon-wrapper" data-label="Configuración" onclick="togglePopup('panel-profile-config')">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="#6d4c41"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+    </div>
+    <div class="profile-circle" onclick="togglePopup('panel-profile-config')">S</div>
+
+    <div class="popup-panel panel-profile-attached" id="panel-profile-config">
+        <span class="btn-close-pop" onclick="closePopups()">✕</span>
+        <div style="font-size: 10px; color: #bbb; font-weight: 800; margin-bottom: 2px;">USUARIO</div>
+        <div style="font-weight: 700; font-size: 16px; margin-bottom: 15px;">Sergi Pérez</div>
+        <div style="font-size: 10px; color: #bbb; font-weight: 800; margin-bottom: 2px;">FECHA INSCRIPCIÓN</div>
+        <div style="font-weight: 700; font-size: 14px; margin-bottom: 15px;">31 de Diciembre, 2025</div>
+        <div style="border-top: 1px solid #eee; padding-top: 15px; margin-top: 10px;">
+            <div style="font-size: 10px; color: #bbb; font-weight: 800; margin-bottom: 2px;">NIVEL RIGOR</div>
+            <div style="font-weight: 700; color: var(--text-main);" id="display-rigor">Relajado</div>
+        </div>
+        <div style="margin-top: 10px; margin-bottom: 20px;">
+            <div style="font-size: 10px; color: #bbb; font-weight: 800; margin-bottom: 2px;">ESTILO CHAT</div>
+            <div style="font-weight: 700; color: var(--text-main);" id="display-estilo">Normal</div>
+        </div>
+        <button class="btn-reset-session" onclick="location.reload()" style="width: 100%; padding: 12px; border-radius: 15px; border: none; background: #fff0f0; color: #ff5252; font-weight: 800; cursor: pointer;">Reiniciar Sesión</button>
+    </div>
+</nav>
+
+<main class="main-app">
+    <div class="section-card record-fixed">
+        <div class="header-unit"><span style="font-weight: 700; color: #455a64;">CORRECCIONES</span></div>
+        <div id="correction-log" style="overflow-y:auto; flex:1;">
+            <div style="padding:25px; color:#ccc; font-size:13px; text-align: center;">Esperando análisis gramatical...</div>
+        </div>
+    </div>
+
+    <div class="section-card chat-container">
+        <header class="header-unit">
+            <span class="migo-brand">Migo web</span>
+            <div style="display:flex; gap:12px;">
+                <div class="icon-wrapper" data-label="Opciones de Chat" onclick="togglePopup('menu-modes')">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#795548"><path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"/></svg>
+                </div>
+                <div class="icon-wrapper" data-label="Traductor" onclick="togglePopup('panel-translator')">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#4caf50"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
+                </div>
+            </div>
+        </header>
+
+        <div class="chat-messages" id="chat-box">
+            <div class="message migo">Bienvenido, Sergi. Todo lo que escribamos aparecerá aquí a la izquierda.</div>
+        </div>
+
+        <div class="input-area">
+            <div class="input-wrapper">
+                <textarea id="user-input" rows="1" placeholder="Escribe un mensaje..." onkeypress="handleChatEnter(event)"></textarea>
+                <div class="icon-wrapper" style="background:var(--active-green); width:38px; height:38px; border:none; color:white;" onclick="sendMessage()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="popup-panel panel-translator" id="panel-translator">
+            <span class="btn-close-pop" onclick="closePopups()">✕</span>
+            <div class="translator-title">TRADUCTOR</div>
+            <div class="trans-box">
+                <div class="trans-label">ESPAÑOL > INGLÉS <span class="btn-refresh" onclick="clearTrans('es')">REFRESH</span></div>
+                <textarea id="in-es" class="trans-textarea" placeholder="Escribe..." rows="3" onkeypress="handleTransEnter(event, 'es', 'en')"></textarea>
+                <button class="btn-send-green" onclick="translateNow('es','en')">
+                    <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
+                <div id="out-en" class="trans-output"></div>
+            </div>
+            <div class="trans-box">
+                <div class="trans-label">INGLÉS > ESPAÑOL <span class="btn-refresh" onclick="clearTrans('en')">REFRESH</span></div>
+                <textarea id="in-en" class="trans-textarea" placeholder="Type..." rows="3" onkeypress="handleTransEnter(event, 'en', 'es')"></textarea>
+                <button class="btn-send-green" onclick="translateNow('en','es')">
+                    <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
+                <div id="out-es" class="trans-output"></div>
+            </div>
+        </div>
+
+        <div class="popup-panel menu-modes" id="menu-modes">
+            <span class="btn-close-pop" onclick="closePopups()">✕</span>
+            <div class="popup-section-title">Rigor</div>
+            <div class="mode-option" onclick="setMode('rigor', 'Estricto', this)"><span>🔒</span> Estricto</div>
+            <div class="mode-option active" onclick="setMode('rigor', 'Relajado', this)"><span>🔓</span> Relajado</div>
+            <div class="popup-section-title">Estilo</div>
+            <div class="mode-option active" onclick="setMode('estilo', 'Normal', this)"><span>📓</span> Normal</div>
+            <div class="mode-option" onclick="setMode('estilo', 'Formal', this)"><span>👔</span> Formal</div>
+            <div class="mode-option" onclick="setMode('estilo', 'Coloquial', this)"><span>✍️</span> Coloquial</div>
+            <div class="mode-option" onclick="setMode('estilo', 'Viajes', this)"><span>✈️</span> Viajes</div>
+        </div>
+    </div>
+</main>
+
+<script>
+    let isBlocked = false;
+    let expectedText = "";
+
+    function togglePopup(id) {
+        const el = document.getElementById(id);
+        const isOpen = el.style.display === 'block';
+        closePopups();
+        if (!isOpen) el.style.display = 'block';
+    }
+
+    function closePopups() {
+        document.querySelectorAll('.popup-panel').forEach(p => p.style.display = 'none');
+    }
+
+    function setMode(type, value, element) {
+        const options = element.parentElement.querySelectorAll('.mode-option');
+        let isStyle = ['Normal', 'Formal', 'Coloquial', 'Viajes'].includes(value);
+        options.forEach(opt => {
+            let optVal = opt.innerText.trim();
+            let optIsStyle = ['Normal', 'Formal', 'Coloquial', 'Viajes'].some(v => optVal.includes(v));
+            if(isStyle === optIsStyle) opt.classList.remove('active');
+        });
+        element.classList.add('active');
+        document.getElementById(`display-${type}`).innerText = value;
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('user-input');
+        const text = input.value.trim();
+        if (!text) return;
+        addChatMessage(text, 'user');
+        input.value = '';
+
+        if (isBlocked) {
+            if (text.toLowerCase() === expectedText.toLowerCase()) {
+                isBlocked = false; expectedText = "";
+                setTimeout(() => addChatMessage("¡Correcto! Has corregido el error.", 'migo'), 600);
+            } else {
+                setTimeout(() => addChatMessage(`Error: Escribe exactamente "${expectedText}"`, 'migo'), 600);
+            }
+            return;
+        }
+
+        if (text.toLowerCase() === "helo") {
+            blockAndCorrect(text, "Hello", "Ortografía");
+        } else {
+            setTimeout(() => addChatMessage("I've processed your message. Check the sidebar for corrections.", 'migo'), 800);
+        }
+    }
+
+    function blockAndCorrect(wrong, right, reason) {
+        isBlocked = true; expectedText = right;
+        setTimeout(() => addChatMessage(`Error de ${reason}. Escribe "${right}" para continuar.`, 'migo'), 800);
+        logCorrection(wrong, right);
+    }
+
+    function addChatMessage(text, type) {
+        const chat = document.getElementById('chat-box');
+        const div = document.createElement('div');
+        div.className = `message ${type}`; div.innerText = text;
+        chat.appendChild(div); chat.scrollTop = chat.scrollHeight;
+    }
+
+    function logCorrection(wrong, right) {
+        const log = document.getElementById('correction-log');
+        if (log.innerText.includes("Esperando")) log.innerHTML = "";
+        
+        const now = new Date();
+        const timeStr = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        
+        const div = document.createElement('div');
+        div.className = 'log-entry';
+        div.innerHTML = `
+            <span class="log-wrong">${wrong}</span>
+            <span class="log-right">➜ ${right}</span>
+            <span class="log-time">${timeStr}</span>
+        `;
+        log.prepend(div);
+    }
+
+    async function translateNow(sl, tl) {
+        const text = document.getElementById(`in-${sl}`).value;
+        const out = document.getElementById(`out-${tl}`);
+        if(!text) return;
+        out.innerText = "Traduciendo...";
+        try {
+            const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`);
+            const data = await res.json();
+            out.innerText = data[0][0][0];
+        } catch (e) { out.innerText = "Error de conexión"; }
+    }
+
+    function clearTrans(lang) {
+        document.getElementById(`in-${lang}`).value = '';
+        document.getElementById(`out-${lang === 'es' ? 'en' : 'es'}`).innerText = '';
+    }
+
+    function handleChatEnter(e) { if (e.key === 'Enter') { e.preventDefault(); sendMessage(); } }
+    function handleTransEnter(e, sl, tl) { if (e.key === 'Enter') { e.preventDefault(); translateNow(sl, tl); } }
+
+    window.onclick = (e) => { 
+        if (!e.target.closest('.icon-wrapper') && !e.target.closest('.popup-panel') && !e.target.closest('.profile-circle')) closePopups(); 
+    };
+</script>
+</body>
+</html>

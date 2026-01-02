@@ -1,0 +1,14 @@
+/* ============================================
+   IMPORTS.CSS - Para desarrollo
+   (No usar en producción)
+   ============================================ */
+
+@import 'base.css';
+@import 'layout.css';
+@import 'nav.css';
+@import 'chat.css';
+@import 'profile.css';
+@import 'translator.css';
+@import 'chat-config.css';
+@import 'components.css';
+

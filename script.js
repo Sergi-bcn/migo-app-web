@@ -1,101 +1,92 @@
-// Configuración de la API de Groq con tu clave
-const API_KEY = "";
-const API_URL = "https://api.groq.com/openai/v1/chat/completions";
+let currentRigor = "relaxed";
 
-async function sendMessage() {
-    const userInputField = document.getElementById('user-input');
-    const userInput = userInputField.value.trim();
+function togglePopup(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
     
-    if (!userInput) return;
-
-    // Mostrar mensaje del usuario en la pantalla
-    appendMessage('user', userInput);
-    userInputField.value = '';
-
-    // Instrucciones detalladas para que la IA actúe como Migo
-    const systemPrompt = `You are Migo, a friendly and helpful English tutor. 
-    Follow this structure for every response:
-    1. Check for grammar or spelling errors.
-    2. Suggest a natural/native way to say the same thing.
-    3. Reply to the user's message to keep the conversation going.
-    
-    CRITICAL: You must format your response exactly like this:
-    CORRECTION: [List errors or say "None"]
-    NATURAL: [Native-sounding version]
-    MIGO: [Your conversational reply]`;
-
-    try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${API_KEY}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                model: "llama-3.3-70b-versatile",
-                messages: [
-                    { role: "system", content: systemPrompt },
-                    { role: "user", content: userInput }
-                ],
-                temperature: 0.7
-            })
-        });
-
-        const data = await response.json();
-        
-        if (data.error) {
-            throw new Error(data.error.message);
-        }
-
-        const fullResponse = data.choices[0].message.content;
-        
-        // Procesar y mostrar la respuesta formateada
-        displayFormattedResponse(fullResponse);
-
-    } catch (error) {
-        console.error("Error de Migo:", error);
-        appendMessage('migo', "Oops! I lost my connection. Please check if your API key is still active or try again in a moment.");
-    }
+    // Usamos una clase CSS específica para no interferir con otros estilos
+    el.classList.toggle('show-popup');
 }
 
-function displayFormattedResponse(text) {
-    // Usamos expresiones regulares para extraer cada sección del texto de la IA
-    const correctionMatch = text.match(/CORRECTION:\s*([\s\S]*?)(?=NATURAL:|$)/i);
-    const naturalMatch = text.match(/NATURAL:\s*([\s\S]*?)(?=MIGO:|$)/i);
-    const migoMatch = text.match(/MIGO:\s*([\s\S]*)/i);
-
-    const correction = correctionMatch ? correctionMatch[1].trim() : "No major errors found!";
-    const natural = naturalMatch ? naturalMatch[1].trim() : "Your sentence is already quite natural.";
-    const reply = migoMatch ? migoMatch[1].trim() : text;
-
-    const formattedHTML = `
-        <div class="correction-box">
-            <p><strong>📝 Correction:</strong> ${correction}</p>
-            <p><strong>✨ Natural Way:</strong> <em>${natural}</em></p>
-        </div>
-        <div class="migo-text">
-            <p>${reply}</p>
-        </div>
-    `;
-    
-    appendMessage('migo', formattedHTML);
-}
-
-function appendMessage(sender, content) {
-    const chatBox = document.getElementById('chat-box');
-    const msgDiv = document.createElement('div');
-    msgDiv.classList.add('message', sender);
-    msgDiv.innerHTML = content;
-    
-    chatBox.appendChild(msgDiv);
-    
-    // Auto-scroll hacia abajo para ver el último mensaje
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-// Permitir enviar el mensaje al presionar "Enter"
-document.getElementById('user-input')?.addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
+function handleChatEnter(event) {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
         sendMessage();
     }
-});
+}
+
+function copyText(btn) {
+    const text = btn.parentElement.querySelector('.msg-content').innerText;
+    navigator.clipboard.writeText(text);
+    const originalSvg = btn.innerHTML;
+    btn.innerHTML = `<span style="font-size:10px; color:var(--verde); font-weight:800">OK</span>`;
+    setTimeout(() => btn.innerHTML = originalSvg, 1500);
+}
+
+function clearTrans(lang) {
+    document.getElementById(`in-${lang}`).value = "";
+    document.getElementById(lang === 'es' ? 'out-en' : 'out-es').innerText = "";
+}
+
+function selectOption(el, targetId, value) {
+    const parent = el.parentElement;
+    Array.from(parent.children).forEach(child => {
+        if(child.classList) child.classList.remove('active');
+    });
+    el.classList.add('active');
+    document.getElementById(targetId).innerText = el.innerText;
+    if (targetId === 'status-rigor') currentRigor = value;
+}
+
+function handleTransEnter(event, sl, tl) {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        translateNow(sl, tl);
+    }
+}
+
+async function translateNow(sl, tl) {
+    const text = document.getElementById(`in-${sl}`).value.trim();
+    const out = document.getElementById(sl === 'es' ? 'out-en' : 'out-es');
+    if (!text) return;
+    out.innerText = "...";
+    try {
+        const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`);
+        const data = await res.json();
+        out.innerText = data[0].map(s => s[0]).join('');
+    } catch (e) { out.innerText = "Error."; }
+}
+
+function copyToClipboard(id) {
+    const text = document.getElementById(id).innerText;
+    if (text && text !== "...") {
+        navigator.clipboard.writeText(text);
+    }
+}
+
+function sendMessage() {
+    const input = document.getElementById('user-input');
+    const text = input.value.trim();
+    if (!text) return;
+
+    addChatMessage(text, 'user');
+    input.value = '';
+
+    setTimeout(() => {
+        addChatMessage("I'm here to help you practice! / Estoy aquí para ayudarte a practicar.", 'migo');
+    }, 700);
+}
+
+function addChatMessage(text, type) {
+    const chat = document.getElementById('chat-box');
+    const div = document.createElement('div');
+    div.className = `message ${type}`;
+    div.innerHTML = `
+        <span class="msg-content">${text}</span>
+        <button class="copy-msg-btn" onclick="copyText(this)" title="Copy / Copiar">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        </button>
+    `;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+}

@@ -1,0 +1,29 @@
+# ============================================
+# ARCHIVOS IGNORADOS PARA MIGO WEB
+# ============================================
+
+# Dependencias de Node.js (NO SUBIR)
+node_modules/
+npm-debug.log*
+
+# Variables de entorno (SEGURIDAD)
+.env
+.env.local
+
+# Archivos CSS generados automáticamente
+css/bundle.css
+css/bundle.min.css
+
+# Archivos del sistema operativo
+.DS_Store          # macOS
+Thumbs.db          # Windows
+desktop.ini        # Windows
+
+# Archivos de editores/IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log

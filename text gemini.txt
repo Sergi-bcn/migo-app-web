@@ -1,0 +1,5 @@
+usando el código anterior en su totalidad, y salvaguardando todas funcionalidades que ya funcionan bien quiero que me des el código completo para: 
+
+
+CORRECTOR Y BLOQUEO 
+quiero que en la ventana de la izquiera se use para el registro de correcciones del chat. quiero que el chat sea siempre y solo en inglés, y que rectifique y bloquee la conversación cuando el usuario no ha cometido una falta de ortografía, gramatical, etc. la AI, pondrá un mensaje y avisarà que el usuario humano tiene que poner exactamente lo que la AI le ha indicado, si no pone lo que le ha indicado la IA, seguirà saliendo el mismo mensaje. esto quedarà registrado en la ventana de la derecha indicando fecha y hora. 

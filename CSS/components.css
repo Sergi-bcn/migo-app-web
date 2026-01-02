@@ -1,0 +1,30 @@
+/* ============================================
+   COMPONENTS.CSS - Componentes reutilizables
+   (Estilos que se repiten en varias partes)
+   ============================================ */
+
+.send-btn-green {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    color: var(--verde);
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+/* Botones de copia comunes */
+.copy-msg-btn:hover {
+    color: var(--verde);
+}
+
+/* Estados hover para opciones */
+.opt-migo:hover {
+    background: #f5f5f5;
+}
+
+/* Transiciones suaves */
+.mini-profile-card,
+.popup-migo,
+.opt-migo {
+    transition: all 0.2s ease;
+}
