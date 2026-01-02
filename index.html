@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo Web</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="side-nav-orange">
+    <div class="nav-icons-group">
+        <div class="circle-btn-nav">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="#ffffff"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+        </div>
+        <div class="profile-circle-nav" onclick="togglePopup('panel-profile-config')">S</div>
+    </div>
+</nav>
+
+<main class="main-app">
+    <div class="section-card corrections-panel">
+        <div class="header-record-box">
+            <span class="record-dot"></span>
+            <span class="record-title">CORRECTIONS / CORRECCIONES</span>
+        </div>
+        <div id="correction-log" class="log-container" style="padding: 20px;">
+        </div>
+        
+        <div class="mini-profile-card" id="panel-profile-config">
+            <span class="close-x" onclick="togglePopup('panel-profile-config')">✕</span>
+            <div class="profile-header-ui">
+                <div class="avatar-large">S</div>
+                <div class="user-info-ui">
+                    <div class="label-small">USER / USUARIO</div>
+                    <div class="user-name">Sergi Pérez</div>
+                </div>
+            </div>
+            <div class="config-grid">
+                <div class="config-item">
+                    <div class="label-small">RIGOR LEVEL</div>
+                    <div id="status-rigor" class="status-val-ui">Relajado / Relaxed</div>
+                </div>
+                <div class="config-item">
+                    <div class="label-small">CHAT STYLE</div>
+                    <div id="status-style" class="status-val-ui">Normal</div>
+                </div>
+            </div>
+            <button class="btn-reset-ui" onclick="location.reload()">Reset / Reiniciar</button>
+        </div>
+    </div>
+
+    <div class="section-card chat-main">
+        <header class="chat-header">
+            <div class="migo-logo-container">
+                <h1 class="migo-title">Migo<span class="title-dot">.</span></h1>
+                <span class="migo-subtitle">web companion</span>
+            </div>
+            
+            <div class="header-controls">
+                <div class="icon-only-btn" id="menu-modes-btn" onclick="togglePopup('menu-modes')">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="#f39c12"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+                </div>
+                <button class="icon-only-btn-plain" onclick="togglePopup('panel-translator')">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="#4caf50"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04z"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="chat-box" id="chat-box">
+            <div class="message migo">
+                <span class="msg-content">Hello Sergi! I'm ready to practice. / Hola Sergi! Estoy listo.</span>
+                <button class="copy-msg-btn" onclick="copyText(this)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <div class="input-box">
+                <textarea id="user-input" placeholder="Type in English..." onkeydown="handleChatEnter(event)"></textarea>
+                <button class="send-btn-green" onclick="sendMessage()">➜</button>
+            </div>
+        </div>
+
+        <div class="popup-migo" id="menu-modes">
+            <span class="close-x" onclick="togglePopup('menu-modes')">✕</span>
+            <small class="label-small">RIGOR / RIGOR</small>
+            <div class="opt-migo active" onclick="selectOption(this, 'status-rigor', 'relaxed')">🔓 Relaxed / Relajado</div>
+            <div class="opt-migo" onclick="selectOption(this, 'status-rigor', 'strict')">🔒 Strict / Estricto</div>
+            <hr>
+            <small class="label-small">STYLE / ESTILO</small>
+            <div class="opt-migo active" onclick="selectOption(this, 'status-style')">📄 Normal</div>
+            <div class="opt-migo" onclick="selectOption(this, 'status-style')">👔 Formal</div>
+            <div class="opt-migo" onclick="selectOption(this, 'status-style')">💬 Casual / Coloquial</div>
+            <div class="opt-migo" onclick="selectOption(this, 'status-style')">🌍 Travel / Viajes</div>
+        </div>
+
+        <div class="popup-migo translator-wide" id="panel-translator">
+            <span class="close-x" onclick="togglePopup('panel-translator')">✕</span>
+            <header class="trans-main-title">TRANSLATOR / TRADUCTOR</header>
+            
+            <div class="trans-unit">
+                <div class="trans-head">
+                    <span class="lang-label">ESPAÑOL > INGLÉS</span> 
+                    <button class="refresh-btn-clean" onclick="clearTrans('es')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#bbb"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                    </button>
+                </div>
+                <div class="input-zone-styled">
+                    <textarea id="in-es" placeholder="Escribe..." onkeydown="handleTransEnter(event, 'es', 'en')"></textarea>
+                </div>
+                <div class="result-zone">
+                    <span class="result-indicator">RESULT</span>
+                    <div id="out-en" class="res-text"></div>
+                    <button class="copy-btn-inner-clean" onclick="copyToClipboard('out-en')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#5f6368"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                    </button>
+                </div>
+                <div class="trans-tools"><button class="go-btn-tool-clean" onclick="translateNow('es','en')">➜</button></div>
+            </div>
+
+            <div class="trans-unit">
+                <div class="trans-head">
+                    <span class="lang-label">ENGLISH > SPANISH</span> 
+                    <button class="refresh-btn-clean" onclick="clearTrans('en')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#bbb"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                    </button>
+                </div>
+                <div class="input-zone-styled">
+                    <textarea id="in-en" placeholder="Type..." onkeydown="handleTransEnter(event, 'en', 'es')"></textarea>
+                </div>
+                <div class="result-zone">
+                    <span class="result-indicator">RESULTADO</span>
+                    <div id="out-es" class="res-text"></div>
+                    <button class="copy-btn-inner-clean" onclick="copyToClipboard('out-es')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#5f6368"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                    </button>
+                </div>
+                <div class="trans-tools"><button class="go-btn-tool-clean" onclick="translateNow('en','es')">➜</button></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
