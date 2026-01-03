@@ -1,29 +1,39 @@
-body.bg-main {
-    background-color: #d1e3e8; /* El azul claro de tu captura */
+.bg-main {
+    background-color: #d1e3e8;
     margin: 0;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
     font-family: 'Inter', sans-serif;
 }
 
-.app-container {
-    display: grid;
-    grid-template-columns: 80px 350px 1fr 350px;
-    gap: 15px;
-    height: 100vh;
+.app-wrapper {
+    display: flex;
+    width: 100%;
     padding: 15px;
-    box-sizing: border-box;
+    gap: 15px;
 }
 
-.sidebar-orange {
-    background-color: #f16b24; /* Naranja Migo */
-    border-radius: 40px;
+.sidebar-mini {
+    width: 65px;
+    background: #f16b24;
+    border-radius: 35px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: 30px 0;
     align-items: center;
+    padding: 25px 0;
 }
 
-.main-content, .side-panel, .right-panel {
+#workspace {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 15px;
+    padding-top: 20px;
+}
+
+.right-stack {
     display: flex;
     flex-direction: column;
     gap: 15px;

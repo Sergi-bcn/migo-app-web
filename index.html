@@ -3,111 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo Web Companion</title>
+    <title>Migo - Desktop Experience</title>
     <link rel="stylesheet" href="CSS/base.css">
     <link rel="stylesheet" href="CSS/layout.css">
     <link rel="stylesheet" href="CSS/components.css">
     <link rel="stylesheet" href="CSS/chat.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
 </head>
 <body class="bg-main">
 
-    <div class="app-container">
-        <nav class="sidebar-orange">
+    <div class="app-wrapper">
+        <nav class="sidebar-mini">
             <div class="nav-top">
-                <div class="dot-indicator"></div>
+                <div class="dot-white"></div>
             </div>
-            <div class="nav-bottom">
-                <button class="nav-icon">⚙️</button>
-                <button class="nav-icon active">👤</button>
+            <div class="nav-menu">
+                <button class="nav-btn" onclick="bringToFront('chat-panel')">💬</button>
+                <button class="nav-btn" onclick="bringToFront('trans-panel')">🌐</button>
+                <button class="nav-btn" onclick="bringToFront('corrections-panel')">📝</button>
+                <button class="nav-btn" onclick="bringToFront('user-panel')">👤</button>
             </div>
         </nav>
 
-        <aside class="side-panel">
-            <div class="panel-card corrections-card">
-                <div class="card-header">
-                    <span class="dot red"></span>
-                    <h2>CORRECTIONS / CORRECCIONES</h2>
+        <div id="workspace">
+            
+            <aside id="corrections-panel" class="window window-small">
+                <div class="window-header"><span class="dot red"></span> CORRECTIONS / CORRECCIONES</div>
+                <div class="window-body">
+                    <h3 class="panel-subtitle">CORRECCIONES/ERRORES</h3>
+                    <div id="corrections-list">
+                        <p class="empty-text">No hay correcciones todavía.</p>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <h3>CORRECCIONES/ERRORES</h3>
-                    <p class="empty-msg">No hay correcciones todavía.</p>
-                </div>
-            </div>
+            </aside>
 
-            <div class="panel-card user-card">
-                <div class="user-row">
-                    <div class="avatar">S</div>
-                    <div class="user-details">
-                        <p class="label">USER / USUARIO</p>
-                        <p class="user-name">Sergi Pérez</p>
-                    </div>
-                </div>
-                <div class="stats-grid">
-                    <div>
-                        <p class="label">RIGOR LEVEL</p>
-                        <p class="stat-val">Relajado / Relaxed</p>
-                    </div>
-                    <div>
-                        <p class="label">CHAT STYLE</p>
-                        <p class="stat-val">Normal</p>
-                    </div>
-                </div>
-                <button class="btn-reset">Reset / Reiniciar</button>
-            </div>
-        </aside>
-
-        <main class="main-content">
-            <div class="chat-card">
-                <div class="chat-header">
+            <main id="chat-panel" class="window window-main">
+                <div class="window-header">
                     <h1 class="logo">Migo<span>.</span></h1>
                     <p class="tagline">WEB COMPANION</p>
                 </div>
-                
-                <div class="chat-messages" id="chat-box">
-                    <div class="bubble bot">
-                        Hello Sergi! I'm ready to practice. / Hola Sergi! Estoy listo.
+                <div id="chat-box" class="chat-content scroll">
+                    <div class="bubble bot">Hello Sergi! I'm ready to practice.</div>
+                </div>
+                <div class="input-container">
+                    <input type="text" id="user-input" placeholder="Type in English..." onkeydown="if(event.key==='Enter') sendMessage()">
+                    <button class="send-btn" onclick="sendMessage()">➔</button>
+                </div>
+            </main>
+
+            <div class="right-stack">
+                <section id="config-panel" class="window window-medium">
+                    <div class="config-group">
+                        <p class="label">RIGOR / RIGOR</p>
+                        <button class="opt-btn active">Relaxed / Relajado</button>
+                        <button class="opt-btn">Strict / Estricto</button>
                     </div>
-                </div>
+                    <div class="config-group" style="margin-top:15px">
+                        <p class="label">STYLE / ESTILO</p>
+                        <div class="grid-2x2">
+                            <button class="opt-btn active">Normal</button>
+                            <button class="opt-btn">Formal</button>
+                            <button class="opt-btn">Casual</button>
+                            <button class="opt-btn">Travel</button>
+                        </div>
+                    </div>
+                </section>
 
-                <div class="input-area">
-                    <input type="text" id="user-input" placeholder="Type in English...">
-                    <button class="btn-send">➔</button>
-                </div>
-            </div>
-        </main>
+                <section id="trans-panel" class="window window-medium">
+                    <div class="window-header">TRANSLATOR / TRADUCTOR</div>
+                    <div class="trans-box">
+                        <p class="label">ESPAÑOL > INGLÉS</p>
+                        <textarea id="trans-es" placeholder="Escribe..."></textarea>
+                        <div class="res-preview">RESULT</div>
+                    </div>
+                </section>
 
-        <aside class="right-panel">
-            <div class="floating-config card-shadow">
-                <div class="config-section">
-                    <p class="label">RIGOR / RIGOR</p>
-                    <button class="sel-btn active">🔓 Relaxed / Relajado</button>
-                    <button class="sel-btn">🔒 Strict / Estricto</button>
-                </div>
-                <div class="config-section">
-                    <p class="label">STYLE / ESTILO</p>
-                    <button class="sel-btn active">📄 Normal</button>
-                    <button class="sel-btn">👔 Formal</button>
-                    <button class="sel-btn">💬 Casual / Coloquial</button>
-                    <button class="sel-btn">🌍 Travel / Viajes</button>
-                </div>
+                <section id="user-panel" class="window window-user">
+                    <div class="user-row">
+                        <div class="avatar">S</div>
+                        <div class="user-info">
+                            <p class="label">USER / USUARIO</p>
+                            <p class="user-name">Sergi Pérez</p>
+                        </div>
+                    </div>
+                    <button class="btn-reset" onclick="location.reload()">Reset / Reiniciar</button>
+                </section>
             </div>
-
-            <div class="translator-card card-shadow">
-                <p class="label">TRANSLATOR / TRADUCTOR</p>
-                <div class="trans-box">
-                    <p class="sub-label">ESPAÑOL > INGLÉS</p>
-                    <textarea placeholder="Escribe..."></textarea>
-                    <div class="res-box">RESULT</div>
-                </div>
-                <div class="trans-box">
-                    <p class="sub-label">ENGLISH > SPANISH</p>
-                    <textarea placeholder="Type..."></textarea>
-                    <div class="res-box">RESULTADO</div>
-                </div>
-            </div>
-        </aside>
+        </div>
     </div>
 
+    <script src="js/ui-manager.js"></script>
+    <script src="js/chat-logic.js"></script>
 </body>
 </html>
