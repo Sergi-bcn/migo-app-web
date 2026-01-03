@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo - Precision Interface</title>
+    <title>Migo - App</title>
     <link rel="stylesheet" href="CSS/base.css">
     <link rel="stylesheet" href="CSS/layout.css">
     <link rel="stylesheet" href="CSS/components.css">
@@ -12,77 +12,88 @@
 </head>
 <body class="bg-main">
 
-    <nav class="sidebar-fixed">
+    <nav class="sidebar-naranja">
         <div class="nav-bottom-group">
-            <button class="nav-btn btn-white" onclick="toggleModal(event, 'config-modal')">
-                <img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" alt="settings" width="20">
-            </button>
-            <button class="nav-btn btn-circle" onclick="toggleModal(event, 'user-modal')">S</button>
+            <div class="anchor">
+                <button class="nav-circle-btn" onclick="togglePopup(event, 'popup-config')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" width="20">
+                </button>
+                <div id="popup-config" class="popup-modal">
+                    <div class="popup-header">
+                        <span>RIGOR</span>
+                        <button class="close-inner" onclick="closeAllPopups()">×</button>
+                    </div>
+                    <div class="options-list">
+                        <button class="opt-row active" onclick="setConfig('rigor', 'Relajado', this)">🔓 Relajado</button>
+                        <button class="opt-row" onclick="setConfig('rigor', 'Estricto', this)">🔒 Estricto</button>
+                    </div>
+                    <div class="popup-header" style="margin-top:15px"><span>ESTILO</span></div>
+                    <div class="options-list">
+                        <button class="opt-row active" onclick="setConfig('style', 'Normal', this)">📝 Normal</button>
+                        <button class="opt-row" onclick="setConfig('style', 'Coloquial', this)">✍️ Coloquial</button>
+                        <button class="opt-row" onclick="setConfig('style', 'Viajes', this)">✈️ Viajes</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="anchor">
+                <button class="nav-circle-btn btn-s" onclick="togglePopup(event, 'popup-user')">S</button>
+                <div id="popup-user" class="popup-modal user-card">
+                    <button class="close-inner" onclick="closeAllPopups()">×</button>
+                    <p class="label">USUARIO</p>
+                    <p class="val-big">Sergi Pérez</p>
+                    <p class="label">FECHA INSCRIPCIÓN</p>
+                    <p class="val-small">31 de Diciembre, 2025</p>
+                    <hr>
+                    <div class="user-stats">
+                        <div><p class="label">RIGOR</p><p id="stat-rigor">Relajado</p></div>
+                        <div><p class="label">ESTILO</p><p id="stat-style">Normal</p></div>
+                    </div>
+                    <button class="btn-reset-app" onclick="location.reload()">Reiniciar Sesión</button>
+                </div>
+            </div>
         </div>
     </nav>
 
-    <div class="app-container">
-        <div id="workspace">
-            <aside id="corrections-panel" class="window window-full-height window-small">
-                <div class="window-header"><span class="dot red"></span> CORRECTIONS / CORRECCIONES</div>
-                <div id="corrections-list" class="window-body scroll">
-                    <p class="empty-text">No hay correcciones todavía.</p>
+    <div class="main-screen">
+        <header class="app-header">
+            <div class="logo-area">
+                <h1 class="logo">Migo<span>.</span></h1>
+                <p class="subtitle">WEB COMPANION</p>
+            </div>
+            <div class="header-tools">
+                <div class="anchor">
+                    <button class="tool-btn" onclick="togglePopup(event, 'popup-translate')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Translate_logo.svg" width="28">
+                    </button>
+                    <div id="popup-translate" class="popup-modal translate-box">
+                        <div class="popup-header"><span>TRANSLATOR / TRADUCTOR</span></div>
+                        <p class="label">ESPAÑOL > INGLÉS</p>
+                        <textarea id="input-es" placeholder="Escribe aquí..."></textarea>
+                        <div class="res-preview" id="res-en">Traducción automática...</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-layout">
+            <aside class="panel-white correction-panel">
+                <div class="panel-header"><span class="dot red"></span> CORRECTIONS / CORRECCIONES</div>
+                <div id="corrections-container" class="scroll-area">
+                    <p class="empty-msg">No hay correcciones todavía.</p>
                 </div>
             </aside>
 
-            <div class="main-area">
-                <header class="top-header">
-                    <div class="logo-group">
-                        <h1 class="logo">Migo<span>.</span></h1>
-                        <p class="tagline">WEB COMPANION</p>
-                    </div>
-                    <div class="header-tools">
-                        <div class="tool-anchor">
-                            <button class="icon-tool" onclick="toggleModal(event, 'chat-settings-popup')">
-                                <img src="https://cdn-icons-png.flaticon.com/512/5968/5968812.png" alt="chat-style" width="35">
-                            </button>
-                            <div id="chat-settings-popup" class="popup-window">
-                                <p class="label">STYLE / ESTILO</p>
-                                <button class="opt-btn active">Normal</button>
-                                <button class="opt-btn">Formal</button>
-                                <button class="opt-btn">Casual</button>
-                            </div>
-                        </div>
-
-                        <div class="tool-anchor">
-                            <button class="icon-tool tool-border" onclick="toggleModal(event, 'translator-popup')">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Translate_logo.svg" alt="google-translate" width="30">
-                            </button>
-                            <div id="translator-popup" class="popup-window popup-large">
-                                <div class="window-header">TRANSLATOR</div>
-                                <textarea id="trans-es" placeholder="Escribe en español..."></textarea>
-                                <div class="res-preview">Traducción...</div>
-                            </div>
-                        </div>
-                    </div>
-                </header>
-
-                <main id="chat-panel" class="window window-main">
-                    <div id="chat-box" class="chat-content scroll">
-                        <div class="bubble bot">Hello Sergi! I'm ready.</div>
-                    </div>
-                    <div class="input-container">
-                        <input type="text" id="user-input" placeholder="Type in English...">
-                        <button class="send-btn" onclick="sendMessage()">➔</button>
-                    </div>
-                </main>
-            </div>
+            <main class="panel-white chat-panel">
+                <div id="chat-box" class="scroll-area chat-feed">
+                    <div class="bubble bot">Hello Sergi! I'm ready to practice. / ¡Hola Sergi! Estoy listo.</div>
+                </div>
+                <div class="chat-input-wrapper">
+                    <input type="text" id="user-input" placeholder="Escribe en inglés...">
+                    <button class="send-btn" onclick="sendMessage()">➔</button>
+                </div>
+            </main>
         </div>
-    </div>
-
-    <div id="user-modal" class="popup-window user-card">
-        <button class="close-x" onclick="toggleModal(event, 'user-modal')">×</button>
-        <p class="label">USUARIO</p>
-        <p class="user-name">Sergi Pérez</p>
-        <p class="label">FECHA INSCRIPCIÓN</p>
-        <p class="user-data">31 de Diciembre, 2025</p>
-        <hr>
-        <button class="btn-reset-full" onclick="location.reload()">Reiniciar Sesión</button>
     </div>
 
     <script src="js/ui-manager.js"></script>

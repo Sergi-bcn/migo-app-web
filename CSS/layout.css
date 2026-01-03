@@ -1,19 +1,16 @@
 :root {
     --naranja: #f16b24;
-    --fondo-azul: #d1e3e8;
+    --fondo: #d1e3e8;
+    --blanco: #ffffff;
 }
 
-body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+body, html { margin: 0; padding: 0; height: 100vh; overflow: hidden; background: var(--fondo); }
 
-.bg-main {
-    background-color: var(--fondo-azul);
-    display: flex;
-    font-family: 'Inter', sans-serif;
-}
+.bg-main { display: flex; font-family: 'Inter', sans-serif; }
 
-/* Barra lateral pegada sin redondeos */
-.sidebar-fixed {
-    width: 75px;
+/* BARRA NARANJA RECTA */
+.sidebar-naranja {
+    width: 80px;
     background: var(--naranja);
     height: 100vh;
     display: flex;
@@ -21,32 +18,28 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
     justify-content: flex-end;
     align-items: center;
     padding-bottom: 30px;
-    box-sizing: border-box;
+    flex-shrink: 0;
 }
 
-.app-container {
-    flex: 1;
-    height: 100vh;
-    padding: 25px;
-    box-sizing: border-box;
-}
-
-#workspace {
-    display: flex;
-    gap: 20px;
-    height: 100%;
-}
-
-.main-area {
+.main-screen {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    padding: 20px 30px 30px 20px;
+    height: 100vh;
+    box-sizing: border-box;
 }
 
-.top-header {
+.app-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 0 10px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.content-layout {
+    display: flex;
+    gap: 20px;
+    flex: 1;
+    height: calc(100% - 100px);
 }

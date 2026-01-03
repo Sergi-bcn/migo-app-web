@@ -1,53 +1,75 @@
-.window {
-    background: white; border-radius: 35px; padding: 25px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+.panel-white {
+    background: var(--blanco);
+    border-radius: 40px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
 }
 
-.window-full-height { height: 100%; }
-.window-small { width: 300px; }
-.window-main { flex: 1; }
+.correction-panel { width: 320px; }
+.chat-panel { flex: 1; }
 
-/* Sistema de Popups Emergentes */
-.tool-anchor { position: relative; display: inline-block; }
+/* Botones circulares de la barra naranja */
+.nav-bottom-group { display: flex; flex-direction: column; gap: 15px; }
 
-.popup-window {
+.nav-circle-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.nav-circle-btn:hover { background: var(--blanco); }
+.btn-s { background: var(--blanco); color: #f1b324; font-weight: 900; font-size: 1.2rem; }
+
+/* POPUPS */
+.anchor { position: relative; }
+
+.popup-modal {
     position: absolute;
-    top: 60px; /* Sale debajo del icono */
-    right: 0;
-    width: 250px;
-    background: white;
-    border-radius: 20px;
+    bottom: 0;
+    left: 70px;
+    width: 260px;
+    background: var(--blanco);
+    border-radius: 25px;
     padding: 20px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.15);
     display: none;
     z-index: 1000;
 }
 
-.popup-window.active { display: block; animation: popIn 0.2s ease-out; }
+.popup-modal.active { display: block; animation: slideRight 0.2s ease; }
 
-.popup-large { width: 350px; }
+.translate-box { top: 50px; left: auto; right: 0; bottom: auto; width: 320px; }
 
-@keyframes popIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+/* Estilos de opciones como en la captura */
+.opt-row {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+    background: #fff;
+    text-align: left;
+    cursor: pointer;
+    font-size: 0.9rem;
 }
 
-.icon-tool {
-    background: transparent; border: none; cursor: pointer; padding: 8px;
-    display: flex; align-items: center; justify-content: center;
+.opt-row.active {
+    background: #e8f5e9;
+    border-color: #4caf50;
+    color: #2e7d32;
+    font-weight: 600;
 }
 
-.tool-border {
-    background: #f0f0f0; border-radius: 12px; border: 1px solid #ddd;
-}
-
-/* Botón S y su popup */
-.nav-btn.btn-circle {
-    background: #ffcc00; color: white; border-radius: 50%; width: 45px; height: 45px;
-    font-weight: 900; border: 3px solid white; cursor: pointer;
-}
-
-.user-card {
-    position: fixed; bottom: 80px; left: 85px; /* Pegado a la franja naranja */
-    width: 280px;
+@keyframes slideRight {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
 }

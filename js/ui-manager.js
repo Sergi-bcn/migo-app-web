@@ -1,18 +1,38 @@
-function toggleModal(event, id) {
+// Manejo de Modales
+function togglePopup(event, id) {
     event.stopPropagation();
-    const target = document.getElementById(id);
-    const isOpen = target.classList.contains('active');
-
-    // Cerrar todos los demás
-    document.querySelectorAll('.popup-window').forEach(p => p.classList.remove('active'));
-
-    // Abrir el actual si estaba cerrado
-    if (!isOpen) {
-        target.classList.add('active');
+    const modal = document.getElementById(id);
+    const wasActive = modal.classList.contains('active');
+    
+    closeAllPopups();
+    
+    if (!wasActive) {
+        modal.classList.add('active');
     }
 }
 
-// Cerrar al hacer clic en cualquier parte de la pantalla
-document.addEventListener('click', () => {
-    document.querySelectorAll('.popup-window').forEach(p => p.classList.remove('active'));
+function closeAllPopups() {
+    document.querySelectorAll('.popup-modal').forEach(m => m.classList.remove('active'));
+}
+
+// Lógica de Configuración (Operativa)
+function setConfig(type, value, element) {
+    // Actualizar UI de botones
+    const parent = element.parentElement;
+    parent.querySelectorAll('.opt-row').forEach(btn => btn.classList.remove('active'));
+    element.classList.add('active');
+
+    // Actualizar valores en el modal de usuario
+    if (type === 'rigor') {
+        document.getElementById('stat-rigor').innerText = value;
+    } else if (type === 'style') {
+        document.getElementById('stat-style').innerText = value;
+    }
+    
+    console.log(`Configuración actualizada: ${type} -> ${value}`);
+}
+
+// Cerrar al hacer clic fuera
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.popup-modal')) closeAllPopups();
 });
