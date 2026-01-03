@@ -1,41 +1,46 @@
 .window {
     background: white;
     border-radius: 40px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-    padding: 25px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+    padding: 30px;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
 }
 
-.window-main { width: 480px; height: 750px; }
+.window-main { flex: 2; } /* El chat es más ancho */
+.window-small { width: 300px; }
 .window-medium { width: 320px; }
-.window-small { width: 280px; height: 500px; }
-.window-user { width: 320px; background: #f8f9fa; }
+.window-user { width: 320px; background: #f8f9fa; margin-top: auto; }
+
+.scroll {
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 10px;
+}
 
 .window-header {
-    font-size: 0.7rem;
-    font-weight: 800;
-    color: #999;
-    margin-bottom: 20px;
-    letter-spacing: 0.5px;
+    font-size: 0.75rem;
+    font-weight: 900;
+    color: #aaa;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.label { font-size: 0.65rem; font-weight: 900; color: #bbb; margin-bottom: 8px; }
-
-.opt-btn {
-    width: 100%;
-    padding: 12px;
-    border-radius: 15px;
-    border: 1px solid #eee;
-    background: #fff;
-    text-align: left;
-    margin-bottom: 5px;
-    cursor: pointer;
-}
-
-.opt-btn.active { background: #d1e7dd; border-color: #a3cfbb; font-weight: 700; }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.red { background: #ff5f56; }
 
 .avatar {
-    width: 45px; height: 45px; background: white; border-radius: 15px;
+    width: 50px; height: 50px; background: white; border-radius: 18px;
     display: grid; place-items: center; font-weight: 900; color: #f16b24;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.grid-2x2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
 }
