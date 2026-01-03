@@ -1,7 +1,6 @@
 const axios = require('axios');
 
 export default async function handler(req, res) {
-    // Solo permitimos peticiones POST
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
@@ -17,8 +16,6 @@ export default async function handler(req, res) {
                     role: "system",
                     content: `You are Migo, a friendly English tutor. 
                     Rigor level: ${rigor}. 
-                    If rigor is strict, point out every mistake. 
-                    If relaxed, just keep the conversation going unless the error is big.
                     Always respond in this JSON format:
                     { 
                       "reply": "your response in English", 
@@ -41,7 +38,7 @@ export default async function handler(req, res) {
         res.status(200).json(botResponse);
 
     } catch (error) {
-        console.error("Error en la API:", error.response?.data || error.message);
+        console.error("Error:", error.message);
         res.status(500).json({ error: "Error al conectar con la IA" });
     }
 }

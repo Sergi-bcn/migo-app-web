@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Migo - English Tutor</title>
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/chat.css">
+    <link rel="stylesheet" href="/CSS/base.css">
+    <link rel="stylesheet" href="/CSS/layout.css">
+    <link rel="stylesheet" href="/CSS/chat.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -50,29 +50,13 @@
                 <div class="trans-result">
                     <label>RESULT</label>
                     <div id="out-en" class="result-box"></div>
-                    <button class="copy-btn" onclick="copyToClipboard('out-en')">Copy</button>
                 </div>
             </div>
         </footer>
     </div>
 
-    <div id="profile-popup" class="popup-overlay">
-        <div class="popup-content">
-            <button class="close-btn" onclick="togglePopup('profile-popup')">×</button>
-            <h3>USER / USUARIO</h3>
-            <p>Sergi Pérez</p>
-            <hr>
-            <h3>RIGOR LEVEL</h3>
-            <div class="options">
-                <span onclick="selectOption(this, 'status-rigor', 'relaxed')" class="active">Relajado / Relaxed</span>
-                <span onclick="selectOption(this, 'status-rigor', 'strict')">Estricto / Strict</span>
-            </div>
-            <p>Status: <b id="status-rigor">Relajado</b></p>
-        </div>
-    </div>
-
-    <script src="js/main.js"></script>
-    <script src="js/chat-logic.js"></script>
-    <script src="js/translator.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/chat-logic.js"></script>
+    <script src="/js/translator.js"></script>
 </body>
 </html>
