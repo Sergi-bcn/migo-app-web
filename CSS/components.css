@@ -8,10 +8,24 @@
     box-sizing: border-box;
 }
 
-.window-main { flex: 2; } /* El chat es más ancho */
-.window-small { width: 300px; }
-.window-medium { width: 320px; }
-.window-user { width: 320px; background: #f8f9fa; margin-top: auto; }
+/* Ventana de correcciones según lo solicitado */
+.window-small { 
+    width: 300px; 
+}
+
+.window-main { 
+    flex: 2; 
+}
+
+.window-medium { 
+    width: 320px; 
+}
+
+.window-user { 
+    width: 320px; 
+    background: #f8f9fa; 
+    margin-top: auto; /* Se pega abajo en el stack derecho */
+}
 
 .scroll {
     overflow-y: auto;
@@ -23,8 +37,7 @@
     font-size: 0.75rem;
     font-weight: 900;
     color: #aaa;
-    margin-bottom: 25px;
-    text-transform: uppercase;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -33,10 +46,22 @@
 .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .red { background: #ff5f56; }
 
-.avatar {
-    width: 50px; height: 50px; background: white; border-radius: 18px;
-    display: grid; place-items: center; font-weight: 900; color: #f16b24;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+.opt-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 15px;
+    border: 1px solid #eee;
+    background: #fff;
+    text-align: left;
+    margin-bottom: 5px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.opt-btn.active { 
+    background: #d1e7dd; 
+    border-color: #a3cfbb; 
+    font-weight: 700; 
 }
 
 .grid-2x2 {

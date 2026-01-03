@@ -14,76 +14,49 @@
 
     <div class="app-wrapper">
         <nav class="sidebar-mini">
-            <div class="nav-top">
-                <div class="dot-white"></div>
-            </div>
-            <div class="nav-menu">
-                <button class="nav-btn" onclick="bringToFront('chat-panel')">💬</button>
-                <button class="nav-btn" onclick="bringToFront('trans-panel')">🌐</button>
-                <button class="nav-btn" onclick="bringToFront('corrections-panel')">📝</button>
-                <button class="nav-btn" onclick="bringToFront('user-panel')">👤</button>
-            </div>
+            <button class="nav-btn" onclick="bringToFront('chat-panel')">💬</button>
+            <button class="nav-btn" onclick="bringToFront('trans-panel')">🌐</button>
+            <button class="nav-btn" onclick="bringToFront('corrections-panel')">📝</button>
+            <button class="nav-btn" onclick="bringToFront('user-panel')">👤</button>
         </nav>
 
         <div id="workspace">
-            
             <aside id="corrections-panel" class="window window-full-height window-small">
                 <div class="window-header"><span class="dot red"></span> CORRECTIONS / CORRECCIONES</div>
-                <div class="window-body scroll">
-                    <h3 class="panel-subtitle">CORRECCIONES/ERRORES</h3>
-                    <div id="corrections-list">
-                        <p class="empty-text">No hay correcciones todavía.</p>
-                    </div>
+                <div class="window-body scroll" id="corrections-list">
+                    <p class="empty-text">No hay correcciones todavía.</p>
                 </div>
             </aside>
 
             <main id="chat-panel" class="window window-full-height window-main">
                 <div class="window-header">
                     <h1 class="logo">Migo<span>.</span></h1>
-                    <p class="tagline">WEB COMPANION</p>
                 </div>
                 <div id="chat-box" class="chat-content scroll">
                     <div class="bubble bot">Hello Sergi! I'm ready to practice.</div>
                 </div>
                 <div class="input-container">
-                    <input type="text" id="user-input" placeholder="Type in English..." onkeydown="if(event.key==='Enter') sendMessage()">
+                    <input type="text" id="user-input" placeholder="Type in English...">
                     <button class="send-btn" onclick="sendMessage()">➔</button>
                 </div>
             </main>
 
             <div class="right-stack window-full-height">
-                <section id="config-panel" class="window window-medium card-shadow">
-                    <p class="label">RIGOR / RIGOR</p>
-                    <button class="opt-btn active">Relaxed / Relajado</button>
-                    <button class="opt-btn">Strict / Estricto</button>
-                    
-                    <p class="label" style="margin-top:15px">STYLE / ESTILO</p>
-                    <div class="grid-2x2">
-                        <button class="opt-btn active">Normal</button>
-                        <button class="opt-btn">Formal</button>
-                        <button class="opt-btn">Casual</button>
-                        <button class="opt-btn">Travel</button>
-                    </div>
+                <section id="config-panel" class="window window-medium">
+                    <p class="label">RIGOR</p>
+                    <button class="opt-btn active">Relaxed</button>
+                    <button class="opt-btn">Strict</button>
                 </section>
 
-                <section id="trans-panel" class="window window-medium card-shadow">
-                    <div class="window-header">TRANSLATOR / TRADUCTOR</div>
-                    <div class="trans-box">
-                        <p class="label">ESPAÑOL > INGLÉS</p>
-                        <textarea id="trans-es" placeholder="Escribe..."></textarea>
-                        <div class="res-preview">RESULT</div>
-                    </div>
+                <section id="trans-panel" class="window window-medium">
+                    <div class="window-header">TRANSLATOR</div>
+                    <textarea id="trans-es" placeholder="Escribe..."></textarea>
+                    <div class="res-preview">RESULT</div>
                 </section>
 
                 <section id="user-panel" class="window window-user">
-                    <div class="user-row">
-                        <div class="avatar">S</div>
-                        <div class="user-info">
-                            <p class="label">USER / USUARIO</p>
-                            <p class="user-name">Sergi Pérez</p>
-                        </div>
-                    </div>
-                    <button class="btn-reset" onclick="location.reload()">Reset / Reiniciar</button>
+                    <p class="user-name">Sergi Pérez</p>
+                    <button class="btn-reset" onclick="location.reload()">Reset Session</button>
                 </section>
             </div>
         </div>
