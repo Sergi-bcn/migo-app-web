@@ -1,71 +1,59 @@
 .window {
     background: white;
     border-radius: 40px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.06);
-    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    padding: 25px;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
 }
 
-/* Ventana de correcciones según lo solicitado */
-.window-small { 
-    width: 300px; 
+.window-full-height { height: 100%; }
+.window-main { flex: 1; }
+.window-small { width: 300px; }
+
+/* ESTILO EMERGENTE */
+.floating-modal {
+    position: absolute;
+    right: 35px;
+    top: 0;
+    width: 320px;
+    z-index: 1000;
+    display: none; /* Oculta hasta que se pulsa el botón */
+    border: 2px solid rgba(241, 107, 36, 0.1);
 }
 
-.window-main { 
-    flex: 2; 
-}
-
-.window-medium { 
-    width: 320px; 
-}
-
-.window-user { 
-    width: 320px; 
-    background: #f8f9fa; 
-    margin-top: auto; /* Se pega abajo en el stack derecho */
-}
-
-.scroll {
-    overflow-y: auto;
-    flex: 1;
-    padding-right: 10px;
-}
-
-.window-header {
-    font-size: 0.75rem;
-    font-weight: 900;
-    color: #aaa;
-    margin-bottom: 20px;
+.floating-modal.active {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    animation: slideIn 0.3s ease-out;
 }
 
-.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-.red { background: #ff5f56; }
+@keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
 
-.opt-btn {
-    width: 100%;
-    padding: 12px;
+.action-icon {
+    background: white;
+    border: none;
+    width: 50px;
+    height: 50px;
     border-radius: 15px;
-    border: 1px solid #eee;
-    background: #fff;
-    text-align: left;
-    margin-bottom: 5px;
+    font-size: 1.4rem;
     cursor: pointer;
-    font-size: 0.85rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    margin-left: 10px;
+    transition: 0.2s;
 }
 
-.opt-btn.active { 
-    background: #d1e7dd; 
-    border-color: #a3cfbb; 
-    font-weight: 700; 
+.action-icon:hover { transform: scale(1.1); color: var(--naranja); }
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
 }
 
-.grid-2x2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-}
+.modal-header h3 { font-size: 0.9rem; margin: 0; color: #555; }
+.modal-header button { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #ccc; }

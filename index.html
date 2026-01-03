@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo - Desktop Pro</title>
+    <title>Migo - Floating Edition</title>
     <link rel="stylesheet" href="CSS/base.css">
     <link rel="stylesheet" href="CSS/layout.css">
     <link rel="stylesheet" href="CSS/components.css">
@@ -14,49 +14,57 @@
 
     <div class="app-wrapper">
         <nav class="sidebar-mini">
-            <button class="nav-btn" onclick="bringToFront('chat-panel')">💬</button>
-            <button class="nav-btn" onclick="bringToFront('trans-panel')">🌐</button>
-            <button class="nav-btn" onclick="bringToFront('corrections-panel')">📝</button>
-            <button class="nav-btn" onclick="bringToFront('user-panel')">👤</button>
+            <button class="nav-btn" onclick="toggleWindow('user-panel')">👤</button>
         </nav>
 
-        <div id="workspace">
-            <aside id="corrections-panel" class="window window-full-height window-small">
-                <div class="window-header"><span class="dot red"></span> CORRECTIONS / CORRECCIONES</div>
-                <div class="window-body scroll" id="corrections-list">
-                    <p class="empty-text">No hay correcciones todavía.</p>
-                </div>
-            </aside>
-
-            <main id="chat-panel" class="window window-full-height window-main">
-                <div class="window-header">
+        <div id="main-container">
+            <header class="main-header">
+                <div class="logo-area">
                     <h1 class="logo">Migo<span>.</span></h1>
+                    <p class="tagline">WEB COMPANION</p>
                 </div>
-                <div id="chat-box" class="chat-content scroll">
-                    <div class="bubble bot">Hello Sergi! I'm ready to practice.</div>
+                <div class="header-actions">
+                    <button class="action-icon" onclick="toggleWindow('trans-panel')">🌐</button>
+                    <button class="action-icon" onclick="toggleWindow('config-panel')">⚙️</button>
                 </div>
-                <div class="input-container">
-                    <input type="text" id="user-input" placeholder="Type in English...">
-                    <button class="send-btn" onclick="sendMessage()">➔</button>
-                </div>
-            </main>
+            </header>
 
-            <div class="right-stack window-full-height">
-                <section id="config-panel" class="window window-medium">
+            <div id="workspace">
+                <aside id="corrections-panel" class="window window-full-height window-small">
+                    <div class="window-header"><span class="dot red"></span> CORRECTIONS</div>
+                    <div class="window-body scroll" id="corrections-list">
+                        <p class="empty-text">No hay correcciones todavía.</p>
+                    </div>
+                </aside>
+
+                <main id="chat-panel" class="window window-full-height window-main">
+                    <div id="chat-box" class="chat-content scroll">
+                        <div class="bubble bot">Hello Sergi! I'm ready.</div>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="user-input" placeholder="Type in English...">
+                        <button class="send-btn" onclick="sendMessage()">➔</button>
+                    </div>
+                </main>
+
+                <section id="trans-panel" class="window floating-modal">
+                    <div class="modal-header"><h3>Translator</h3><button onclick="toggleWindow('trans-panel')">×</button></div>
+                    <textarea id="trans-es" placeholder="Escribe en español..."></textarea>
+                    <div class="res-preview">Traducción...</div>
+                </section>
+
+                <section id="config-panel" class="window floating-modal">
+                    <div class="modal-header"><h3>Settings</h3><button onclick="toggleWindow('config-panel')">×</button></div>
                     <p class="label">RIGOR</p>
                     <button class="opt-btn active">Relaxed</button>
                     <button class="opt-btn">Strict</button>
                 </section>
 
-                <section id="trans-panel" class="window window-medium">
-                    <div class="window-header">TRANSLATOR</div>
-                    <textarea id="trans-es" placeholder="Escribe..."></textarea>
-                    <div class="res-preview">RESULT</div>
-                </section>
-
-                <section id="user-panel" class="window window-user">
-                    <p class="user-name">Sergi Pérez</p>
-                    <button class="btn-reset" onclick="location.reload()">Reset Session</button>
+                <section id="user-panel" class="window floating-modal user-card">
+                    <div class="user-row">
+                        <div class="avatar">S</div>
+                        <p class="user-name">Sergi Pérez</p>
+                    </div>
                 </section>
             </div>
         </div>

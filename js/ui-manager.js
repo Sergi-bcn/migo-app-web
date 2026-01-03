@@ -1,17 +1,23 @@
-let zCounter = 100;
-
-function bringToFront(id) {
-    zCounter++;
-    const target = document.getElementById(id);
-    if (target) {
-        target.style.zIndex = zCounter;
-        // Animación suave de enfoque
-        target.style.transform = "scale(1.01)";
-        setTimeout(() => target.style.transform = "scale(1)", 150);
+function toggleWindow(id) {
+    const win = document.getElementById(id);
+    
+    // Si la ventana ya está abierta, la cerramos
+    if (win.classList.contains('active')) {
+        win.classList.remove('active');
+    } else {
+        // Cerramos otras ventanas abiertas para que no se amontonen
+        document.querySelectorAll('.floating-modal').forEach(m => m.classList.remove('active'));
+        // Abrimos la seleccionada
+        win.classList.add('active');
     }
 }
 
-// Inicialización: repartir un poco las ventanas si se solapan
-window.onload = () => {
-    console.log("Migo Desktop Loaded");
-};
+// Cerrar ventanas al hacer clic fuera del área (opcional)
+document.addEventListener('mousedown', (e) => {
+    const modals = document.querySelectorAll('.floating-modal');
+    modals.forEach(modal => {
+        if (modal.classList.contains('active') && !modal.contains(e.target) && !e.target.closest('.action-icon')) {
+            modal.classList.remove('active');
+        }
+    });
+});
