@@ -3,112 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo Web - English Tutor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
+    <title>Migo Web Companion</title>
     <link rel="stylesheet" href="CSS/base.css">
     <link rel="stylesheet" href="CSS/layout.css">
+    <link rel="stylesheet" href="CSS/components.css">
     <link rel="stylesheet" href="CSS/chat.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light">
 
-<nav class="side-nav-orange">
-    <div class="nav-icons-group">
-        <div class="circle-btn-nav">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="#ffffff"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
-        </div>
-        <div class="profile-circle-nav" onclick="togglePopup('panel-profile-config')">S</div>
-    </div>
-</nav>
-
-<main class="main-app">
-    <div class="section-card corrections-panel">
-        <div class="header-record-box">
-            <span class="record-dot"></span>
-            <span class="record-title">CORRECTIONS / CORRECCIONES</span>
-        </div>
-        <div id="correction-log" class="log-container" style="padding: 20px; overflow-y: auto;">
-            <p class="empty-state">No hay correcciones todavía.</p>
-        </div>
-        
-        <div class="mini-profile-card" id="panel-profile-config">
-            <span class="close-x" onclick="togglePopup('panel-profile-config')">✕</span>
-            <div class="profile-header-ui">
-                <div class="avatar-large">S</div>
-                <div class="user-info-ui">
-                    <div class="label-small">USER / USUARIO</div>
-                    <div class="user-name">Sergi Pérez</div>
-                </div>
+    <div class="app-grid">
+        <nav class="sidebar-accent">
+            <div class="nav-icons">
+                <button class="icon-btn active">⚙️</button>
+                <button class="icon-btn" onclick="toggleUserPanel()">👤</button>
             </div>
-            <div class="config-grid">
-                <div class="config-item">
-                    <div class="label-small">RIGOR LEVEL</div>
-                    <div id="status-rigor" class="status-val-ui">Relajado / Relaxed</div>
-                </div>
-                <div class="config-item">
-                    <div class="label-small">CHAT STYLE</div>
-                    <div id="status-style" class="status-val-ui">Normal</div>
-                </div>
-            </div>
-            <button class="btn-reset-ui" onclick="location.reload()">Reset / Reiniciar</button>
-        </div>
-    </div>
+        </nav>
 
-    <div class="section-card chat-main">
-        <header class="chat-header">
-            <div class="migo-logo-container">
-                <h1 class="migo-title">Migo<span class="title-dot">.</span></h1>
-                <span class="migo-subtitle">web companion</span>
+        <aside class="panel-corrections card">
+            <h2 class="panel-title">CORRECTIONS / CORRECCIONES</h2>
+            <div id="corrections-list" class="scroll-area">
+                <p class="empty-text">No hay correcciones todavía.</p>
             </div>
             
-            <div class="header-controls">
-                <div class="icon-only-btn" id="menu-modes-btn" onclick="togglePopup('menu-modes')">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="#f39c12"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+            <div class="user-card card shadow-sm">
+                <div class="user-avatar">S</div>
+                <div class="user-info">
+                    <p class="label">USER / USUARIO</p>
+                    <p class="name">Sergi Pérez</p>
+                    <div class="user-stats">
+                        <span>Rigor: <b id="ui-rigor">Relaxed</b></span>
+                        <span>Style: <b id="ui-style">Normal</b></span>
+                    </div>
                 </div>
-                <button class="icon-only-btn-plain" onclick="togglePopup('panel-translator')">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="#4caf50"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04z"/></svg>
-                </button>
+                <button class="reset-link" onclick="location.reload()">Reset / Reiniciar</button>
             </div>
-        </header>
+        </aside>
 
-        <div class="chat-box" id="chat-box">
-            <div class="message migo">
-                <span class="msg-content">Hello Sergi! I'm ready to practice. / Hola Sergi! Estoy listo.</span>
+        <main class="panel-chat card main-shadow">
+            <div class="chat-header">
+                <h1 class="migo-logo">Migo<span>.</span></h1>
+                <p class="migo-subtitle">WEB COMPANION</p>
             </div>
-        </div>
-
-        <div class="input-area">
-            <div class="input-box">
-                <textarea id="user-input" placeholder="Type in English..." onkeydown="handleChatEnter(event)"></textarea>
-                <button class="send-btn-green" onclick="sendMessage()">➜</button>
+            
+            <div id="chat-box" class="chat-container scroll-area">
+                <div class="msg bot">Hello Sergi! I'm ready to practice. / Hola Sergi! Estoy listo.</div>
             </div>
-        </div>
 
-        <div class="popup-migo" id="menu-modes">
-            <span class="close-x" onclick="togglePopup('menu-modes')">✕</span>
-            <small class="label-small">RIGOR / RIGOR</small>
-            <div class="opt-migo active" onclick="selectOption(this, 'status-rigor', 'relaxed')">🔓 Relaxed / Relajado</div>
-            <div class="opt-migo" onclick="selectOption(this, 'status-rigor', 'strict')">🔒 Strict / Estricto</div>
-            <hr>
-            <small class="label-small">STYLE / ESTILO</small>
-            <div class="opt-migo active" onclick="selectOption(this, 'status-style', 'normal')">📄 Normal</div>
-            <div class="opt-migo" onclick="selectOption(this, 'status-style', 'formal')">👔 Formal</div>
-        </div>
-
-        <div class="popup-migo translator-wide" id="panel-translator">
-            <span class="close-x" onclick="togglePopup('panel-translator')">✕</span>
-            <header class="trans-main-title">TRANSLATOR / TRADUCTOR</header>
-            <div class="trans-unit">
-                <div class="trans-head"><span class="lang-label">ESPAÑOL > INGLÉS</span></div>
-                <div class="input-zone-styled"><textarea id="in-es" placeholder="Escribe..." onkeydown="handleTransEnter(event, 'es', 'en')"></textarea></div>
-                <div class="result-zone"><div id="out-en" class="res-text"></div></div>
-                <button class="go-btn-tool-clean" onclick="translateNow('es','en')">➜</button>
+            <div class="chat-input-wrapper">
+                <input type="text" id="user-input" placeholder="Type in English..." onkeydown="handleChatEnter(event)">
+                <button onclick="sendMessage()" class="send-circle">→</button>
             </div>
-        </div>
+        </main>
+
+        <aside class="panel-right">
+            <div class="config-card card shadow-sm">
+                <section>
+                    <p class="label">RIGOR / RIGOR</p>
+                    <button class="option-btn active" onclick="setRigor('relaxed')">🔓 Relaxed / Relajado</button>
+                    <button class="option-btn" onclick="setRigor('strict')">🔒 Strict / Estricto</button>
+                </section>
+                <section>
+                    <p class="label">STYLE / ESTILO</p>
+                    <div class="style-grid">
+                        <button class="option-btn active" onclick="setStyle('Normal')">📄 Normal</button>
+                        <button class="option-btn" onclick="setStyle('Formal')">👔 Formal</button>
+                        <button class="option-btn" onclick="setStyle('Casual')">💬 Casual</button>
+                        <button class="option-btn" onclick="setStyle('Travel')">🌍 Travel</button>
+                    </div>
+                </section>
+            </div>
+
+            <div class="translator-card card shadow-sm">
+                <p class="label">TRANSLATOR / TRADUCTOR</p>
+                <div class="trans-group">
+                    <p class="sub-label">ESPAÑOL > INGLÉS</p>
+                    <textarea id="in-es" placeholder="Escribe..."></textarea>
+                    <div id="out-en" class="result-area">RESULT</div>
+                </div>
+                <div class="trans-group">
+                    <p class="sub-label">ENGLISH > SPANISH</p>
+                    <textarea id="in-en" placeholder="Type..."></textarea>
+                    <div id="out-es" class="result-area">RESULTADO</div>
+                </div>
+            </div>
+        </aside>
     </div>
-</main>
 
-<script src="js/main.js"></script>
-<script src="js/chat-logic.js"></script>
-<script src="js/translator.js"></script>
+    <script src="js/ui-manager.js"></script>
+    <script src="js/chat-logic.js"></script>
+    <script src="js/translator.js"></script>
 </body>
 </html>
