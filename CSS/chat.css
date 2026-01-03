@@ -1,0 +1,6 @@
+.chat-box { flex: 1; overflow-y: auto; }
+.message { margin-bottom: 15px; padding: 12px; border-radius: 12px; max-width: 80%; }
+.bot-msg { background: var(--gray); }
+.user-msg { background: var(--accent); color: white; margin-left: auto; }
+.input-area { display: flex; gap: 10px; margin-top: 10px; }
+textarea { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border); }
