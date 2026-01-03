@@ -1,18 +1,18 @@
-function toggleModal(id) {
-    const modal = document.getElementById(id);
-    const isActive = modal.classList.contains('active');
-    
-    // Cerrar otros modales
-    document.querySelectorAll('.modal-float').forEach(m => m.classList.remove('active'));
-    
-    if (!isActive) {
-        modal.classList.add('active');
+function toggleModal(event, id) {
+    event.stopPropagation();
+    const target = document.getElementById(id);
+    const isOpen = target.classList.contains('active');
+
+    // Cerrar todos los demás
+    document.querySelectorAll('.popup-window').forEach(p => p.classList.remove('active'));
+
+    // Abrir el actual si estaba cerrado
+    if (!isOpen) {
+        target.classList.add('active');
     }
 }
 
-// Cerrar si se hace clic fuera del modal
-document.addEventListener('click', (e) => {
-    if (!e.target.closest('.modal-float') && !e.target.closest('.nav-btn') && !e.target.closest('.icon-tool')) {
-        document.querySelectorAll('.modal-float').forEach(m => m.classList.remove('active'));
-    }
+// Cerrar al hacer clic en cualquier parte de la pantalla
+document.addEventListener('click', () => {
+    document.querySelectorAll('.popup-window').forEach(p => p.classList.remove('active'));
 });

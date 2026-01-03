@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo - Full Desktop Experience</title>
+    <title>Migo - Precision Interface</title>
     <link rel="stylesheet" href="CSS/base.css">
     <link rel="stylesheet" href="CSS/layout.css">
     <link rel="stylesheet" href="CSS/components.css">
@@ -12,34 +12,59 @@
 </head>
 <body class="bg-main">
 
-    <div class="app-wrapper">
-        <nav class="sidebar-mini">
-            <div class="nav-bottom-group">
-                <button class="nav-btn btn-white" onclick="toggleModal('config-modal')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" alt="settings" width="20">
-                </button>
-                <button class="nav-btn btn-circle" onclick="toggleModal('user-modal')">S</button>
-            </div>
-        </nav>
+    <nav class="sidebar-fixed">
+        <div class="nav-bottom-group">
+            <button class="nav-btn btn-white" onclick="toggleModal(event, 'config-modal')">
+                <img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" alt="settings" width="20">
+            </button>
+            <button class="nav-btn btn-circle" onclick="toggleModal(event, 'user-modal')">S</button>
+        </div>
+    </nav>
 
+    <div class="app-container">
         <div id="workspace">
             <aside id="corrections-panel" class="window window-full-height window-small">
                 <div class="window-header"><span class="dot red"></span> CORRECTIONS / CORRECCIONES</div>
-                <div class="window-body scroll" id="corrections-list">
+                <div id="corrections-list" class="window-body scroll">
                     <p class="empty-text">No hay correcciones todavía.</p>
                 </div>
             </aside>
 
-            <div class="center-col window-full-height">
-                <header class="main-header">
+            <div class="main-area">
+                <header class="top-header">
                     <div class="logo-group">
                         <h1 class="logo">Migo<span>.</span></h1>
                         <p class="tagline">WEB COMPANION</p>
                     </div>
+                    <div class="header-tools">
+                        <div class="tool-anchor">
+                            <button class="icon-tool" onclick="toggleModal(event, 'chat-settings-popup')">
+                                <img src="https://cdn-icons-png.flaticon.com/512/5968/5968812.png" alt="chat-style" width="35">
+                            </button>
+                            <div id="chat-settings-popup" class="popup-window">
+                                <p class="label">STYLE / ESTILO</p>
+                                <button class="opt-btn active">Normal</button>
+                                <button class="opt-btn">Formal</button>
+                                <button class="opt-btn">Casual</button>
+                            </div>
+                        </div>
+
+                        <div class="tool-anchor">
+                            <button class="icon-tool tool-border" onclick="toggleModal(event, 'translator-popup')">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Translate_logo.svg" alt="google-translate" width="30">
+                            </button>
+                            <div id="translator-popup" class="popup-window popup-large">
+                                <div class="window-header">TRANSLATOR</div>
+                                <textarea id="trans-es" placeholder="Escribe en español..."></textarea>
+                                <div class="res-preview">Traducción...</div>
+                            </div>
+                        </div>
+                    </div>
                 </header>
+
                 <main id="chat-panel" class="window window-main">
                     <div id="chat-box" class="chat-content scroll">
-                        <div class="bubble bot">Hello Sergi! I'm ready to practice.</div>
+                        <div class="bubble bot">Hello Sergi! I'm ready.</div>
                     </div>
                     <div class="input-container">
                         <input type="text" id="user-input" placeholder="Type in English...">
@@ -47,55 +72,17 @@
                     </div>
                 </main>
             </div>
-
-            <div class="right-col window-full-height">
-                <header class="main-header header-right">
-                    <div class="action-group">
-                        <button class="icon-tool" onclick="toggleModal('config-modal')">
-                            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968812.png" alt="chat-config" width="30">
-                        </button>
-                        <button class="icon-tool tool-border" onclick="toggleModal('trans-panel')">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Translate_logo.svg" alt="google-translate" width="30">
-                        </button>
-                    </div>
-                </header>
-                <section id="trans-panel" class="window window-medium">
-                    <div class="window-header">TRANSLATOR / TRADUCTOR</div>
-                    <div class="trans-group">
-                        <p class="label">ESPAÑOL > INGLÉS</p>
-                        <textarea id="trans-es" placeholder="Escribe..."></textarea>
-                        <div class="res-preview">RESULT</div>
-                    </div>
-                    <div class="trans-group" style="margin-top:20px">
-                        <p class="label">ENGLISH > SPANISH</p>
-                        <textarea id="trans-en" placeholder="Type..."></textarea>
-                        <div class="res-preview">RESULTADO</div>
-                    </div>
-                </section>
-            </div>
-
-            <div id="config-modal" class="modal-float">
-                <div class="modal-content">
-                    <div class="modal-header"><h3>RIGOR / RIGOR</h3><button onclick="toggleModal('config-modal')">×</button></div>
-                    <button class="opt-btn active">🔒 Relaxed / Relajado</button>
-                    <button class="opt-btn">🔒 Strict / Estricto</button>
-                </div>
-            </div>
-
-            <div id="user-modal" class="modal-float user-popup">
-                <div class="modal-content">
-                    <button class="close-modal" onclick="toggleModal('user-modal')">×</button>
-                    <p class="label">USUARIO</p>
-                    <p class="user-name">Sergi Pérez</p>
-                    <p class="label">FECHA INSCRIPCIÓN</p>
-                    <p class="user-data">31 de Diciembre, 2025</p>
-                    <hr>
-                    <p class="label">NIVEL RIGOR</p>
-                    <p class="user-data">Relajado</p>
-                    <button class="btn-reset-full" onclick="location.reload()">Reiniciar Sesión</button>
-                </div>
-            </div>
         </div>
+    </div>
+
+    <div id="user-modal" class="popup-window user-card">
+        <button class="close-x" onclick="toggleModal(event, 'user-modal')">×</button>
+        <p class="label">USUARIO</p>
+        <p class="user-name">Sergi Pérez</p>
+        <p class="label">FECHA INSCRIPCIÓN</p>
+        <p class="user-data">31 de Diciembre, 2025</p>
+        <hr>
+        <button class="btn-reset-full" onclick="location.reload()">Reiniciar Sesión</button>
     </div>
 
     <script src="js/ui-manager.js"></script>

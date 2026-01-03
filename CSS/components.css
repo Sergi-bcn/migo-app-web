@@ -1,36 +1,53 @@
 .window {
     background: white; border-radius: 35px; padding: 25px;
-    display: flex; flex-direction: column; box-sizing: border-box;
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
+.window-full-height { height: 100%; }
 .window-small { width: 300px; }
+.window-main { flex: 1; }
 
-.action-group { display: flex; gap: 12px; align-items: center; }
+/* Sistema de Popups Emergentes */
+.tool-anchor { position: relative; display: inline-block; }
 
-.icon-tool { background: transparent; border: none; cursor: pointer; }
+.popup-window {
+    position: absolute;
+    top: 60px; /* Sale debajo del icono */
+    right: 0;
+    width: 250px;
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    display: none;
+    z-index: 1000;
+}
+
+.popup-window.active { display: block; animation: popIn 0.2s ease-out; }
+
+.popup-large { width: 350px; }
+
+@keyframes popIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.icon-tool {
+    background: transparent; border: none; cursor: pointer; padding: 8px;
+    display: flex; align-items: center; justify-content: center;
+}
 
 .tool-border {
-    background: #f0f0f0; border-radius: 10px; padding: 10px; border: 1px solid #ddd;
+    background: #f0f0f0; border-radius: 12px; border: 1px solid #ddd;
 }
 
-/* Modal Usuario (Estilo Captura) */
-.modal-float { position: absolute; display: none; z-index: 2000; }
-.modal-float.active { display: block; }
-
-.user-popup { bottom: 85px; left: 10px; width: 280px; }
-
-.user-popup .modal-content {
-    background: white; border-radius: 25px; padding: 25px;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.15);
-}
-
-.nav-btn.btn-white {
-    background: white; border: none; border-radius: 50%; width: 40px; height: 40px; 
-    margin-bottom: 15px; cursor: pointer; display: grid; place-items: center;
-}
-
+/* Botón S y su popup */
 .nav-btn.btn-circle {
     background: #ffcc00; color: white; border-radius: 50%; width: 45px; height: 45px;
     font-weight: 900; border: 3px solid white; cursor: pointer;
+}
+
+.user-card {
+    position: fixed; bottom: 80px; left: 85px; /* Pegado a la franja naranja */
+    width: 280px;
 }
