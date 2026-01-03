@@ -1,42 +1,52 @@
-.label {
-    font-size: 0.7rem;
-    font-weight: 800;
-    color: #888;
-    margin-bottom: 10px;
-    letter-spacing: 1px;
+.panel-card, .chat-card, .floating-config, .translator-card {
+    background: white;
+    border-radius: 45px; /* Bordes muy redondeados como en la imagen */
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
-.option-btn {
+/* Tarjeta de Usuario (User Card) */
+.user-card {
+    background-color: #f8f9fa;
+    border: 1px solid #fff;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    background: #fff3e0;
+    color: #f16b24;
+    border-radius: 20px;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: 1.5rem;
+}
+
+/* Botones selectores (Rigor/Style) */
+.sel-btn {
     width: 100%;
-    padding: 12px;
-    margin-bottom: 8px;
-    border-radius: 12px;
-    border: 1px solid #eee;
-    background: #f8f9fa;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    border: 1px solid #e0e0e0;
+    background: transparent;
     text-align: left;
     cursor: pointer;
-    font-size: 0.9rem;
-    transition: 0.3s;
 }
 
-.option-btn.active {
-    background: #d1e7dd;
-    border-color: #a3cfbb;
+.sel-btn.active {
+    background-color: #c8e1d4; /* El verde clarito de tu captura */
+    border-color: #b0d4c1;
     font-weight: 600;
 }
 
-.result-area {
-    background: #f1f3f5;
+/* Traductor */
+.res-box {
+    background: #e9ecef;
     padding: 15px;
-    border-radius: 12px;
-    min-height: 50px;
-    font-size: 0.9rem;
-    color: #495057;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    color: #666;
     margin-top: 5px;
-}
-
-.user-card {
-    margin-top: auto;
-    background: #fff;
-    border: 1px solid #eee;
 }

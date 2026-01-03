@@ -10,88 +10,104 @@
     <link rel="stylesheet" href="CSS/chat.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
-<body class="bg-light">
+<body class="bg-main">
 
-    <div class="app-grid">
-        <nav class="sidebar-accent">
-            <div class="nav-icons">
-                <button class="icon-btn active">⚙️</button>
-                <button class="icon-btn" onclick="toggleUserPanel()">👤</button>
+    <div class="app-container">
+        <nav class="sidebar-orange">
+            <div class="nav-top">
+                <div class="dot-indicator"></div>
+            </div>
+            <div class="nav-bottom">
+                <button class="nav-icon">⚙️</button>
+                <button class="nav-icon active">👤</button>
             </div>
         </nav>
 
-        <aside class="panel-corrections card">
-            <h2 class="panel-title">CORRECTIONS / CORRECCIONES</h2>
-            <div id="corrections-list" class="scroll-area">
-                <p class="empty-text">No hay correcciones todavía.</p>
+        <aside class="side-panel">
+            <div class="panel-card corrections-card">
+                <div class="card-header">
+                    <span class="dot red"></span>
+                    <h2>CORRECTIONS / CORRECCIONES</h2>
+                </div>
+                <div class="card-body">
+                    <h3>CORRECCIONES/ERRORES</h3>
+                    <p class="empty-msg">No hay correcciones todavía.</p>
+                </div>
             </div>
-            
-            <div class="user-card card shadow-sm">
-                <div class="user-avatar">S</div>
-                <div class="user-info">
-                    <p class="label">USER / USUARIO</p>
-                    <p class="name">Sergi Pérez</p>
-                    <div class="user-stats">
-                        <span>Rigor: <b id="ui-rigor">Relaxed</b></span>
-                        <span>Style: <b id="ui-style">Normal</b></span>
+
+            <div class="panel-card user-card">
+                <div class="user-row">
+                    <div class="avatar">S</div>
+                    <div class="user-details">
+                        <p class="label">USER / USUARIO</p>
+                        <p class="user-name">Sergi Pérez</p>
                     </div>
                 </div>
-                <button class="reset-link" onclick="location.reload()">Reset / Reiniciar</button>
+                <div class="stats-grid">
+                    <div>
+                        <p class="label">RIGOR LEVEL</p>
+                        <p class="stat-val">Relajado / Relaxed</p>
+                    </div>
+                    <div>
+                        <p class="label">CHAT STYLE</p>
+                        <p class="stat-val">Normal</p>
+                    </div>
+                </div>
+                <button class="btn-reset">Reset / Reiniciar</button>
             </div>
         </aside>
 
-        <main class="panel-chat card main-shadow">
-            <div class="chat-header">
-                <h1 class="migo-logo">Migo<span>.</span></h1>
-                <p class="migo-subtitle">WEB COMPANION</p>
-            </div>
-            
-            <div id="chat-box" class="chat-container scroll-area">
-                <div class="msg bot">Hello Sergi! I'm ready to practice. / Hola Sergi! Estoy listo.</div>
-            </div>
+        <main class="main-content">
+            <div class="chat-card">
+                <div class="chat-header">
+                    <h1 class="logo">Migo<span>.</span></h1>
+                    <p class="tagline">WEB COMPANION</p>
+                </div>
+                
+                <div class="chat-messages" id="chat-box">
+                    <div class="bubble bot">
+                        Hello Sergi! I'm ready to practice. / Hola Sergi! Estoy listo.
+                    </div>
+                </div>
 
-            <div class="chat-input-wrapper">
-                <input type="text" id="user-input" placeholder="Type in English..." onkeydown="handleChatEnter(event)">
-                <button onclick="sendMessage()" class="send-circle">→</button>
+                <div class="input-area">
+                    <input type="text" id="user-input" placeholder="Type in English...">
+                    <button class="btn-send">➔</button>
+                </div>
             </div>
         </main>
 
-        <aside class="panel-right">
-            <div class="config-card card shadow-sm">
-                <section>
+        <aside class="right-panel">
+            <div class="floating-config card-shadow">
+                <div class="config-section">
                     <p class="label">RIGOR / RIGOR</p>
-                    <button class="option-btn active" onclick="setRigor('relaxed')">🔓 Relaxed / Relajado</button>
-                    <button class="option-btn" onclick="setRigor('strict')">🔒 Strict / Estricto</button>
-                </section>
-                <section>
+                    <button class="sel-btn active">🔓 Relaxed / Relajado</button>
+                    <button class="sel-btn">🔒 Strict / Estricto</button>
+                </div>
+                <div class="config-section">
                     <p class="label">STYLE / ESTILO</p>
-                    <div class="style-grid">
-                        <button class="option-btn active" onclick="setStyle('Normal')">📄 Normal</button>
-                        <button class="option-btn" onclick="setStyle('Formal')">👔 Formal</button>
-                        <button class="option-btn" onclick="setStyle('Casual')">💬 Casual</button>
-                        <button class="option-btn" onclick="setStyle('Travel')">🌍 Travel</button>
-                    </div>
-                </section>
+                    <button class="sel-btn active">📄 Normal</button>
+                    <button class="sel-btn">👔 Formal</button>
+                    <button class="sel-btn">💬 Casual / Coloquial</button>
+                    <button class="sel-btn">🌍 Travel / Viajes</button>
+                </div>
             </div>
 
-            <div class="translator-card card shadow-sm">
+            <div class="translator-card card-shadow">
                 <p class="label">TRANSLATOR / TRADUCTOR</p>
-                <div class="trans-group">
+                <div class="trans-box">
                     <p class="sub-label">ESPAÑOL > INGLÉS</p>
-                    <textarea id="in-es" placeholder="Escribe..."></textarea>
-                    <div id="out-en" class="result-area">RESULT</div>
+                    <textarea placeholder="Escribe..."></textarea>
+                    <div class="res-box">RESULT</div>
                 </div>
-                <div class="trans-group">
+                <div class="trans-box">
                     <p class="sub-label">ENGLISH > SPANISH</p>
-                    <textarea id="in-en" placeholder="Type..."></textarea>
-                    <div id="out-es" class="result-area">RESULTADO</div>
+                    <textarea placeholder="Type..."></textarea>
+                    <div class="res-box">RESULTADO</div>
                 </div>
             </div>
         </aside>
     </div>
 
-    <script src="js/ui-manager.js"></script>
-    <script src="js/chat-logic.js"></script>
-    <script src="js/translator.js"></script>
 </body>
 </html>
