@@ -1,15 +1,15 @@
 :root {
-    --accent: #ff9900;
-    --text: #1a1a1a;
+    --bg-verde: #e1eee3;
+    --naranja: #f39c12;
+    --blanco: #ffffff;
+    --verde: #4caf50;
+    --rojo-alegre: #ff5252;
+    --azul-flojo: #f1f8f1;
+    --gris-label: #a0a0a0;
 }
-
+* { box-sizing: border-box; }
 body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    color: var(--text);
+    font-family: 'Quicksand', sans-serif;
+    background-color: var(--bg-verde);
+    margin: 0; height: 100vh; display: flex; overflow: hidden;
 }
-
-h1 { font-weight: 900; margin: 0; font-size: 2rem; }
-h1 span { color: var(--accent); }
-
-.subtitle { color: #666; font-size: 0.9rem; }

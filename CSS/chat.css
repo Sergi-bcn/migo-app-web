@@ -1,41 +1,8 @@
-.chat-box {
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding-bottom: 20px;
-}
-
-.message {
-    max-width: 80%;
-    padding: 12px 16px;
-    border-radius: 15px;
-    font-size: 1rem;
-}
-
-.bot-msg {
-    background: #f0f0f0;
-    align-self: flex-start;
-}
-
-.user-msg {
-    background: var(--accent);
-    color: white;
-    align-self: flex-end;
-}
-
-.input-area {
-    display: flex;
-    gap: 10px;
-    background: white;
-    padding: 10px 0;
-}
-
-textarea {
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    resize: none;
-}
+.migo-title { color: var(--naranja); font-size: 48px; margin: 0; font-weight: 800; line-height: 0.8; }
+.title-dot { color: var(--verde); }
+.chat-box { flex: 1; padding: 15px 40px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+.message { padding: 15px 20px; border-radius: 22px; max-width: 75%; font-size: 16px; }
+.migo { background: #fff9c4; align-self: flex-start; border-top-left-radius: 5px; }
+.user { background: #f2f2f2; align-self: flex-end; border-top-right-radius: 5px; }
+.input-box { background: #f8f9fa; border-radius: 40px; padding: 12px 25px; display: flex; align-items: center; margin: 20px; }
+.send-btn-green { background: var(--verde); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; }
