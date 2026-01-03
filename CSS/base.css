@@ -1,13 +1,15 @@
 :root {
-    --bg: #ffffff;
-    --text: #1a1a1a;
     --accent: #ff9900;
-    --gray: #f4f4f4;
-    --border: #e0e0e0;
+    --text: #1a1a1a;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
+    margin: 0;
     font-family: 'Inter', sans-serif;
-    background-color: var(--bg);
     color: var(--text);
 }
+
+h1 { font-weight: 900; margin: 0; font-size: 2rem; }
+h1 span { color: var(--accent); }
+
+.subtitle { color: #666; font-size: 0.9rem; }
