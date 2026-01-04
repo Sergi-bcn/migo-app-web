@@ -1,22 +1,32 @@
 <div class="translator-premium-card">
     <div class="trans-header-main">
         <span>TRANSLATOR / TRADUCTOR</span>
-        <span class="close-x-red" onclick="this.parentElement.parentElement.classList.remove('active')">×</span>
+        <span class="close-x-red" onclick="togglePopup(null, 'popup-translate')">×</span>
     </div>
     
     <div class="trans-unit-box">
         <p class="label-orange">ESPAÑOL > INGLÉS</p>
         <div class="input-zone-styled">
-            <textarea id="translate-input" placeholder="Escribe aquí tu frase..."></textarea>
+            <textarea id="trans-es-en-in" placeholder="Escribe en español..."></textarea>
         </div>
-        
         <div class="result-zone-styled">
-            <div id="translate-result" style="color: #718096; font-size: 15px;">El resultado aparecerá aquí...</div>
+            <div id="res-es-en" style="color: #718096; font-size: 14px;">Traducción...</div>
+            <div class="actions-row-mini">
+                <button class="green-arrow-btn-mini">➔</button>
+            </div>
         </div>
+    </div>
 
-        <div class="actions-row">
-            <button class="icon-btn-grey" onclick="copyTranslation()">📋</button>
-            <button class="green-arrow-btn" onclick="executeTranslation()">➔</button>
+    <div class="trans-unit-box">
+        <p class="label-orange">ENGLISH > SPANISH</p>
+        <div class="input-zone-styled">
+            <textarea id="trans-en-es-in" placeholder="Type in English..."></textarea>
+        </div>
+        <div class="result-zone-styled">
+            <div id="res-en-es" style="color: #718096; font-size: 14px;">Translation...</div>
+            <div class="actions-row-mini">
+                <button class="green-arrow-btn-mini">➔</button>
+            </div>
         </div>
     </div>
 </div>

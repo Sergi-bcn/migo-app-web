@@ -1,19 +1,20 @@
-/**
- * ui-manager.js - Permite tener todas las ventanas abiertas a la vez
- */
 function togglePopup(event, popupId) {
     if (event) event.stopPropagation();
     const popup = document.getElementById(popupId);
-    if (popup) {
-        popup.classList.toggle('active');
+    if (!popup) return;
+
+    popup.classList.toggle('active');
+
+    // Lógica de desplazamiento automático
+    const config = document.getElementById('popup-config');
+    const translate = document.getElementById('popup-translate');
+
+    if (config.classList.contains('active') && translate.classList.contains('active')) {
+        // Si ambas están abiertas, movemos la de configuración a la izquierda
+        // 380px (ancho traductor) + 20px (separación) = 400px
+        config.style.right = "400px";
+    } else {
+        // Si no, vuelve a su sitio
+        config.style.right = "0px";
     }
 }
-
-// Cierra si se pulsa en el fondo de la pantalla (opcional)
-document.addEventListener('click', (event) => {
-    if (!event.target.closest('.popup-modal') && !event.target.closest('button')) {
-        // Si quieres que no se cierren al clickar fuera, comenta las siguientes líneas
-        // const popups = document.querySelectorAll('.popup-modal');
-        // popups.forEach(p => p.classList.remove('active'));
-    }
-});
