@@ -1,39 +1,38 @@
-/* Restaurado tamaño de logo original del deploy 260fao5zx */
-.logo {
-    font-size: 2rem;
-    font-weight: 900;
-    margin: 0;
-    color: #333;
-    line-height: 1;
-}
+/* Estilos Base */
+.logo { font-size: 2rem; font-weight: 900; margin: 0; color: #333; line-height: 1; }
 .logo span { color: #f16b24; }
 
 .chat-internal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: flex; justify-content: space-between; align-items: center;
     margin-bottom: 20px;
 }
 
-.header-tools-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.header-tools-right { display: flex; align-items: center; gap: 10px; }
+
+/* Popups Comunes */
+.popup-modal {
+    position: absolute; background: white; border-radius: 30px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.1); display: none; z-index: 1000;
+}
+.popup-modal.active { display: block; animation: popIn 0.2s ease; }
+
+.anchor-down-right { top: 45px; right: 0; }
+
+/* Ventana Configuración */
+.config-menu { width: 280px; padding: 25px; }
+
+/* Ventana Traducción Emergente */
+.translator-premium {
+    width: 380px; padding: 25px; background: #f8fafb; border-radius: 35px;
 }
 
-/* Base de componentes idéntica al deploy preferido */
-.panel-white {
-    background: white; border-radius: 40px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-    display: flex; flex-direction: column; padding: 25px;
-}
+/* Estilos de botones internos */
 .tool-btn-plain { background: transparent; border: none; cursor: pointer; display: flex; align-items: center; }
 .tool-border-sq { border: 1px solid #e0e0e0; border-radius: 10px; padding: 8px; }
-.popup-modal { position: absolute; background: white; border-radius: 30px; box-shadow: 0 15px 50px rgba(0,0,0,0.1); display: none; z-index: 1000; }
-.popup-modal.active { display: block; }
-.anchor-down-right { top: 45px; right: 0; }
-.config-menu { width: 280px; padding: 25px; }
-.translator-premium { width: 380px; padding: 25px; background: #f8fafb; border-radius: 35px; }
-.popup-user-card { position: absolute; bottom: 0; left: 75px; width: 300px; background: white; border-radius: 30px; padding: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); display: none; z-index: 1000; }
-.popup-user-card.active { display: block; }
+
+.opt-btn { width: 100%; padding: 10px; margin-bottom: 5px; border-radius: 12px; border: 1px solid #f0f0f0; background: white; text-align: left; cursor: pointer; }
+.opt-btn.active { border-color: #2ecc71; color: #2ecc71; background: #f0fff4; font-weight: 600; }
+
 .close-x, .close-x-trans { position: absolute; top: 15px; right: 15px; cursor: pointer; color: #ccc; font-weight: bold; }
+
+@keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
