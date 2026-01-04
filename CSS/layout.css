@@ -5,41 +5,36 @@
 }
 
 body, html { margin: 0; padding: 0; height: 100vh; overflow: hidden; background: var(--fondo); }
-
 .bg-main { display: flex; font-family: 'Inter', sans-serif; }
 
-/* BARRA NARANJA RECTA */
 .sidebar-naranja {
-    width: 80px;
-    background: var(--naranja);
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    padding-bottom: 30px;
-    flex-shrink: 0;
+    width: 80px; background: var(--naranja); height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    align-items: center; padding-bottom: 30px; flex-shrink: 0;
 }
 
 .main-screen {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 30px 30px 20px;
-    height: 100vh;
-    box-sizing: border-box;
-}
-
-.app-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 20px;
+    flex: 1; height: 100vh; box-sizing: border-box;
+    padding: 0 20px 20px 20px; /* Sin padding superior para que las ventanas toquen el borde */
 }
 
 .content-layout {
-    display: flex;
-    gap: 20px;
-    flex: 1;
-    height: calc(100% - 100px);
+    display: flex; gap: 20px; height: 100%;
+}
+
+.center-column {
+    flex: 1; display: flex; flex-direction: column; height: 100%;
+}
+
+.app-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 10px; height: 80px; box-sizing: border-box;
+}
+
+.correction-panel { 
+    width: 320px; height: 100%; border-radius: 0 0 40px 40px; 
+}
+
+.chat-panel { 
+    flex: 1; height: calc(100% - 100px); margin-bottom: 10px;
 }
