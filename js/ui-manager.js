@@ -1,22 +1,19 @@
 /**
- * ui-manager.js - Gestión de interfaz y ventanas múltiples
+ * ui-manager.js - Permite tener todas las ventanas abiertas a la vez
  */
 function togglePopup(event, popupId) {
-    // Detenemos la propagación para que no se cierre al hacer clic en el botón
     if (event) event.stopPropagation();
-
     const popup = document.getElementById(popupId);
-    
-    // Alternamos la clase 'active' solo en el popup clickeado
     if (popup) {
         popup.classList.toggle('active');
     }
 }
 
-// Opcional: Cerrar ventanas si se hace clic fuera de ellas (pero no entre ellas)
+// Cierra si se pulsa en el fondo de la pantalla (opcional)
 document.addEventListener('click', (event) => {
     if (!event.target.closest('.popup-modal') && !event.target.closest('button')) {
-        const popups = document.querySelectorAll('.popup-modal');
-        popups.forEach(p => p.classList.remove('active'));
+        // Si quieres que no se cierren al clickar fuera, comenta las siguientes líneas
+        // const popups = document.querySelectorAll('.popup-modal');
+        // popups.forEach(p => p.classList.remove('active'));
     }
 });

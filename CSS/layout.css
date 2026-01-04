@@ -29,6 +29,18 @@ body, html {
     gap: 20px; width: 100%; height: 100%;
 }
 
+/* LOGOTIPO MIGO */
+.logo {
+    font-size: 32px; /* Tamaño aumentado */
+    font-weight: 900;
+    margin: 0;
+    letter-spacing: -1.5px;
+}
+.logo span { color: #f39c12; }
+
+/* SISTEMA DE VENTANAS VINCULADAS */
+.anchor { position: relative; }
+
 .popup-modal {
     position: absolute;
     display: none;
@@ -40,25 +52,20 @@ body, html {
 
 .popup-modal.active { display: block; }
 
-/* --- POSICIONES ESPECÍFICAS --- */
+/* POSICIONAMIENTO EXACTO */
 
-/* Ventana de Usuario (Sale desde el botón S) */
+/* Ventana de Usuario (Desde el botón S) */
 #popup-user {
     bottom: 20px;
     left: 75px;
 }
 
-/* Ventana de Configuración (Sale desde su icono) */
-#popup-config {
-    top: 60px;
-    right: 0;
+/* Ambas ventanas del header (Config y Traducción) ahora usan la misma lógica */
+#popup-config, #popup-translate {
+    top: 50px;
+    right: 0; /* Aparecen alineadas a la derecha de sus respectivos iconos */
 }
 
-/* Ventana del Traductor (Sale desde el Logotipo Migo.) */
-#popup-translate {
-    top: 65px;
-    left: 0;
-}
-
-/* Estilo de los botones del header del chat */
+/* Estilo para los botones del header */
 .tool-btn-plain { background: none; border: none; cursor: pointer; padding: 5px; }
+.tool-border-sq { border: 1px solid #eee; border-radius: 12px; }
