@@ -14,18 +14,16 @@ body, html { margin: 0; padding: 0; height: 100vh; overflow: hidden; background:
 }
 
 .main-screen {
-    flex: 1; height: 100vh; box-sizing: border-box;
-    padding: 25px; /* Mantiene la estructura de tu última captura */
+    flex: 1; height: 100vh; display: flex; flex-direction: column; padding: 25px; box-sizing: border-box;
+}
+
+.chat-header-main {
+    display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;
 }
 
 .content-layout {
-    display: flex; gap: 25px; height: 100%;
+    display: flex; gap: 25px; flex: 1; height: calc(100% - 80px);
 }
 
 .correction-panel { width: 320px; height: 100%; }
 .chat-panel { flex: 1; height: 100%; position: relative; }
-
-.chat-internal-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 20px; padding-bottom: 10px;
-}
