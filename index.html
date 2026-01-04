@@ -21,6 +21,28 @@
             </div>
             <div class="anchor">
                 <button class="nav-circle-btn btn-s" onclick="togglePopup(event, 'popup-user')">S</button>
+                
+                <div id="popup-user" class="popup-user-card">
+                    <span class="close-x" onclick="closeAllPopups()">×</span>
+                    <div class="user-info-header">
+                        <div class="avatar-circle">S</div>
+                        <div class="user-text">
+                            <p class="label-tiny">USER / USUARIO</p>
+                            <p class="user-name">Sergi Pérez</p>
+                        </div>
+                    </div>
+                    <div class="user-details-grid">
+                        <div class="detail-item">
+                            <p class="label-tiny">RIGOR LEVEL</p>
+                            <p class="val-green" id="stat-rigor">Relajado / Relaxed</p>
+                        </div>
+                        <div class="detail-item">
+                            <p class="label-tiny">CHAT STYLE</p>
+                            <p class="val-green" id="stat-style">Normal</p>
+                        </div>
+                    </div>
+                    <button class="btn-reset-light" onclick="location.reload()">Reset / Reiniciar</button>
+                </div>
             </div>
         </div>
     </nav>
@@ -37,7 +59,7 @@
             <main class="panel-white chat-panel">
                 <header class="chat-internal-header">
                     <div class="logo-area">
-                        <h1 class="logo">Migo<span>.</span></h1>
+                        <img src="https://i.ibb.co/L6V2N3N/migo-logo.png" alt="Migo" class="main-logo-img" style="display:none;"> <h1 class="logo">Migo<span>.</span></h1>
                         <p class="subtitle">WEB COMPANION</p>
                     </div>
                     <div class="header-tools">
@@ -61,10 +83,46 @@
                             <button class="tool-btn-plain tool-border-sq" onclick="togglePopup(event, 'popup-translate')">
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Translate_logo.svg" width="24">
                             </button>
-                            <div id="popup-translate" class="popup-modal translate-box anchor-down">
-                                <div class="popup-header"><span>TRADUCTOR</span></div>
-                                <textarea id="input-es" placeholder="Escribe aquí..."></textarea>
-                                <div class="res-preview" id="res-en">Traducción...</div>
+                            
+                            <div id="popup-translate" class="translator-premium anchor-down">
+                                <div class="trans-header">
+                                    <span>TRANSLATOR / TRADUCTOR</span>
+                                    <span class="close-x-trans" onclick="closeAllPopups()">×</span>
+                                </div>
+                                
+                                <div class="trans-unit">
+                                    <div class="unit-head">
+                                        <p class="lang-label">ESPAÑOL > INGLÉS</p>
+                                        <button class="icon-btn-tiny">🔄</button>
+                                    </div>
+                                    <div class="input-box-styled">
+                                        <textarea id="input-es" placeholder="Escribe..."></textarea>
+                                    </div>
+                                    <div class="result-box-styled">
+                                        <p class="res-text">RESULT</p>
+                                        <div class="res-footer">
+                                            <button class="icon-btn-copy">📋</button>
+                                            <button class="arrow-btn">➔</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="trans-unit">
+                                    <div class="unit-head">
+                                        <p class="lang-label">ENGLISH > SPANISH</p>
+                                        <button class="icon-btn-tiny">🔄</button>
+                                    </div>
+                                    <div class="input-box-styled">
+                                        <textarea id="input-en" placeholder="Type..."></textarea>
+                                    </div>
+                                    <div class="result-box-styled">
+                                        <p class="res-text grey">RESULTADO</p>
+                                        <div class="res-footer">
+                                            <button class="icon-btn-copy">📋</button>
+                                            <button class="arrow-btn">➔</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -88,18 +146,6 @@
             <button class="opt-row active" onclick="setConfig('rigor', 'Relajado', this)">🔓 Relajado</button>
             <button class="opt-row" onclick="setConfig('rigor', 'Estricto', this)">🔒 Estricto</button>
         </div>
-    </div>
-
-    <div id="popup-user" class="popup-modal sidebar-popup user-card">
-        <button class="close-inner" onclick="closeAllPopups()">×</button>
-        <p class="label">USUARIO</p>
-        <p class="val-big">Sergi Pérez</p>
-        <hr>
-        <div class="user-stats">
-            <div><p class="label">RIGOR</p><p id="stat-rigor">Relajado</p></div>
-            <div><p class="label">ESTILO</p><p id="stat-style">Normal</p></div>
-        </div>
-        <button class="btn-reset-app" onclick="location.reload()">Reiniciar Sesión</button>
     </div>
 
     <script src="js/ui-manager.js"></script>

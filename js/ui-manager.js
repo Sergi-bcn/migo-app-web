@@ -1,38 +1,37 @@
-// Manejo de Modales
+// Función universal para abrir popups y cerrarlos al tocar fuera
 function togglePopup(event, id) {
     event.stopPropagation();
-    const modal = document.getElementById(id);
-    const wasActive = modal.classList.contains('active');
+    const target = document.getElementById(id);
+    const wasActive = target.classList.contains('active');
     
     closeAllPopups();
     
     if (!wasActive) {
-        modal.classList.add('active');
+        target.classList.add('active');
     }
 }
 
 function closeAllPopups() {
-    document.querySelectorAll('.popup-modal').forEach(m => m.classList.remove('active'));
+    document.querySelectorAll('.popup-modal, .popup-user-card, .translator-premium').forEach(p => {
+        p.classList.remove('active');
+    });
 }
 
-// Lógica de Configuración (Operativa)
+// Lógica de configuración operativa
 function setConfig(type, value, element) {
-    // Actualizar UI de botones
     const parent = element.parentElement;
     parent.querySelectorAll('.opt-row').forEach(btn => btn.classList.remove('active'));
     element.classList.add('active');
 
-    // Actualizar valores en el modal de usuario
     if (type === 'rigor') {
-        document.getElementById('stat-rigor').innerText = value;
+        document.getElementById('stat-rigor').innerText = value + (value === 'Relajado' ? ' / Relaxed' : ' / Strict');
     } else if (type === 'style') {
         document.getElementById('stat-style').innerText = value;
     }
-    
-    console.log(`Configuración actualizada: ${type} -> ${value}`);
 }
 
-// Cerrar al hacer clic fuera
 document.addEventListener('click', (e) => {
-    if (!e.target.closest('.popup-modal')) closeAllPopups();
+    if (!e.target.closest('.popup-user-card') && !e.target.closest('.translator-premium') && !e.target.closest('.popup-modal')) {
+        closeAllPopups();
+    }
 });
