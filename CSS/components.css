@@ -1,18 +1,19 @@
-/* Logo corporativo más grande */
-.logo-large {
-    font-size: 2.8rem; /* Tamaño aumentado */
+/* Logo principal aumentado */
+.logo-main {
+    font-size: 2.8rem;
     font-weight: 900;
     color: #333;
     margin: 0;
+    line-height: 1;
     letter-spacing: -1.5px;
 }
-.logo-large span { color: #f16b24; }
+.logo-main span { color: #f16b24; }
 
-/* Ajuste de cabecera interna */
+/* Header interno alineado */
 .chat-internal-header {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Alineación perfecta con el logo grande */
+    align-items: center; /* Centra los iconos con el logo grande */
     margin-bottom: 25px;
     padding-bottom: 10px;
 }
@@ -20,10 +21,10 @@
 .header-tools-right {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
-/* Resto de componentes (se mantienen igual) */
+/* Resto de componentes (Base del deploy 260fao5zx) */
 .panel-white {
     background: white; border-radius: 40px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.05);
