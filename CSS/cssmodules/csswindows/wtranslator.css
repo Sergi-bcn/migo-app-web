@@ -1,6 +1,51 @@
-.translator-premium-card { width: 400px; padding: 25px; background: #f9fbfc; border-radius: 40px; }
-.trans-unit-box { background: white; border-radius: 25px; padding: 18px; margin-bottom: 15px; border: 1px solid #eff2f5; }
-.label-orange { color: #f39c12; font-weight: 800; font-size: 11px; margin-bottom: 8px; }
-.input-zone-styled textarea { width: 100%; border: none; outline: none; resize: none; height: 50px; font-family: inherit; }
-.result-zone-styled { background: #fcfdfe; border-radius: 15px; padding: 12px; border: 1px solid #f0f3f5; min-height: 60px; }
-.green-arrow-btn { background: none; border: none; color: #5cb85c; font-size: 24px; cursor: pointer; }
+/* CSS/cssmodules/csswindows/wtranslator.css */
+.translator-premium-card {
+    width: 380px; padding: 25px; background: #ffffff;
+    border-radius: 35px; border: 1px solid #f0f3f5;
+}
+
+.trans-header-main {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 20px; font-size: 11px; font-weight: 800;
+    color: #cbd5e0; letter-spacing: 1px;
+}
+
+.trans-unit-box {
+    background: #f8fafc; border-radius: 25px; padding: 20px;
+    margin-bottom: 15px; border: 1px solid #edf2f7;
+}
+
+.label-orange {
+    color: #f39c12; font-weight: 800; font-size: 10px;
+    margin-bottom: 10px; text-transform: uppercase;
+}
+
+.input-zone-styled textarea {
+    width: 100%; border: none; background: transparent;
+    outline: none; resize: none; height: 60px;
+    font-family: inherit; font-size: 15px; color: #2d3748;
+}
+
+.result-zone-styled {
+    background: white; border-radius: 18px; padding: 15px;
+    border: 1px solid #e2e8f0; min-height: 50px; position: relative;
+}
+
+.actions-row {
+    display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px;
+}
+
+.icon-btn-grey {
+    background: #f1f5f9; border: none; width: 35px; height: 35px;
+    border-radius: 10px; cursor: pointer; display: flex;
+    align-items: center; justify-content: center; transition: 0.2s;
+}
+
+.green-arrow-btn {
+    background: #48bb78; color: white; border: none;
+    width: 35px; height: 35px; border-radius: 10px;
+    cursor: pointer; font-size: 16px; transition: 0.3s;
+}
+
+.green-arrow-btn:hover { background: #38a169; }
+.close-x-red { color: #fc8181; cursor: pointer; font-size: 18px; }
