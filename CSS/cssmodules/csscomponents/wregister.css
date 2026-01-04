@@ -1,0 +1,60 @@
+/* Panel de Correcciones - Estilo Premium */
+.correction-panel {
+    background: white;
+    border-radius: 35px; /* Bordes redondeados según capturas */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+    border: 1px solid #f0f3f5;
+    overflow: hidden;
+}
+
+.panel-header {
+    padding: 25px;
+    font-weight: 800;
+    font-size: 11px;
+    color: #bbb;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #f9fbfc;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+.dot.red { background-color: #ff5c5c; }
+
+.scroll-area {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Estilo para cada tarjeta de error individual */
+.error-card {
+    background: #fffafa;
+    border: 1px solid #ffebeb;
+    border-radius: 20px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.error-title {
+    color: #ff5c5c;
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.empty-msg {
+    text-align: center;
+    color: #ccc;
+    font-size: 14px;
+    margin-top: 50px;
+    font-weight: 500;
+}

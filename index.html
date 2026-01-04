@@ -2,146 +2,26 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo - App</title>
-    <link rel="stylesheet" href="CSS/base.css">
-    <link rel="stylesheet" href="CSS/layout.css">
-    <link rel="stylesheet" href="CSS/components.css">
-    <link rel="stylesheet" href="CSS/chat.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    <title>Migo App - Modular System</title>
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/cssmodules/csscomponents/wconvers.css">
+    <link rel="stylesheet" href="css/cssmodules/csscomponents/wregister.css">
+    <link rel="stylesheet" href="css/cssmodules/csswindows/wuser.css">
+    <link rel="stylesheet" href="css/cssmodules/csswindows/wtranslator.css">
+    <link rel="stylesheet" href="css/cssmodules/csswindows/wconfconvers.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body class="bg-main">
-
     <nav class="sidebar-naranja">
         <div class="nav-bottom-group">
             <div class="anchor">
-                <button class="nav-circle-btn">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" width="20">
-                </button>
-            </div>
-            <div class="anchor">
                 <button class="nav-circle-btn btn-s" onclick="togglePopup(event, 'popup-user')">S</button>
-                
-                <div id="popup-user" class="popup-user-card">
-                    <div class="user-info-header">
-                        <div class="avatar-circle-orange">S</div>
-                        <div class="user-text">
-                            <p class="label-tiny-grey">USER / USUARIO</p>
-                            <p class="user-name-bold">Sergi Pérez</p>
-                        </div>
-                        <span class="close-x-red" onclick="closeAllPopups()">×</span>
-                    </div>
-                    <div class="user-stats-row">
-                        <div class="stat-box">
-                            <p class="label-tiny-grey">RIGOR LEVEL</p>
-                            <p class="stat-val-green" id="stat-rigor">Relajado / Relaxed</p>
-                        </div>
-                        <div class="stat-box">
-                            <p class="label-tiny-grey">CHAT STYLE</p>
-                            <p class="stat-val-green" id="stat-style">Normal</p>
-                        </div>
-                    </div>
-                    <button class="btn-reset-pill" onclick="location.reload()">Reset / Reiniciar</button>
-                </div>
+                <div id="popup-user" class="popup-modal"></div>
             </div>
         </div>
     </nav>
-
-    <div class="main-screen">
-        <div class="content-layout">
-            <aside class="panel-white correction-panel">
-                <div class="panel-header"><span class="dot red"></span> CORRECTIONS / CORRECCIONES</div>
-                <div id="corrections-container" class="scroll-area">
-                    <p class="empty-msg">No hay correcciones todavía.</p>
-                </div>
-            </aside>
-
-            <main class="panel-white chat-panel">
-                <header class="chat-internal-header">
-                    <div class="logo-area">
-                        <h1 class="logo">Migo<span>.</span></h1>
-                    </div>
-                    
-                    <div class="header-tools-right">
-                        <div class="anchor">
-                            <button class="tool-btn-plain" onclick="togglePopup(event, 'popup-config')">
-                                <svg width="26" height="26" viewBox="0 0 24 24" fill="#f39c12">
-                                    <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
-                                </svg>
-                            </button>
-                            <div id="popup-config" class="popup-modal anchor-down-right config-premium">
-                                <span class="close-x-red" onclick="closeAllPopups()">×</span>
-                                <p class="section-title">RIGOR / RIGOR</p>
-                                <div class="options-stack">
-                                    <button class="pill-opt active" onclick="setConfig('rigor', 'Relajado', this)">🔓 Relaxed / Relajado</button>
-                                    <button class="pill-opt" onclick="setConfig('rigor', 'Estricto', this)">🔒 Strict / Estricto</button>
-                                </div>
-                                <hr class="divider">
-                                <p class="section-title">STYLE / ESTILO</p>
-                                <div class="options-stack">
-                                    <button class="pill-opt active" onclick="setConfig('style', 'Normal', this)">📄 Normal</button>
-                                    <button class="pill-opt" onclick="setConfig('style', 'Formal', this)">🏙️ Formal</button>
-                                    <button class="pill-opt" onclick="setConfig('style', 'Casual', this)">💬 Casual / Coloquial</button>
-                                    <button class="pill-opt" onclick="setConfig('style', 'Travel', this)">🌍 Travel / Viajes</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="anchor">
-                            <button class="tool-btn-plain tool-border-sq" onclick="togglePopup(event, 'popup-translate')">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Translate_logo.svg" width="22">
-                            </button>
-                            <div id="popup-translate" class="popup-modal anchor-down-right translator-premium-card">
-                                <div class="trans-header-main">
-                                    <span>TRANSLATOR / TRADUCTOR</span>
-                                    <span class="close-x-red" onclick="closeAllPopups()">×</span>
-                                </div>
-                                
-                                <div class="trans-unit-box">
-                                    <div class="trans-row-head">
-                                        <p class="label-orange">ESPAÑOL > INGLÉS</p>
-                                        <button class="btn-icon-grey">🔄</button>
-                                    </div>
-                                    <div class="input-styled-area"><textarea placeholder="Escribe..."></textarea></div>
-                                    <div class="result-styled-area">
-                                        <p class="label-result">RESULT</p>
-                                        <div class="res-actions">
-                                            <button class="action-btn">📋</button>
-                                            <button class="action-btn green-arrow">➔</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="trans-unit-box">
-                                    <div class="trans-row-head">
-                                        <p class="label-orange">ENGLISH > SPANISH</p>
-                                        <button class="btn-icon-grey">🔄</button>
-                                    </div>
-                                    <div class="input-styled-area"><textarea placeholder="Type..."></textarea></div>
-                                    <div class="result-styled-area">
-                                        <p class="label-result">RESULTADO</p>
-                                        <div class="res-actions">
-                                            <button class="action-btn">📋</button>
-                                            <button class="action-btn green-arrow">➔</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </header>
-
-                <div id="chat-box" class="scroll-area chat-feed">
-                    <div class="bubble bot">Hello Sergi! I'm ready to practice.</div>
-                </div>
-                <div class="chat-input-wrapper">
-                    <input type="text" id="user-input" placeholder="Type in English...">
-                    <button class="send-btn" onclick="sendMessage()">➔</button>
-                </div>
-            </main>
-        </div>
-    </div>
-
+    <div class="main-screen"><div class="content-layout"><div id="slot-register"></div><div id="slot-convers"></div></div></div>
+    <script src="js/loader.js"></script>
     <script src="js/ui-manager.js"></script>
     <script src="js/chat-logic.js"></script>
 </body>
