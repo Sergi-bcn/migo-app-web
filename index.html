@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo App - Web</title>
+    <title>Migo App - Sistema Modular</title>
     
-    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="CSS/layout.css">
     
-    <link rel="stylesheet" href="css/cssmodules/csscomponents/wconvers.css">
-    <link rel="stylesheet" href="css/cssmodules/csscomponents/wregister.css">
+    <link rel="stylesheet" href="CSS/cssmodules/csscomponents/wconvers.css">
+    <link rel="stylesheet" href="CSS/cssmodules/csscomponents/wregister.css">
     
-    <link rel="stylesheet" href="css/cssmodules/csswindows/wuser.css">
-    <link rel="stylesheet" href="css/cssmodules/csswindows/wtranslator.css">
-    <link rel="stylesheet" href="css/cssmodules/csswindows/wconfconvers.css">
+    <link rel="stylesheet" href="CSS/cssmodules/csswindows/wuser.css">
+    <link rel="stylesheet" href="CSS/cssmodules/csswindows/wtranslator.css">
+    <link rel="stylesheet" href="CSS/cssmodules/csswindows/wconfconvers.css">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
@@ -21,7 +21,7 @@
     <nav class="sidebar-naranja">
         <div class="nav-bottom-group">
             <div class="anchor">
-                <button class="nav-circle-btn btn-s" onclick="togglePopup(event, 'popup-user')">S</button>
+                <button class="nav-circle-btn" onclick="togglePopup(event, 'popup-user')">S</button>
                 <div id="popup-user" class="popup-modal"></div>
             </div>
         </div>
@@ -29,11 +29,15 @@
 
     <div class="main-screen">
         <div class="content-layout">
-            <div id="slot-register"></div> <div id="slot-convers"></div>  </div>
+            <div id="slot-register"></div> 
+            
+            <div id="slot-convers"></div>  
+        </div>
     </div>
 
     <script src="js/loader.js"></script>
     <script src="js/ui-manager.js"></script>
     <script src="js/chat-logic.js"></script>
+
 </body>
 </html>
