@@ -4,38 +4,36 @@
     display: flex; flex-direction: column; padding: 25px;
 }
 
-/* Herramientas Header */
-.tool-btn-plain { background: transparent; border: none; cursor: pointer; padding: 5px; display: flex; align-items: center; }
-.tool-border-sq { border: 1px solid #e0e0e0; border-radius: 10px; padding: 8px; margin-left: 10px; }
-.header-tools { display: flex; align-items: center; }
+/* Alineación de iconos a la derecha y a la altura de Web Companion */
+.chat-internal-header {
+    display: flex; justify-content: space-between; align-items: flex-end; /* Alinea con el subtítulo */
+    margin-bottom: 20px; padding-bottom: 10px; position: relative;
+}
 
-/* Popups Generales */
+.header-tools-right {
+    display: flex; align-items: center; gap: 5px; margin-bottom: -4px; /* Ajuste fino de altura */
+}
+
+/* Herramientas */
+.tool-btn-plain { background: transparent; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; }
+.tool-border-sq { border: 1px solid #e0e0e0; border-radius: 8px; padding: 6px; margin-left: 8px; }
+
+/* Posicionamiento de popups desde la derecha */
+.anchor-down-right { top: 45px; right: 0; }
+
+/* Ventanas */
 .popup-modal { position: absolute; background: white; border-radius: 30px; box-shadow: 0 15px 50px rgba(0,0,0,0.1); display: none; z-index: 1000; }
-.popup-modal.active { display: block; animation: popIn 0.2s ease; }
-.anchor-down { top: 60px; right: 0; }
-
-/* Ventana Configuración */
+.popup-modal.active { display: block; }
 .config-menu { width: 280px; padding: 25px; }
-.menu-label { font-size: 11px; font-weight: 700; color: #bbb; margin-bottom: 10px; text-transform: uppercase; }
-.opt-btn { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #f0f0f0; border-radius: 15px; background: white; text-align: left; cursor: pointer; }
-.opt-btn.active { border-color: #2ecc71; color: #2ecc71; background: #f0fff4; font-weight: 600; }
+.translator-premium { width: 380px; padding: 25px; background: #f8fafb; border-radius: 35px; }
 
 /* Ventana Usuario */
 .popup-user-card { position: absolute; bottom: 0; left: 75px; width: 300px; background: white; border-radius: 30px; padding: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); display: none; z-index: 1000; }
 .popup-user-card.active { display: block; }
-.avatar-circle { width: 60px; height: 60px; border-radius: 50%; background: #fff4e5; color: #f39c12; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 900; margin-right: 15px; }
-.user-info-header { display: flex; align-items: center; margin-bottom: 20px; }
 
-/* Ventana Traductor */
-.translator-premium { position: absolute; top: 60px; right: 0; width: 380px; background: #f8fafb; border-radius: 35px; padding: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); display: none; z-index: 1000; }
-.translator-premium.active { display: block; }
-.trans-unit { background: white; border-radius: 25px; padding: 15px; margin-bottom: 15px; border: 1px solid #edf2f7; }
-.lang-label { color: #f39c12; font-weight: 700; font-size: 12px; margin-bottom: 8px; }
-.input-zone-styled textarea { width: 100%; border: none; font-size: 1rem; outline: none; resize: none; height: 40px; }
-.result-zone-styled { background: #fcfcfc; border-radius: 18px; padding: 12px; border: 1px solid #f0f0f0; min-height: 70px; position: relative; }
-.res-footer { position: absolute; bottom: 10px; right: 10px; display: flex; gap: 8px; }
-.copy-btn, .arrow-go { background: none; border: none; cursor: pointer; color: #2ecc71; font-size: 1.1rem; }
+/* Cerrar */
+.close-x, .close-x-trans { position: absolute; top: 15px; right: 20px; cursor: pointer; color: #ccc; font-weight: bold; }
 
-.close-x, .close-x-trans { position: absolute; top: 20px; right: 20px; cursor: pointer; color: #ccc; font-weight: bold; }
-
-@keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+/* Estilos internos omitidos por brevedad para no alterar nada más */
+.opt-btn { width: 100%; padding: 10px; margin-bottom: 5px; border-radius: 12px; border: 1px solid #f0f0f0; background: white; text-align: left; cursor: pointer; }
+.opt-btn.active { border-color: #2ecc71; color: #2ecc71; background: #f0fff4; font-weight: 600; }

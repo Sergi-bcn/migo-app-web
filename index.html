@@ -15,7 +15,7 @@
     <nav class="sidebar-naranja">
         <div class="nav-bottom-group">
             <div class="anchor">
-                <button class="nav-circle-btn" onclick="togglePopup(event, 'popup-settings-sidebar')">
+                <button class="nav-circle-btn">
                     <img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" width="20">
                 </button>
             </div>
@@ -62,14 +62,14 @@
                         <h1 class="logo">Migo<span>.</span></h1>
                         <p class="subtitle">WEB COMPANION</p>
                     </div>
-                    <div class="header-tools">
+                    <div class="header-tools-right">
                         <div class="anchor">
                             <button class="tool-btn-plain" onclick="togglePopup(event, 'popup-config')">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="#f39c12">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="#f39c12">
                                     <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
                                 </svg>
                             </button>
-                            <div id="popup-config" class="popup-modal anchor-down config-menu">
+                            <div id="popup-config" class="popup-modal anchor-down-right config-menu">
                                 <span class="close-x" onclick="closeAllPopups()">×</span>
                                 <p class="menu-label">RIGOR / RIGOR</p>
                                 <div class="options-group">
@@ -87,9 +87,9 @@
 
                         <div class="anchor">
                             <button class="tool-btn-plain tool-border-sq" onclick="togglePopup(event, 'popup-translate')">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Translate_logo.svg" width="24">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Translate_logo.svg" width="22">
                             </button>
-                            <div id="popup-translate" class="translator-premium anchor-down">
+                            <div id="popup-translate" class="translator-premium anchor-down-right">
                                 <div class="trans-header">
                                     <span>TRANSLATOR / TRADUCTOR</span>
                                     <span class="close-x-trans" onclick="closeAllPopups()">×</span>
@@ -123,14 +123,6 @@
                     <button class="send-btn" onclick="sendMessage()">➔</button>
                 </div>
             </main>
-        </div>
-    </div>
-
-    <div id="popup-settings-sidebar" class="popup-modal sidebar-popup">
-        <div class="popup-header"><span>NIVEL DE RIGOR</span></div>
-        <div class="options-list">
-            <button class="opt-row active" onclick="setConfig('rigor', 'Relajado', this)">🔓 Relajado</button>
-            <button class="opt-row" onclick="setConfig('rigor', 'Estricto', this)">🔒 Estricto</button>
         </div>
     </div>
 
