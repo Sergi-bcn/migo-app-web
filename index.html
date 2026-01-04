@@ -69,12 +69,18 @@
                                     <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
                                 </svg>
                             </button>
-                            <div id="popup-config" class="popup-modal anchor-down">
-                                <div class="popup-header"><span>ESTILO DE CHAT</span></div>
+                            <div id="popup-config" class="popup-modal anchor-down config-window">
+                                <span class="close-x" onclick="closeAllPopups()">×</span>
+                                <div class="popup-header-mini"><span>RIGOR / RIGOR</span></div>
                                 <div class="options-list">
-                                    <button class="opt-row active" onclick="setConfig('style', 'Normal', this)">📝 Normal</button>
-                                    <button class="opt-row" onclick="setConfig('style', 'Coloquial', this)">✍️ Coloquial</button>
-                                    <button class="opt-row" onclick="setConfig('style', 'Viajes', this)">✈️ Viajes</button>
+                                    <button class="opt-row" onclick="setConfig('rigor', 'Estricto', this)">🔒 Strict / Estricto</button>
+                                    <button class="opt-row active" onclick="setConfig('rigor', 'Relajado', this)">🔓 Relaxed / Relajado</button>
+                                </div>
+                                <div class="popup-header-mini" style="margin-top:15px"><span>STYLE / ESTILO</span></div>
+                                <div class="options-list">
+                                    <button class="opt-row active" onclick="setConfig('style', 'Normal', this)">📄 Normal</button>
+                                    <button class="opt-row" onclick="setConfig('style', 'Coloquial', this)">✍️ Casual / Coloquial</button>
+                                    <button class="opt-row" onclick="setConfig('style', 'Viajes', this)">✈️ Travel / Viajes</button>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +89,6 @@
                             <button class="tool-btn-plain tool-border-sq" onclick="togglePopup(event, 'popup-translate')">
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Translate_logo.svg" width="24">
                             </button>
-                            
                             <div id="popup-translate" class="translator-premium anchor-down">
                                 <div class="trans-header">
                                     <span>TRANSLATOR / TRADUCTOR</span>
@@ -91,28 +96,18 @@
                                 </div>
                                 <div class="trans-unit">
                                     <p class="lang-label">ESPAÑOL > INGLÉS</p>
-                                    <div class="input-zone-styled">
-                                        <textarea id="input-es" placeholder="Escribe..."></textarea>
-                                    </div>
+                                    <div class="input-zone-styled"><textarea id="input-es" placeholder="Escribe..."></textarea></div>
                                     <div class="result-zone-styled">
                                         <p class="res-label">RESULT</p>
-                                        <div class="res-footer">
-                                            <button class="copy-btn">📋</button>
-                                            <button class="arrow-go">➔</button>
-                                        </div>
+                                        <div class="res-footer"><button class="copy-btn">📋</button><button class="arrow-go">➔</button></div>
                                     </div>
                                 </div>
                                 <div class="trans-unit">
                                     <p class="lang-label">ENGLISH > SPANISH</p>
-                                    <div class="input-zone-styled">
-                                        <textarea id="input-en" placeholder="Type..."></textarea>
-                                    </div>
+                                    <div class="input-zone-styled"><textarea id="input-en" placeholder="Type..."></textarea></div>
                                     <div class="result-zone-styled">
                                         <p class="res-label grey">RESULTADO</p>
-                                        <div class="res-footer">
-                                            <button class="copy-btn">📋</button>
-                                            <button class="arrow-go">➔</button>
-                                        </div>
+                                        <div class="res-footer"><button class="copy-btn">📋</button><button class="arrow-go">➔</button></div>
                                     </div>
                                 </div>
                             </div>
@@ -125,7 +120,7 @@
                 </div>
                 
                 <div class="chat-input-wrapper">
-                    <input type="text" id="user-input" placeholder="Escribe en inglés...">
+                    <input type="text" id="user-input" placeholder="Type in English...">
                     <button class="send-btn" onclick="sendMessage()">➔</button>
                 </div>
             </main>
