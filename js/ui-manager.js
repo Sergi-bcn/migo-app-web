@@ -15,7 +15,7 @@ function setConfig(type, value, element) {
     parent.querySelectorAll('.opt-row').forEach(btn => btn.classList.remove('active'));
     element.classList.add('active');
     if (type === 'rigor') {
-        document.getElementById('stat-rigor').innerText = value + ' / Relaxed';
+        document.getElementById('stat-rigor').innerText = value + ' / ' + (value === 'Relajado' ? 'Relaxed' : 'Strict');
     } else if (type === 'style') {
         document.getElementById('stat-style').innerText = value;
     }

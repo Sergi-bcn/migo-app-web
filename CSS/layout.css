@@ -15,7 +15,7 @@ body, html { margin: 0; padding: 0; height: 100vh; overflow: hidden; background:
 
 .main-screen {
     flex: 1; height: 100vh; box-sizing: border-box;
-    padding: 25px; /* Margen simétrico arriba, abajo, izq, der */
+    padding: 25px; /* Mantiene la estructura de tu última captura */
 }
 
 .content-layout {
@@ -23,9 +23,9 @@ body, html { margin: 0; padding: 0; height: 100vh; overflow: hidden; background:
 }
 
 .correction-panel { width: 320px; height: 100%; }
-.chat-panel { flex: 1; height: 100%; }
+.chat-panel { flex: 1; height: 100%; position: relative; }
 
 .chat-internal-header {
     display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 20px; padding-bottom: 10px;
 }
