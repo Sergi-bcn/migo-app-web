@@ -15,12 +15,20 @@
     <nav class="sidebar-naranja">
         <div class="nav-bottom-group">
             <div class="anchor">
-                <button class="nav-circle-btn" onclick="togglePopup(event, 'popup-settings-main')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" width="20">
-                </button>
-            </div>
-            <div class="anchor">
                 <button class="nav-circle-btn btn-s" onclick="togglePopup(event, 'popup-user')">S</button>
+                <div id="popup-user" class="popup-modal user-card">
+                    <button class="close-inner" onclick="closeAllPopups()">×</button>
+                    <p class="label">USUARIO</p>
+                    <p class="val-big">Sergi Pérez</p>
+                    <p class="label">FECHA INSCRIPCIÓN</p>
+                    <p class="val-small">31 de Diciembre, 2025</p>
+                    <hr>
+                    <div class="user-stats">
+                        <div><p class="label">RIGOR</p><p id="stat-rigor">Relajado</p></div>
+                        <div><p class="label">ESTILO</p><p id="stat-style">Normal</p></div>
+                    </div>
+                    <button class="btn-reset-app" onclick="location.reload()">Reiniciar Sesión</button>
+                </div>
             </div>
         </div>
     </nav>
@@ -34,8 +42,8 @@
                 </div>
             </aside>
 
-            <div class="center-column">
-                <header class="app-header">
+            <main class="panel-white chat-panel">
+                <header class="chat-internal-header">
                     <div class="logo-area">
                         <h1 class="logo">Migo<span>.</span></h1>
                         <p class="subtitle">WEB COMPANION</p>
@@ -43,10 +51,15 @@
                     <div class="header-tools">
                         <div class="anchor">
                             <button class="tool-btn-circle" onclick="togglePopup(event, 'popup-config')">
-                                <img src="https://cdn-icons-png.flaticon.com/512/5968/5968812.png" width="24">
+                                <img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" width="22">
                             </button>
                             <div id="popup-config" class="popup-modal anchor-down">
-                                <div class="popup-header"><span>ESTILO DE CHAT</span></div>
+                                <div class="popup-header"><span>NIVEL DE RIGOR</span></div>
+                                <div class="options-list">
+                                    <button class="opt-row active" onclick="setConfig('rigor', 'Relajado', this)">🔓 Relajado</button>
+                                    <button class="opt-row" onclick="setConfig('rigor', 'Estricto', this)">🔒 Estricto</button>
+                                </div>
+                                <div class="popup-header" style="margin-top:15px"><span>ESTILO DE CHAT</span></div>
                                 <div class="options-list">
                                     <button class="opt-row active" onclick="setConfig('style', 'Normal', this)">📝 Normal</button>
                                     <button class="opt-row" onclick="setConfig('style', 'Coloquial', this)">✍️ Coloquial</button>
@@ -68,36 +81,16 @@
                     </div>
                 </header>
 
-                <main class="panel-white chat-panel">
-                    <div id="chat-box" class="scroll-area chat-feed">
-                        <div class="bubble bot">Hello Sergi! I'm ready to practice.</div>
-                    </div>
-                    <div class="chat-input-wrapper">
-                        <input type="text" id="user-input" placeholder="Escribe en inglés...">
-                        <button class="send-btn" onclick="sendMessage()">➔</button>
-                    </div>
-                </main>
-            </div>
+                <div id="chat-box" class="scroll-area chat-feed">
+                    <div class="bubble bot">Hello Sergi! I'm ready to practice.</div>
+                </div>
+                
+                <div class="chat-input-wrapper">
+                    <input type="text" id="user-input" placeholder="Escribe en inglés...">
+                    <button class="send-btn" onclick="sendMessage()">➔</button>
+                </div>
+            </main>
         </div>
-    </div>
-
-    <div id="popup-settings-main" class="popup-modal sidebar-popup">
-        <div class="popup-header"><span>AJUSTES</span></div>
-        <div class="options-list">
-            <button class="opt-row active" onclick="setConfig('rigor', 'Relajado', this)">🔓 Relajado</button>
-            <button class="opt-row" onclick="setConfig('rigor', 'Estricto', this)">🔒 Estricto</button>
-        </div>
-    </div>
-
-    <div id="popup-user" class="popup-modal sidebar-popup user-card">
-        <p class="label">USUARIO</p>
-        <p class="val-big">Sergi Pérez</p>
-        <hr>
-        <div class="user-stats">
-            <div><p class="label">RIGOR</p><p id="stat-rigor">Relajado</p></div>
-            <div><p class="label">ESTILO</p><p id="stat-style">Normal</p></div>
-        </div>
-        <button class="btn-reset-app" onclick="location.reload()">Reiniciar Sesión</button>
     </div>
 
     <script src="js/ui-manager.js"></script>
