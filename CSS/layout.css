@@ -1,4 +1,4 @@
-/* CSS/layout.css (Mantenido el resto igual) */
+/* CSS/layout.css */
 body, html {
     margin: 0; padding: 0; height: 100vh;
     font-family: 'Inter', sans-serif;
@@ -29,15 +29,6 @@ body, html {
     gap: 20px; width: 100%; height: 100%;
 }
 
-#slot-register, #slot-convers {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-/* POPUPS GENERALES */
-.anchor { position: relative; }
-
 .popup-modal {
     position: absolute;
     display: none;
@@ -49,12 +40,25 @@ body, html {
 
 .popup-modal.active { display: block; }
 
-/* POSICIONAMIENTO ESPECÍFICO */
-#popup-user { bottom: 10px; left: 65px; } /* Al lado del botón S */
-#popup-config { top: 50px; right: 0; }     /* Debajo del botón config */
+/* --- POSICIONES ESPECÍFICAS --- */
 
-/* Ventana del traductor vinculada al Logotipo */
+/* Ventana de Usuario (Sale desde el botón S) */
+#popup-user {
+    bottom: 20px;
+    left: 75px;
+}
+
+/* Ventana de Configuración (Sale desde su icono) */
+#popup-config {
+    top: 60px;
+    right: 0;
+}
+
+/* Ventana del Traductor (Sale desde el Logotipo Migo.) */
 #popup-translate {
-    top: 60px;   /* Sale debajo del logo Migo. */
+    top: 65px;
     left: 0;
 }
+
+/* Estilo de los botones del header del chat */
+.tool-btn-plain { background: none; border: none; cursor: pointer; padding: 5px; }

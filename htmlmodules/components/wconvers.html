@@ -4,18 +4,21 @@
             <h1 class="logo">Migo<span>.</span></h1>
             <div id="popup-translate" class="popup-modal"></div>
         </div>
-        <div class="header-tools-right">
+        <div class="header-tools-right" style="display: flex; gap: 10px; align-items: center;">
+            
+            <div class="anchor">
+                <button class="tool-btn-plain tool-border-sq" onclick="togglePopup(event, 'popup-translate')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Translate_logo.svg" width="22">
+                </button>
+            </div>
+
             <div class="anchor">
                 <button class="tool-btn-plain" onclick="togglePopup(event, 'popup-config')">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="#f39c12"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
                 </button>
                 <div id="popup-config" class="popup-modal"></div>
             </div>
-            <div class="anchor">
-                <button class="tool-btn-plain tool-border-sq" onclick="togglePopup(event, 'popup-translate')">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Translate_logo.svg" width="22">
-                </button>
-            </div>
+
         </div>
     </header>
     <div id="chat-box" class="chat-feed"></div>
