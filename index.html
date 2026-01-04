@@ -15,20 +15,12 @@
     <nav class="sidebar-naranja">
         <div class="nav-bottom-group">
             <div class="anchor">
+                <button class="nav-circle-btn" onclick="togglePopup(event, 'popup-settings-main')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" width="20">
+                </button>
+            </div>
+            <div class="anchor">
                 <button class="nav-circle-btn btn-s" onclick="togglePopup(event, 'popup-user')">S</button>
-                <div id="popup-user" class="popup-modal user-card">
-                    <button class="close-inner" onclick="closeAllPopups()">×</button>
-                    <p class="label">USUARIO</p>
-                    <p class="val-big">Sergi Pérez</p>
-                    <p class="label">FECHA INSCRIPCIÓN</p>
-                    <p class="val-small">31 de Diciembre, 2025</p>
-                    <hr>
-                    <div class="user-stats">
-                        <div><p class="label">RIGOR</p><p id="stat-rigor">Relajado</p></div>
-                        <div><p class="label">ESTILO</p><p id="stat-style">Normal</p></div>
-                    </div>
-                    <button class="btn-reset-app" onclick="location.reload()">Reiniciar Sesión</button>
-                </div>
             </div>
         </div>
     </nav>
@@ -50,16 +42,13 @@
                     </div>
                     <div class="header-tools">
                         <div class="anchor">
-                            <button class="tool-btn-circle" onclick="togglePopup(event, 'popup-config')">
-                                <img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" width="22">
+                            <button class="tool-btn-plain" onclick="togglePopup(event, 'popup-config')">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="#f39c12">
+                                    <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+                                </svg>
                             </button>
                             <div id="popup-config" class="popup-modal anchor-down">
-                                <div class="popup-header"><span>NIVEL DE RIGOR</span></div>
-                                <div class="options-list">
-                                    <button class="opt-row active" onclick="setConfig('rigor', 'Relajado', this)">🔓 Relajado</button>
-                                    <button class="opt-row" onclick="setConfig('rigor', 'Estricto', this)">🔒 Estricto</button>
-                                </div>
-                                <div class="popup-header" style="margin-top:15px"><span>ESTILO DE CHAT</span></div>
+                                <div class="popup-header"><span>ESTILO DE CHAT</span></div>
                                 <div class="options-list">
                                     <button class="opt-row active" onclick="setConfig('style', 'Normal', this)">📝 Normal</button>
                                     <button class="opt-row" onclick="setConfig('style', 'Coloquial', this)">✍️ Coloquial</button>
@@ -69,7 +58,7 @@
                         </div>
 
                         <div class="anchor">
-                            <button class="tool-btn-circle" onclick="togglePopup(event, 'popup-translate')">
+                            <button class="tool-btn-plain tool-border-sq" onclick="togglePopup(event, 'popup-translate')">
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Translate_logo.svg" width="24">
                             </button>
                             <div id="popup-translate" class="popup-modal translate-box anchor-down">
@@ -91,6 +80,26 @@
                 </div>
             </main>
         </div>
+    </div>
+
+    <div id="popup-settings-main" class="popup-modal sidebar-popup">
+        <div class="popup-header"><span>NIVEL DE RIGOR</span></div>
+        <div class="options-list">
+            <button class="opt-row active" onclick="setConfig('rigor', 'Relajado', this)">🔓 Relajado</button>
+            <button class="opt-row" onclick="setConfig('rigor', 'Estricto', this)">🔒 Estricto</button>
+        </div>
+    </div>
+
+    <div id="popup-user" class="popup-modal sidebar-popup user-card">
+        <button class="close-inner" onclick="closeAllPopups()">×</button>
+        <p class="label">USUARIO</p>
+        <p class="val-big">Sergi Pérez</p>
+        <hr>
+        <div class="user-stats">
+            <div><p class="label">RIGOR</p><p id="stat-rigor">Relajado</p></div>
+            <div><p class="label">ESTILO</p><p id="stat-style">Normal</p></div>
+        </div>
+        <button class="btn-reset-app" onclick="location.reload()">Reiniciar Sesión</button>
     </div>
 
     <script src="js/ui-manager.js"></script>

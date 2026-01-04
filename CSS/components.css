@@ -5,17 +5,21 @@
     display: flex; flex-direction: column; padding: 30px;
 }
 
-/* Iconos de Herramientas circulares */
-.tool-btn-circle {
-    width: 48px; height: 48px; border-radius: 50%;
-    border: 1px solid #eee; background: white;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+/* Iconos de cabecera estilo captura */
+.tool-btn-plain {
+    background: transparent; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    padding: 5px; transition: 0.2s;
 }
 
-.header-tools { display: flex; gap: 12px; }
+.tool-border-sq {
+    border: 1px solid #ccc; border-radius: 6px; background: #f9f9f9;
+    padding: 6px; margin-left: 10px;
+}
 
-/* Popups Emergentes */
+.header-tools { display: flex; align-items: center; }
+
+/* Modales */
 .popup-modal {
     position: absolute; background: var(--blanco); border-radius: 25px;
     padding: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.15);
@@ -24,21 +28,20 @@
 
 .popup-modal.active { display: block; }
 
-.anchor-down { top: 60px; right: 0; width: 280px; }
+.anchor-down { top: 50px; right: 0; width: 280px; }
+.sidebar-popup { bottom: 0; left: 75px; width: 260px; }
 
-.user-card { bottom: 0; left: 70px; width: 280px; }
+/* Botones Sidebar */
+.nav-circle-btn {
+    width: 50px; height: 50px; border-radius: 50%; border: none;
+    background: rgba(255,255,255,0.2); cursor: pointer;
+    display: flex; align-items: center; justify-content: center; margin-bottom: 15px;
+}
+.btn-s { background: white; color: var(--naranja); font-weight: 900; border: 3px solid white; }
 
-/* Estilos de botones de opción (idénticos a captura) */
+/* Opciones (Estilo captura) */
 .opt-row {
     width: 100%; padding: 12px; margin-top: 6px; border-radius: 12px;
     border: 1px solid #eee; background: #fff; text-align: left; cursor: pointer;
 }
-
-.opt-row.active {
-    background: #e8f5e9; border-color: #4caf50; color: #2e7d32; font-weight: 600;
-}
-
-.nav-circle-btn.btn-s {
-    width: 50px; height: 50px; border-radius: 50%; border: 3px solid white;
-    background: white; color: var(--naranja); font-weight: 900; cursor: pointer;
-}
+.opt-row.active { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; font-weight: 600; }

@@ -7,30 +7,23 @@
 body, html { margin: 0; padding: 0; height: 100vh; overflow: hidden; background: var(--fondo); }
 .bg-main { display: flex; font-family: 'Inter', sans-serif; }
 
-/* BARRA NARANJA RECTA */
 .sidebar-naranja {
     width: 80px; background: var(--naranja); height: 100vh;
     display: flex; flex-direction: column; justify-content: flex-end;
     align-items: center; padding-bottom: 25px; flex-shrink: 0;
 }
 
-/* CONTENEDOR PRINCIPAL CON MÁRGENES SIMÉTRICOS */
 .main-screen {
     flex: 1; height: 100vh; box-sizing: border-box;
-    padding: 25px; /* Mismo margen arriba, abajo, izq y der */
+    padding: 25px; /* Margen simétrico arriba, abajo, izq, der */
 }
 
 .content-layout {
     display: flex; gap: 25px; height: 100%;
 }
 
-.correction-panel { 
-    width: 320px; height: 100%; 
-}
-
-.chat-panel { 
-    flex: 1; height: 100%; 
-}
+.correction-panel { width: 320px; height: 100%; }
+.chat-panel { flex: 1; height: 100%; }
 
 .chat-internal-header {
     display: flex; justify-content: space-between; align-items: center;
