@@ -1,6 +1,9 @@
-<main class="panel-white chat-panel">
+<main class="chat-panel">
     <header class="chat-internal-header">
-        <div class="logo-area"><h1 class="logo">Migo<span>.</span></h1></div>
+        <div class="logo-area" style="position: relative;">
+            <h1 class="logo">Migo<span>.</span></h1>
+            <div id="popup-translate" class="popup-modal"></div>
+        </div>
         <div class="header-tools-right">
             <div class="anchor">
                 <button class="tool-btn-plain" onclick="togglePopup(event, 'popup-config')">
@@ -12,11 +15,10 @@
                 <button class="tool-btn-plain tool-border-sq" onclick="togglePopup(event, 'popup-translate')">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Translate_logo.svg" width="22">
                 </button>
-                <div id="popup-translate" class="popup-modal"></div>
             </div>
         </div>
     </header>
-    <div id="chat-box" class="scroll-area chat-feed"></div>
+    <div id="chat-box" class="chat-feed"></div>
     <div class="chat-input-wrapper">
         <input type="text" id="user-input" placeholder="Type in English...">
         <button class="send-btn" onclick="sendMessage()">➔</button>
