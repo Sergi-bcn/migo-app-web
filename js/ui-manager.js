@@ -1,37 +1,26 @@
-// Función universal para abrir popups y cerrarlos al tocar fuera
 function togglePopup(event, id) {
     event.stopPropagation();
     const target = document.getElementById(id);
     const wasActive = target.classList.contains('active');
-    
     closeAllPopups();
-    
-    if (!wasActive) {
-        target.classList.add('active');
-    }
+    if (!wasActive) target.classList.add('active');
 }
 
 function closeAllPopups() {
-    document.querySelectorAll('.popup-modal, .popup-user-card, .translator-premium').forEach(p => {
-        p.classList.remove('active');
-    });
+    document.querySelectorAll('.popup-modal, .popup-user-card, .translator-premium').forEach(p => p.classList.remove('active'));
 }
 
-// Lógica de configuración operativa
 function setConfig(type, value, element) {
     const parent = element.parentElement;
     parent.querySelectorAll('.opt-row').forEach(btn => btn.classList.remove('active'));
     element.classList.add('active');
-
     if (type === 'rigor') {
-        document.getElementById('stat-rigor').innerText = value + (value === 'Relajado' ? ' / Relaxed' : ' / Strict');
+        document.getElementById('stat-rigor').innerText = value + ' / Relaxed';
     } else if (type === 'style') {
         document.getElementById('stat-style').innerText = value;
     }
 }
 
 document.addEventListener('click', (e) => {
-    if (!e.target.closest('.popup-user-card') && !e.target.closest('.translator-premium') && !e.target.closest('.popup-modal')) {
-        closeAllPopups();
-    }
+    if (!e.target.closest('.anchor')) closeAllPopups();
 });
