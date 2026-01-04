@@ -1,42 +1,41 @@
-/* Estilos extraídos de la versión 260fao5zx */
-.panel-white {
-    background: white; border-radius: 40px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-    display: flex; flex-direction: column; padding: 25px;
-}
-
-.logo { font-size: 2rem; font-weight: 900; margin: 0; color: #333; line-height: 1; }
-.logo span { color: #f16b24; }
-
-.chat-internal-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 20px; position: relative;
-}
-
-.header-tools-right { display: flex; align-items: center; gap: 10px; }
-
-/* Configuración de ventanas emergentes */
-.popup-modal {
-    position: absolute; background: white; border-radius: 30px;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.1); display: none; z-index: 1000;
-}
-.popup-modal.active { display: block; }
-
-.anchor-down-right { top: 45px; right: 0; }
-
-.config-menu { width: 280px; padding: 25px; }
-.translator-premium { width: 380px; padding: 25px; background: #f8fafb; border-radius: 35px; }
-
-/* Botones de herramientas */
-.tool-btn-plain { background: transparent; border: none; cursor: pointer; display: flex; align-items: center; }
-.tool-border-sq { border: 1px solid #e0e0e0; border-radius: 10px; padding: 8px; }
-
-/* Popup Usuario */
-.popup-user-card { 
-    position: absolute; bottom: 0; left: 75px; width: 300px; 
-    background: white; border-radius: 30px; padding: 25px; 
-    box-shadow: 0 10px 40px rgba(0,0,0,0.1); display: none; z-index: 1000; 
+/* VENTANA USUARIO (Captura 1) */
+.popup-user-card {
+    position: absolute; bottom: 0; left: 80px; width: 320px;
+    background: white; border-radius: 35px; padding: 30px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.12); display: none; z-index: 1000;
 }
 .popup-user-card.active { display: block; }
+.avatar-circle-orange { width: 65px; height: 65px; border-radius: 20px; background: #fff5e6; color: #f39c12; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 900; margin-right: 15px; }
+.user-info-header { display: flex; align-items: center; margin-bottom: 25px; position: relative; }
+.label-tiny-grey { font-size: 10px; font-weight: 700; color: #bbb; margin-bottom: 4px; text-transform: uppercase; }
+.user-name-bold { font-weight: 800; font-size: 1.2rem; color: #333; }
+.user-stats-row { display: flex; gap: 30px; margin-bottom: 25px; }
+.stat-val-green { color: #2ecc71; font-weight: 600; font-size: 14px; }
+.btn-reset-pill { width: 100%; padding: 15px; border-radius: 25px; border: none; background: #fff0f0; color: #e74c3c; font-weight: 800; cursor: pointer; transition: 0.2s; }
 
-.close-x, .close-x-trans { position: absolute; top: 15px; right: 15px; cursor: pointer; color: #ccc; font-weight: bold; }
+/* VENTANA CONFIGURACIÓN (Captura 3) */
+.config-premium { width: 300px; padding: 25px; }
+.section-title { font-size: 10px; font-weight: 800; color: #ccc; margin: 15px 0 10px 5px; }
+.pill-opt { width: 100%; padding: 12px 20px; margin-bottom: 8px; border-radius: 18px; border: 1px solid #f0f0f0; background: white; text-align: left; font-size: 14px; cursor: pointer; color: #666; display: flex; align-items: center; gap: 10px; }
+.pill-opt.active { border: 2px solid #2ecc71; background: #f0fff4; color: #27ae60; font-weight: 700; }
+.divider { border: 0; border-top: 1px solid #f0f0f0; margin: 15px 0; }
+
+/* VENTANA TRADUCCIÓN (Captura 2) */
+.translator-premium-card { width: 400px; padding: 25px; background: #f9fbfc; border-radius: 40px; }
+.trans-header-main { text-align: center; font-size: 11px; font-weight: 800; color: #bbb; margin-bottom: 20px; position: relative; }
+.trans-unit-box { background: white; border-radius: 25px; padding: 18px; margin-bottom: 15px; border: 1px solid #eff2f5; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+.label-orange { color: #f39c12; font-weight: 800; font-size: 11px; margin-bottom: 10px; }
+.input-styled-area textarea { width: 100%; border: none; outline: none; resize: none; height: 50px; font-size: 15px; color: #333; font-weight: 500; }
+.result-styled-area { background: #fcfdfe; border-radius: 15px; border: 1px solid #f0f3f5; padding: 12px; min-height: 70px; position: relative; }
+.label-result { font-size: 9px; font-weight: 800; color: #bdc3c7; }
+.res-actions { position: absolute; bottom: 10px; right: 10px; display: flex; gap: 8px; }
+.green-arrow { color: #2ecc71; font-weight: bold; }
+.btn-icon-grey { background: none; border: none; color: #ccc; cursor: pointer; float: right; }
+
+/* Elementos Comunes */
+.close-x-red { position: absolute; top: 0; right: 0; color: #e74c3c; cursor: pointer; font-size: 20px; font-weight: bold; }
+.popup-modal { position: absolute; background: white; border-radius: 35px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); display: none; z-index: 1000; }
+.popup-modal.active { display: block; animation: popIn 0.2s ease; }
+.anchor-down-right { top: 50px; right: 0; }
+
+@keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
