@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8"><title>Migo App Modular</title>
+    <meta charset="UTF-8">
+    <title>Migo App - Restauración Total</title>
+    
     <link rel="stylesheet" href="CSS/layout.css">
     <link rel="stylesheet" href="CSS/cssmodules/csscomponents/sidebar.css">
     <link rel="stylesheet" href="CSS/cssmodules/csscomponents/header.css">
@@ -10,20 +12,29 @@
     <link rel="stylesheet" href="CSS/cssmodules/csswindows/wuser.css">
     <link rel="stylesheet" href="CSS/cssmodules/csswindows/wtranslator.css">
     <link rel="stylesheet" href="CSS/cssmodules/csswindows/wconfconvers.css">
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="bg-main">
     <div id="slot-sidebar"></div>
+    
     <div class="main-screen">
         <div class="content-layout">
             <div id="slot-register"></div>
+            
             <main class="chat-panel">
                 <div id="slot-header"></div>
-                <div id="slot-convers-content"></div>
+                <div id="chat-box" class="chat-feed"></div>
+                <div class="chat-input-wrapper">
+                    <input type="text" id="user-input" placeholder="Type in English...">
+                    <button class="send-btn" onclick="sendMessage()">➔</button>
+                </div>
             </main>
         </div>
     </div>
+
     <script src="js/loader.js"></script>
     <script src="js/ui-manager.js"></script>
+    <script src="js/chat-logic.js"></script>
 </body>
 </html>
