@@ -1,59 +1,35 @@
 <div class="translator-premium-card" style="width: 350px;">
-    <div class="trans-header-main" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 11px; font-weight: 800; color: #cbd5e0; text-transform: uppercase;">
+    <div class="trans-header-main">
         <span>CONVERSATION CONFIG</span>
-        <span class="close-x-red" onclick="togglePopup(null, 'popup-config')" style="color: #fc8181; cursor: pointer; font-size: 18px; font-weight: bold;">×</span>
+        <span class="close-x-red" onclick="togglePopup(null, 'popup-config')">×</span>
     </div>
     
     <div style="padding: 10px;">
-        <p class="label-orange" style="margin-bottom: 15px; font-size: 10px; font-weight: 800; color: #f39c12; text-transform: uppercase;">NIVEL DE RIGOR</p>
-        <button class="conf-btn active" onclick="updateConfig('rigor', 'Estricto', event)">🔒 Estricto (Bloqueo)</button>
-        <button class="conf-btn" onclick="updateConfig('rigor', 'Normal', event)">🔓 No tan estricto</button>
+        <p class="label-orange" style="margin-bottom: 15px;">NIVEL DE RIGOR</p>
+        <button class="conf-btn active" onclick="updateConfig('rigor', 'Estricto')">🔒 Estricto (Bloqueo)</button>
+        <button class="conf-btn" onclick="updateConfig('rigor', 'Normal')">🔓 No tan estricto</button>
 
-        <p class="label-orange" style="margin-top: 25px; margin-bottom: 15px; font-size: 10px; font-weight: 800; color: #f39c12; text-transform: uppercase;">ESTILO DE CHAT</p>
-        <button class="conf-btn active" onclick="updateConfig('estilo', 'Normal', event)">📝 Normal</button>
-        <button class="conf-btn" onclick="updateConfig('estilo', 'Coloquial', event)">👍 Coloquial</button>
-        <button class="conf-btn" onclick="updateConfig('estilo', 'Formal', event)">📖 Gramática (Formal)</button>
-        <button class="conf-btn" onclick="updateConfig('estilo', 'Entrevista', event)">💼 Entrevista Trabajo</button>
-        <button class="conf-btn" onclick="updateConfig('estilo', 'Viajes', event)">✈️ Viajes</button>
+        <p class="label-orange" style="margin-top: 25px; margin-bottom: 15px;">ESTILO DE CHAT</p>
+        <button class="conf-btn active" onclick="updateConfig('estilo', 'Normal')">📝 Normal</button>
+        <button class="conf-btn" onclick="updateConfig('estilo', 'Coloquial')">👍 Coloquial</button>
+        <button class="conf-btn" onclick="updateConfig('estilo', 'Formal')">📖 Gramática (Formal)</button>
+        <button class="conf-btn" onclick="updateConfig('estilo', 'Entrevista')">💼 Entrevista Trabajo</button>
+        <button class="conf-btn" onclick="updateConfig('estilo', 'Viajes')">✈️ Viajes</button>
 
-        <button class="conf-btn-reset" onclick="location.reload()" style="margin-top: 20px; width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #fed7d7; background: #fff5f5; color: #e53e3e; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
-            🔄 Reiniciar App
-        </button>
+        <button class="conf-btn-reset" onclick="location.reload()" style="margin-top: 20px;">🔄 Reiniciar App</button>
     </div>
 </div>
 
 <style>
-    /* Estilo base de los botones de configuración */
     .conf-btn {
-        width: 100%; 
-        padding: 12px; 
-        margin-bottom: 8px; 
-        border-radius: 12px;
-        border: 1px solid #edf2f7; 
-        background: #f8fafc; 
-        color: #4a5568;
-        text-align: left; 
-        cursor: pointer; 
-        font-family: inherit; 
-        font-size: 14px;
-        transition: all 0.2s ease; 
-        display: flex; 
-        align-items: center; 
-        gap: 10px;
+        width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 12px;
+        border: 1px solid #edf2f7; background: #f8fafc; color: #4a5568;
+        text-align: left; cursor: pointer; font-family: inherit; font-size: 14px;
+        transition: 0.2s; display: flex; align-items: center; gap: 10px;
     }
-
-    /* Clase activa para iluminar en verde al seleccionar */
-    .conf-btn.active { 
-        background: #5cb85c !important; 
-        color: white !important; 
-        border-color: #4cae4c; 
-        font-weight: 600;
-        box-shadow: 0 4px 12px rgba(92, 184, 92, 0.2);
-    }
-
-    /* Efecto hover para botones no activos */
-    .conf-btn:hover:not(.active) {
-        background: #edf2f7;
-        border-color: #cbd5e0;
+    .conf-btn.active { background: #5cb85c; color: white; border-color: #4cae4c; font-weight: 600; }
+    .conf-btn-reset {
+        width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #fed7d7;
+        background: #fff5f5; color: #e53e3e; cursor: pointer; font-weight: 600;
     }
 </style>
