@@ -10,16 +10,16 @@
             <button class="tr-at-reset" onclick="document.getElementById('in-es-at').value=''; document.getElementById('out-es-at').innerText='' ">🔄</button>
         </div>
         
-        <div class="tr-at-input-wrapper">
+        <div class="tr-at-input-wrapper" style="position: relative; display: flex; align-items: center;">
             <textarea id="in-es-at" class="tr-at-input" placeholder="Escribe..." 
-                onkeydown="if(event.key==='Enter'){ event.preventDefault(); runTranslate('es', 'en'); }"></textarea>
-            <button class="tr-at-inline-send" onclick="runTranslate('es', 'en')">➔</button>
+                onkeydown="if(event.key==='Enter'){ event.preventDefault(); migoTranslate('es', 'en'); }"></textarea>
+            <button class="tr-at-inline-send" onclick="migoTranslate('es', 'en')" style="position: absolute; right: 10px; background: #48bb78; color: white; border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer;">➔</button>
         </div>
         
         <div class="tr-at-result-box">
             <span class="tr-at-label-green">RESULT</span>
-            <div id="out-es-at" class="tr-at-output"></div>
-            <button class="tr-at-copy" onclick="copyResult('out-es-at')">📋</button>
+            <div id="out-es-at" class="tr-at-output" style="min-height: 20px; font-weight: 600;"></div>
+            <button class="tr-at-copy" onclick="const t = document.getElementById('out-es-at').innerText; if(t) navigator.clipboard.writeText(t);">📋</button>
         </div>
     </div>
 
@@ -29,42 +29,44 @@
             <button class="tr-at-reset" onclick="document.getElementById('in-en-at').value=''; document.getElementById('out-en-at').innerText='' ">🔄</button>
         </div>
 
-        <div class="tr-at-input-wrapper">
+        <div class="tr-at-input-wrapper" style="position: relative; display: flex; align-items: center;">
             <textarea id="in-en-at" class="tr-at-input" placeholder="Type..." 
-                onkeydown="if(event.key==='Enter'){ event.preventDefault(); runTranslate('en', 'es'); }"></textarea>
-            <button class="tr-at-inline-send" onclick="runTranslate('en', 'es')">➔</button>
+                onkeydown="if(event.key==='Enter'){ event.preventDefault(); migoTranslate('en', 'es'); }"></textarea>
+            <button class="tr-at-inline-send" onclick="migoTranslate('en', 'es')" style="position: absolute; right: 10px; background: #48bb78; color: white; border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer;">➔</button>
         </div>
         
         <div class="tr-at-result-box">
             <span class="tr-at-label-green">RESULTADO</span>
-            <div id="out-en-at" class="tr-at-output"></div>
-            <button class="tr-at-copy" onclick="copyResult('out-en-at')">📋</button>
+            <div id="out-en-at" class="tr-at-output" style="min-height: 20px; font-weight: 600;"></div>
+            <button class="tr-at-copy" onclick="const t = document.getElementById('out-en-at').innerText; if(t) navigator.clipboard.writeText(t);">📋</button>
         </div>
     </div>
 </div>
 
 <script>
-    // Script de respaldo directo para asegurar funcionamiento
-    async function runTranslate(from, to) {
-        const inId = (from === 'es') ? 'in-es-at' : 'in-en-at';
-        const outId = (from === 'es') ? 'out-es-at' : 'out-en-at';
-        const text = document.getElementById(inId).value.trim();
-        const output = document.getElementById(outId);
+    async function migoTranslate(from, to) {
+        const inputId = (from === 'es') ? 'in-es-at' : 'in-en-at';
+        const outputId = (from === 'es') ? 'out-es-at' : 'out-en-at';
+        
+        const text = document.getElementById(inputId).value.trim();
+        const output = document.getElementById(outputId);
 
         if (!text) return;
         output.innerText = "...";
 
         try {
-            const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`);
-            const data = await res.json();
-            output.innerText = data.responseData.translatedText;
-        } catch (e) {
+            // Usamos un proxy para evitar problemas de CORS si la API directa falla
+            const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`);
+            const data = await response.json();
+            
+            if (data.responseData) {
+                output.innerText = data.responseData.translatedText;
+            } else {
+                output.innerText = "Error en traducción";
+            }
+        } catch (error) {
             output.innerText = "Error de conexión";
+            console.error("Migo Error:", error);
         }
-    }
-
-    function copyResult(id) {
-        const text = document.getElementById(id).innerText;
-        if(text && text !== "...") navigator.clipboard.writeText(text);
     }
 </script>
