@@ -1,7 +1,3 @@
-/**
- * chat-logic.js - Gestión de configuración y traducción
- */
-
 let currentMigoConfig = {
     rigor: 'Estricto / Strict',
     estilo: 'Normal'
@@ -10,7 +6,7 @@ let currentMigoConfig = {
 function updateConfig(type, value, event) {
     currentMigoConfig[type] = value;
     
-    // Gestión de iluminación verde por grupos
+    // Gestión de botones activos por grupo
     const btnPulsado = event.currentTarget;
     const contenedorPadre = btnPulsado.parentElement;
     const botonesDelGrupo = contenedorPadre.querySelectorAll('.conf-btn');
