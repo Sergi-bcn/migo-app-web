@@ -8,22 +8,17 @@ let currentMigoConfig = {
 };
 
 function updateConfig(type, value, event) {
-    // 1. Actualizar el valor en el objeto global
     currentMigoConfig[type] = value;
     
-    // 2. Gestionar la iluminación verde (clase .active)
-    // Buscamos el contenedor padre del botón pulsado para actuar solo sobre su grupo
+    // Gestión de iluminación verde por grupos
     const btnPulsado = event.currentTarget;
     const contenedorPadre = btnPulsado.parentElement;
-    
-    // Quitamos el verde solo a los botones del mismo grupo (Rigor o Estilo)
     const botonesDelGrupo = contenedorPadre.querySelectorAll('.conf-btn');
-    botonesDelGrupo.forEach(btn => btn.classList.remove('active'));
     
-    // Ponemos en verde el botón pulsado para que permanezca marcado
+    botonesDelGrupo.forEach(btn => btn.classList.remove('active'));
     btnPulsado.classList.add('active');
 
-    // 3. Registrar el cambio en la ventana de usuario de forma explícita
+    // Registro explícito en la ventana de usuario
     const userStatus = document.getElementById('user-config-status');
     if (userStatus) {
         userStatus.innerHTML = `
@@ -33,7 +28,6 @@ function updateConfig(type, value, event) {
     }
 }
 
-// Motor de traducción Google
 async function doMigoTrans(mode) {
     const inputId = mode === 'es-en' ? 'trans-es-en-in' : 'trans-en-es-in';
     const outputId = mode === 'es-en' ? 'res-es-en' : 'res-en-es';
