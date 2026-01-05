@@ -1,51 +1,79 @@
 /**
- * chat-logic.js - Registro de configuración y traducción
+ * chat-logic.js - Traducción y Configuración
  */
 
-// Estado inicial
-let currentMigoConfig = {
-    rigor: 'Estricto',
-    estilo: 'Normal'
-};
+let currentMigoConfig = { rigor: 'Estricto', estilo: 'Normal' };
 
-function updateConfig(type, value, event) {
-    // 1. Guardar la selección en el sistema
-    currentMigoConfig[type] = value;
-    
-    // 2. Gestionar visualmente los botones (activa el pulsado, desactiva el resto)
-    const buttons = event.target.parentElement.querySelectorAll('.conf-btn');
-    buttons.forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
-
-    // 3. Registrar los dos menús en la ventana de usuario
-    const userStatus = document.getElementById('user-config-status');
-    if (userStatus) {
-        userStatus.innerText = `${currentMigoConfig.rigor} / ${currentMigoConfig.estilo}`;
-    }
-}
-
-// Motor de traducción Google (Sin errores de "murciano")
+// MOTOR DE TRADUCCIÓN GOOGLE (Corregido)
 async function doMigoTrans(mode) {
     const inputId = mode === 'es-en' ? 'trans-es-en-in' : 'trans-en-es-in';
     const outputId = mode === 'es-en' ? 'res-es-en' : 'res-en-es';
+    
     const sourceText = document.getElementById(inputId).value;
     const outputDiv = document.getElementById(outputId);
 
-    if (!sourceText.trim()) return;
+    if (!sourceText || !sourceText.trim()) return;
+
     outputDiv.innerText = "Translating...";
+    outputDiv.style.color = "#f39c12";
 
     const sl = mode === 'es-en' ? 'es' : 'en';
     const tl = mode === 'es-en' ? 'en' : 'es';
 
     try {
         const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(sourceText)}`;
+        
         const response = await fetch(url);
         const data = await response.json();
+        
         if (data && data[0] && data[0][0]) {
             outputDiv.innerText = data[0][0][0];
             outputDiv.style.color = "#2d3748";
         }
     } catch (error) {
-        outputDiv.innerText = "Error de conexión";
+        console.error("Error en traducción:", error);
+        outputDiv.innerText = "Connection Error";
+        outputDiv.style.color = "#ff5c5c";
     }
+}
+
+// CONFIGURACIÓN Y REGISTRO EN USUARIO
+function updateConfig(type, value, event) {
+    currentMigoConfig[type] = value;
+    
+    // Actualizar botones
+    const buttons = event.target.parentElement.querySelectorAll('.conf-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+
+    // Registrar en ventana de usuario
+    const userStatus = document.getElementById('user-config-status');
+    if (userStatus) {
+        userStatus.innerText = `${currentMigoConfig.rigor} / ${currentMigoConfig.estilo}`;
+    }
+}
+
+// CHAT PRINCIPAL
+function sendMessage() {
+    const input = document.getElementById('user-input');
+    const chatBox = document.getElementById('chat-box');
+    const text = input.value.trim();
+
+    if (!text) return;
+
+    const userDiv = document.createElement('div');
+    userDiv.className = 'message user-msg';
+    userDiv.innerText = text;
+    chatBox.appendChild(userDiv);
+
+    input.value = '';
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    setTimeout(() => {
+        const migoDiv = document.createElement('div');
+        migoDiv.className = 'message migo-msg';
+        migoDiv.innerText = "I am listening. Mode: " + currentMigoConfig.estilo;
+        chatBox.appendChild(migoDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }, 1000);
 }
