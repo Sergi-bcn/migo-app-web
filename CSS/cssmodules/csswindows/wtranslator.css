@@ -37,19 +37,18 @@
     border: 1px solid #edf2f7;
     border-radius: 25px;
     padding: 18px;
-    margin-bottom: 25px;
-    position: relative;
+    margin-bottom: 20px;
 }
 
 .tr-at-lang-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .tr-at-orange {
     color: #f39c12;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 800;
 }
 
@@ -58,25 +57,52 @@
     border: none;
     cursor: pointer;
     opacity: 0.5;
+    font-size: 14px;
 }
 
 .tr-at-input {
     width: 100%;
-    height: 65px;
-    background: none;
-    border: none;
+    height: 70px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 15px;
+    padding: 10px 45px 10px 12px; /* Espacio a la derecha para la flecha */
     resize: none;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 500;
     color: #2d3748;
     outline: none;
+    box-sizing: border-box;
+}
+
+.tr-at-inline-send {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #48bb78;
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: background 0.2s;
+}
+
+.tr-at-inline-send:hover {
+    background: #38a169;
 }
 
 .tr-at-result-box {
     border-top: 1px solid #e2e8f0;
-    padding-top: 10px;
-    margin-top: 8px;
-    min-height: 55px;
+    padding-top: 12px;
+    margin-top: 12px;
+    min-height: 50px;
     position: relative;
 }
 
@@ -92,32 +118,16 @@
     font-size: 15px;
     color: #4a5568;
     padding-right: 30px;
+    font-weight: 600;
 }
 
 .tr-at-copy {
     position: absolute;
     right: 0;
-    top: 25px;
+    bottom: 0;
     background: none;
     border: none;
     cursor: pointer;
     opacity: 0.4;
-}
-
-.tr-at-btn-send {
-    position: absolute;
-    bottom: -18px;
-    right: 25px;
-    background: white;
-    border: 1px solid #edf2f7;
-    color: #48bb78;
-    width: 38px;
-    height: 38px;
-    border-radius: 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    font-size: 18px;
+    font-size: 16px;
 }

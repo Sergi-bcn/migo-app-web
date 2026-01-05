@@ -9,14 +9,18 @@
             <span class="tr-at-orange">ESPAÑOL > INGLÉS</span>
             <button class="tr-at-reset" onclick="document.getElementById('in-es-at').value=''; document.getElementById('out-es-at').innerText='' ">🔄</button>
         </div>
-        <textarea id="in-es-at" class="tr-at-input" placeholder="Escribe..." onkeydown="if(event.key==='Enter'){ event.preventDefault(); handleTranslate('es', 'en'); }"></textarea>
+        
+        <div class="tr-at-input-wrapper" style="position: relative;">
+            <textarea id="in-es-at" class="tr-at-input" placeholder="Escribe..." 
+                onkeydown="if(event.key==='Enter'){ event.preventDefault(); handleTranslate('es', 'en'); }"></textarea>
+            <button class="tr-at-inline-send" onclick="handleTranslate('es', 'en')" title="Traducir">➔</button>
+        </div>
         
         <div class="tr-at-result-box">
             <span class="tr-at-label-green">RESULT</span>
             <div id="out-es-at" class="tr-at-output"></div>
             <button class="tr-at-copy" onclick="copyToClipboard('out-es-at')">📋</button>
         </div>
-        <button class="tr-at-btn-send" onclick="handleTranslate('es', 'en')">➔</button>
     </div>
 
     <div class="tr-at-card">
@@ -24,13 +28,17 @@
             <span class="tr-at-orange">ENGLISH > SPANISH</span>
             <button class="tr-at-reset" onclick="document.getElementById('in-en-at').value=''; document.getElementById('out-en-at').innerText='' ">🔄</button>
         </div>
-        <textarea id="in-en-at" class="tr-at-input" placeholder="Type..." onkeydown="if(event.key==='Enter'){ event.preventDefault(); handleTranslate('en', 'es'); }"></textarea>
+
+        <div class="tr-at-input-wrapper" style="position: relative;">
+            <textarea id="in-en-at" class="tr-at-input" placeholder="Type..." 
+                onkeydown="if(event.key==='Enter'){ event.preventDefault(); handleTranslate('en', 'es'); }"></textarea>
+            <button class="tr-at-inline-send" onclick="handleTranslate('en', 'es')" title="Translate">➔</button>
+        </div>
         
         <div class="tr-at-result-box">
             <span class="tr-at-label-green">RESULTADO</span>
             <div id="out-en-at" class="tr-at-output"></div>
             <button class="tr-at-copy" onclick="copyToClipboard('out-en-at')">📋</button>
         </div>
-        <button class="tr-at-btn-send" onclick="handleTranslate('en', 'es')">➔</button>
     </div>
 </div>

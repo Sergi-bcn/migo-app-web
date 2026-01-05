@@ -1,8 +1,3 @@
-/**
- * Función principal de traducción
- * @param {string} from - Idioma de origen ('es' o 'en')
- * @param {string} to - Idioma de destino ('en' o 'es')
- */
 async function handleTranslate(from, to) {
     const inputId = (from === 'es') ? 'in-es-at' : 'in-en-at';
     const outputId = (from === 'es') ? 'out-es-at' : 'out-en-at';
@@ -10,45 +5,46 @@ async function handleTranslate(from, to) {
     const inputEl = document.getElementById(inputId);
     const outputEl = document.getElementById(outputId);
 
-    if (!inputEl || !outputEl) return;
+    if (!inputEl || !outputEl) {
+        console.error("No se encontraron los elementos de traducción");
+        return;
+    }
 
     const text = inputEl.value.trim();
-    
-    // Si no hay texto, no hacemos nada
     if (!text) {
         outputEl.innerText = "";
         return;
     }
 
-    // Feedback visual mientras traduce
-    outputEl.innerText = (from === 'es') ? "Traduciendo..." : "Translating...";
+    outputEl.innerText = "...";
 
     try {
-        // Usamos la API de MyMemory (gratuita y sin registro para este volumen)
-        const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`);
+        // Usamos una URL de API directa y limpia
+        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`;
+        
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Error en la respuesta de la API");
+        
         const data = await response.json();
         
-        if (data.responseData) {
+        if (data.responseData && data.responseData.translatedText) {
             outputEl.innerText = data.responseData.translatedText;
         } else {
-            outputEl.innerText = "Error en la respuesta.";
+            outputEl.innerText = "No se pudo traducir.";
         }
     } catch (error) {
-        outputEl.innerText = "Error de conexión.";
-        console.error("Translation Error:", error);
+        outputEl.innerText = "Error de red o límite alcanzado.";
+        console.error("Error detallado:", error);
     }
 }
 
-/**
- * Función auxiliar para copiar el resultado al portapapeles
- */
 function copyToClipboard(elementId) {
     const text = document.getElementById(elementId).innerText;
-    if (!text || text === "Traduciendo..." || text === "Translating...") return;
+    if (!text || text === "...") return;
     
     navigator.clipboard.writeText(text).then(() => {
-        alert("Copiado al portapapeles");
+        // Opcional: Podrías cambiar el icono brevemente a un check
     }).catch(err => {
-        console.error('Error al copiar: ', err);
+        console.error('No se pudo copiar: ', err);
     });
 }
