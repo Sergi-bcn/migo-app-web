@@ -1,92 +1,41 @@
-// Función principal para enviar mensajes
-async function sendMessage() {
-    const input = document.getElementById('user-input');
-    const chatBox = document.getElementById('chat-box');
-    const message = input.value.trim();
+// api/chat.js
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method not allowed' });
+  }
 
-    if (!message) return;
+  const { message, config } = req.body;
 
-    // 1. Mostrar mensaje del usuario en el chat
-    appendMessage('user', message);
-    input.value = ''; // Limpiar input
+  try {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "mixtral-8x7b-32768", // Modelo rápido y eficiente de Groq
+        messages: [
+          { 
+            role: "system", 
+            content: `Eres Migo, un asistente inteligente. Tu rigor es ${config.rigor} y tu estilo de chat es ${config.estilo}. Responde siempre de forma auténtica y fluida.` 
+          },
+          { role: "user", content: message }
+        ],
+        temperature: 0.7
+      })
+    });
 
-    try {
-        // 2. Llamada a nuestra API en Vercel
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                message: message,
-                // Obtenemos el rigor del botón que tenga la clase 'active'
-                rigor: document.querySelector('.opt-btn.active')?.innerText.toLowerCase().includes('strict') ? 'strict' : 'relaxed'
-            })
-        });
-
-        if (!response.ok) throw new Error('Error en la conexión con Migo');
-
-        const data = await response.json();
-        
-        // 3. Mostrar respuesta de Migo
-        if (data.reply) {
-            appendMessage('bot', data.reply);
-        }
-        
-        // 4. Si la IA detectó un error, actualizar la ventana de CORRECTIONS
-        if (data.correction && data.correction !== message) {
-            updateCorrectionsPanel(data);
-        }
-
-    } catch (error) {
-        console.error("Error:", error);
-        appendMessage('bot', "I'm sorry, Sergi. I'm having trouble thinking right now. / Lo siento, Sergi. Tengo problemas para conectar.");
+    const data = await response.json();
+    
+    if (data.error) {
+      throw new Error(data.error.message);
     }
+
+    const reply = data.choices[0].message.content;
+    res.status(200).json({ reply });
+  } catch (error) {
+    console.error("Groq API Error:", error);
+    res.status(500).json({ error: 'Error al conectar con Groq' });
+  }
 }
-
-// Función para añadir burbujas al chat
-function appendMessage(role, text) {
-    const chatBox = document.getElementById('chat-box');
-    const msgDiv = document.createElement('div');
-    msgDiv.className = `bubble ${role === 'user' ? 'user' : 'bot'}`;
-    msgDiv.innerText = text;
-    
-    chatBox.appendChild(msgDiv);
-    
-    // Scroll automático al final
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-// Función para actualizar la ventana de correcciones (Izquierda)
-function updateCorrectionsPanel(data) {
-    const correctionsList = document.getElementById('corrections-list');
-    
-    // Crear un nuevo elemento de corrección
-    const correctionHTML = `
-        <div class="correction-item" style="margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
-            <p style="font-size: 0.65rem; font-weight: 800; color: #f16b24; margin-bottom: 5px;">YOU SAID:</p>
-            <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">"${data.original || '...'}"</p>
-            
-            <p style="font-size: 0.65rem; font-weight: 800; color: #28a745; margin-bottom: 5px;">SUGGESTION:</p>
-            <p style="font-size: 0.9rem; font-weight: 600; color: #333; margin-bottom: 10px;">${data.correction}</p>
-            
-            <p style="font-size: 0.65rem; font-weight: 800; color: #bbb; margin-bottom: 5px;">EXPLANATION:</p>
-            <p style="font-size: 0.85rem; color: #777; font-style: italic;">${data.explanation || 'No hay explicación disponible.'}</p>
-        </div>
-    `;
-
-    // Reemplazar el "No hay correcciones todavía" o añadir a la lista
-    if (correctionsList.querySelector('.empty-text')) {
-        correctionsList.innerHTML = correctionHTML;
-    } else {
-        correctionsList.insertAdjacentHTML('afterbegin', correctionHTML);
-    }
-    
-    // Efecto visual: Resaltar la ventana de correcciones
-    bringToFront('corrections-panel');
-}
-
-// Permitir enviar con la tecla Enter
-document.getElementById('user-input').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-        sendMessage();
-    }
-});
