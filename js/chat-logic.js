@@ -23,7 +23,7 @@ async function sendMessage() {
 
     const userText = input.value;
 
-    // Cierre automático de ventanas del header
+    // Cierre automático de popups del header
     const popups = document.querySelectorAll('.popup-modal');
     popups.forEach(p => p.innerHTML = '');
 
@@ -36,6 +36,7 @@ async function sendMessage() {
     input.value = '';
     chatBox.scrollTop = chatBox.scrollHeight;
 
+    // Indicador de "escribiendo..." opcional o salto directo a la API
     try {
         const response = await fetch('/api/chat', {
             method: 'POST',
@@ -45,12 +46,13 @@ async function sendMessage() {
 
         const data = await response.json();
         
-        if (data.error) throw new Error(data.error);
-        
-        renderMigoResponse(data.reply);
+        if (data.error) {
+            renderMigoResponse("Error: " + data.error);
+        } else {
+            renderMigoResponse(data.reply);
+        }
     } catch (error) {
-        console.error("Error detallado:", error);
-        renderMigoResponse("Error: No he podido conectar con la AI. Revisa la GROQ_API_KEY en Vercel y redespliega.");
+        renderMigoResponse("Error: No se pudo establecer conexión con el servidor de Vercel.");
     }
 }
 

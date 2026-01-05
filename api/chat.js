@@ -1,8 +1,12 @@
-// api/chat.js
 export default async function handler(req, res) {
-  // Solo permitir peticiones POST
+  // 1. Validar método
   if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // 2. Validar que la API KEY existe en el entorno
+  if (!process.env.GROQ_API_KEY) {
+    return res.status(500).json({ error: 'Falta la variable GROQ_API_KEY en Vercel.' });
   }
 
   const { message, config } = req.body;
@@ -15,31 +19,27 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model: "mixtral-8x7b-32768",
+        model: "llama-3.3-70b-versatile", // Modelo actualizado y potente de Groq
         messages: [
           { 
             role: "system", 
-            content: `Eres Migo. Rigor: ${config.rigor}. Estilo: ${config.estilo}. Responde de forma auténtica.` 
+            content: `Eres Migo. Estilo: ${config.estilo}. Rigor: ${config.rigor}. Responde siempre en el idioma que te hable el usuario.` 
           },
           { role: "user", content: message }
         ],
-        temperature: 0.7,
-        max_tokens: 1024
+        temperature: 0.7
       })
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("Error de Groq:", data);
-      return res.status(response.status).json({ error: data.error?.message || "Error en Groq API" });
+      return res.status(response.status).json({ error: data.error?.message || 'Error de Groq' });
     }
 
-    const reply = data.choices[0].message.content;
-    res.status(200).json({ reply });
+    res.status(200).json({ reply: data.choices[0].message.content });
 
   } catch (error) {
-    console.error("Server Error:", error);
-    res.status(500).json({ error: "No se pudo conectar con el servidor de la AI." });
+    res.status(500).json({ error: 'Error interno del servidor al conectar con la AI.' });
   }
 }
