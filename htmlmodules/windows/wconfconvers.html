@@ -7,7 +7,7 @@
     <div style="padding: 10px;">
         <p class="label-orange" style="margin-bottom: 15px; font-size: 10px; font-weight: 800; color: #f39c12; text-transform: uppercase;">NIVEL DE RIGOR</p>
         <button class="conf-btn active" onclick="updateConfig('rigor', 'Estricto', event)">🔒 Estricto (Bloqueo)</button>
-        <button class="conf-btn" onclick="updateConfig('rigor', 'Normal', event)">🔓 No tan estricto</button>
+        <button class="conf-btn" onclick="updateConfig('rigor', 'Normal', event)">🔓 Nivel normal</button>
 
         <p class="label-orange" style="margin-top: 25px; margin-bottom: 15px; font-size: 10px; font-weight: 800; color: #f39c12; text-transform: uppercase;">ESTILO DE CHAT</p>
         <button class="conf-btn active" onclick="updateConfig('estilo', 'Normal', event)">📝 Normal</button>
@@ -25,5 +25,11 @@
         text-align: left; cursor: pointer; font-family: inherit; font-size: 14px;
         transition: 0.2s; display: flex; align-items: center; gap: 10px;
     }
-    .conf-btn.active { background: #5cb85c !important; color: white !important; border-color: #4cae4c; font-weight: 600; }
+    /* Esta es la clase que marca la selección en verde */
+    .conf-btn.active { 
+        background: #5cb85c !important; 
+        color: white !important; 
+        border-color: #4cae4c; 
+        font-weight: 600; 
+    }
 </style>
