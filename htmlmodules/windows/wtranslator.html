@@ -1,57 +1,32 @@
-<div class="tr-at-container">
-    <div class="tr-at-header">
-        <span class="tr-at-title">TRANSLATOR / TRADUCTOR</span>
-        <button class="tr-at-close" onclick="togglePopup(event, 'popup-translate')">×</button>
+<div class="translator-premium-card">
+    <div class="trans-header-main">
+        <span>TRANSLATOR / TRADUCTOR</span>
+        <span class="close-x-red" onclick="togglePopup(null, 'popup-translate')">×</span>
     </div>
-
-    <div class="tr-at-card">
-        <div class="tr-at-lang-row">
-            <span class="tr-at-orange">ESPAÑOL > INGLÉS</span>
-            <button class="tr-at-reset" onclick="document.getElementById('in-es').value=''; document.getElementById('out-es').innerText='' ">🔄</button>
+    
+    <div class="trans-unit-box">
+        <p class="label-orange">ESPAÑOL > INGLÉS</p>
+        <div class="input-zone-styled">
+            <textarea id="trans-es-en-in" placeholder="Escribe en español..." onkeydown="if(event.key==='Enter'){ doMigoTrans('es-en'); event.preventDefault(); }"></textarea>
         </div>
-        <div style="position: relative;">
-            <textarea id="in-es" class="tr-at-input" placeholder="Escribe..." 
-                onkeydown="if(event.key==='Enter'){ event.preventDefault(); doMigoTrans('es', 'en'); }"></textarea>
-            <button class="tr-at-inline-send" onclick="doMigoTrans('es', 'en')">➔</button>
-        </div>
-        <div class="tr-at-result-box">
-            <span class="tr-at-label-green">RESULT</span>
-            <div id="out-es" class="tr-at-output"></div>
+        <div class="result-zone-styled">
+            <div id="res-es-en" style="color: #718096; font-size: 14px;">Traducción...</div>
+            <div class="actions-row-mini">
+                <button class="green-arrow-btn-mini" onclick="doMigoTrans('es-en')">➔</button>
+            </div>
         </div>
     </div>
 
-    <div class="tr-at-card">
-        <div class="tr-at-lang-row">
-            <span class="tr-at-orange">ENGLISH > SPANISH</span>
-            <button class="tr-at-reset" onclick="document.getElementById('in-en').value=''; document.getElementById('out-en').innerText='' ">🔄</button>
+    <div class="trans-unit-box">
+        <p class="label-orange">ENGLISH > SPANISH</p>
+        <div class="input-zone-styled">
+            <textarea id="trans-en-es-in" placeholder="Type in English..." onkeydown="if(event.key==='Enter'){ doMigoTrans('en-es'); event.preventDefault(); }"></textarea>
         </div>
-        <div style="position: relative;">
-            <textarea id="in-en" class="tr-at-input" placeholder="Type..." 
-                onkeydown="if(event.key==='Enter'){ event.preventDefault(); doMigoTrans('en', 'es'); }"></textarea>
-            <button class="tr-at-inline-send" onclick="doMigoTrans('en', 'es')">➔</button>
-        </div>
-        <div class="tr-at-result-box">
-            <span class="tr-at-label-green">RESULTADO</span>
-            <div id="out-en" class="tr-at-output"></div>
+        <div class="result-zone-styled">
+            <div id="res-en-es" style="color: #718096; font-size: 14px;">Translation...</div>
+            <div class="actions-row-mini">
+                <button class="green-arrow-btn-mini" onclick="doMigoTrans('en-es')">➔</button>
+            </div>
         </div>
     </div>
 </div>
-
-<script>
-    async function doMigoTrans(from, to) {
-        const input = document.getElementById(from === 'es' ? 'in-es' : 'in-en');
-        const output = document.getElementById(from === 'es' ? 'out-es' : 'out-en');
-        const text = input.value.trim();
-        
-        if (!text) return;
-        output.innerText = "...";
-
-        try {
-            const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`);
-            const d = await r.json();
-            output.innerText = d.responseData.translatedText || "Error";
-        } catch (e) {
-            output.innerText = "Error de red";
-        }
-    }
-</script>
