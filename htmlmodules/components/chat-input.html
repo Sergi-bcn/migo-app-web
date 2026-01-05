@@ -1,0 +1,12 @@
+<div class="chat-input-container" style="padding: 20px; background: white; border-top: 1px solid #f8f9fa;">
+    <div class="input-wrapper" style="display: flex; gap: 10px; background: #f8fafc; padding: 10px 15px; border-radius: 15px; border: 1px solid #edf2f7;">
+        <input type="text" id="user-input" 
+               placeholder="Type your message / Escribe tu mensaje..." 
+               onkeydown="if(event.key === 'Enter') sendMessage()"
+               style="flex: 1; border: none; background: transparent; outline: none; font-size: 16px; color: #4a5568; font-family: inherit;">
+        
+        <button onclick="sendMessage()" style="background: #f39c12; border: none; padding: 8px 15px; border-radius: 10px; color: white; cursor: pointer; font-weight: 700; transition: 0.2s;">
+            SEND
+        </button>
+    </div>
+</div>

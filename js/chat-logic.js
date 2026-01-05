@@ -1,5 +1,5 @@
 /**
- * chat-logic.js - Gestión de configuración, traducción y funcionalidad de chat
+ * chat-logic.js - Gestión de conversación, configuración y traducción
  */
 
 let currentMigoConfig = {
@@ -7,12 +7,9 @@ let currentMigoConfig = {
     estilo: 'Normal'
 };
 
-// Función para actualizar la configuración de la conversación
 function updateConfig(type, value, event) {
-    // 1. Actualizar estado interno
     currentMigoConfig[type] = value;
     
-    // 2. Gestionar UI de botones (Selección Verde)
     const btnPulsado = event.currentTarget;
     const contenedorPadre = btnPulsado.parentElement;
     const botonesDelGrupo = contenedorPadre.querySelectorAll('.conf-btn');
@@ -20,7 +17,6 @@ function updateConfig(type, value, event) {
     botonesDelGrupo.forEach(btn => btn.classList.remove('active'));
     btnPulsado.classList.add('active');
 
-    // 3. Notificar al sistema de usuario (Funcionalidad explícita)
     const userStatus = document.getElementById('user-config-status');
     if (userStatus) {
         userStatus.innerHTML = `
@@ -28,8 +24,34 @@ function updateConfig(type, value, event) {
             <div><strong>CHAT STYLE / ESTILO DE CHAT:</strong> ${currentMigoConfig.estilo}</div>
         `;
     }
+}
+
+function sendMessage() {
+    const input = document.getElementById('user-input');
+    const chatBox = document.getElementById('chat-box');
     
-    console.log(`Configuración actualizada: Rigor=${currentMigoConfig.rigor}, Estilo=${currentMigoConfig.estilo}`);
+    if (!input || !input.value.trim()) return;
+
+    // 1. Mensaje del Usuario
+    const userMsg = document.createElement('div');
+    userMsg.className = 'message user-msg';
+    userMsg.style.cssText = "align-self: flex-end; background: #f39c12; color: white; padding: 10px 15px; border-radius: 15px 15px 0 15px; margin-bottom: 10px; max-width: 80%; font-size: 15px;";
+    userMsg.innerText = input.value;
+    chatBox.appendChild(userMsg);
+
+    const textoEnviado = input.value;
+    input.value = '';
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // 2. Respuesta de Migo: "entendido"
+    setTimeout(() => {
+        const migoMsg = document.createElement('div');
+        migoMsg.className = 'message migo-msg';
+        migoMsg.style.cssText = "align-self: flex-start; background: #f1f5f9; color: #4a5568; padding: 10px 15px; border-radius: 15px 15px 15px 0; margin-bottom: 10px; max-width: 80%; font-size: 15px; border: 1px solid #edf2f7;";
+        migoMsg.innerText = "entendido";
+        chatBox.appendChild(migoMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }, 600);
 }
 
 // Motor de traducción
@@ -55,29 +77,4 @@ async function doMigoTrans(mode) {
     } catch (e) {
         outputDiv.innerText = "Error";
     }
-}
-
-// Envío de mensajes de chat
-function sendMessage() {
-    const input = document.getElementById('user-input');
-    const chatBox = document.getElementById('chat-box');
-    if (!input || !input.value.trim()) return;
-
-    // Crear burbuja de mensaje del usuario
-    const msg = document.createElement('div');
-    msg.className = 'message user-msg';
-    msg.innerText = input.value;
-    chatBox.appendChild(msg);
-
-    input.value = '';
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    // Simulación de respuesta basada en configuración (funcionalidad de conversación)
-    setTimeout(() => {
-        const reply = document.createElement('div');
-        reply.className = 'message migo-msg';
-        reply.innerText = `[Modo ${currentMigoConfig.estilo} activo]: Entendido.`;
-        chatBox.appendChild(reply);
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }, 1000);
 }
