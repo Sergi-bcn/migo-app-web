@@ -1,7 +1,3 @@
-/**
- * chat-logic.js - Gestión de configuración y traducción bilingüe
- */
-
 let currentMigoConfig = {
     rigor: 'Estricto / Strict',
     estilo: 'Normal'
@@ -10,6 +6,7 @@ let currentMigoConfig = {
 function updateConfig(type, value, event) {
     currentMigoConfig[type] = value;
     
+    // Gestión de botones verdes activos por grupo
     const btnPulsado = event.currentTarget;
     const contenedorPadre = btnPulsado.parentElement;
     const botonesDelGrupo = contenedorPadre.querySelectorAll('.conf-btn');
@@ -17,11 +14,12 @@ function updateConfig(type, value, event) {
     botonesDelGrupo.forEach(btn => btn.classList.remove('active'));
     btnPulsado.classList.add('active');
 
+    // Registro explícito en la ventana de usuario
     const userStatus = document.getElementById('user-config-status');
     if (userStatus) {
         userStatus.innerHTML = `
-            <div style="margin-bottom: 5px;"><strong>RIGOR:</strong> ${currentMigoConfig.rigor}</div>
-            <div><strong>STYLE:</strong> ${currentMigoConfig.estilo}</div>
+            <div style="margin-bottom: 5px;"><strong>RIGOR LEVEL / NIVEL DE RIGOR:</strong> ${currentMigoConfig.rigor}</div>
+            <div><strong>CHAT STYLE / ESTILO DE CHAT:</strong> ${currentMigoConfig.estilo}</div>
         `;
     }
 }
@@ -48,18 +46,4 @@ async function doMigoTrans(mode) {
     } catch (e) {
         outputDiv.innerText = "Error";
     }
-}
-
-function sendMessage() {
-    const input = document.getElementById('user-input');
-    const chatBox = document.getElementById('chat-box');
-    if (!input.value.trim()) return;
-
-    const msg = document.createElement('div');
-    msg.className = 'message user-msg';
-    msg.innerText = input.value;
-    chatBox.appendChild(msg);
-
-    input.value = '';
-    chatBox.scrollTop = chatBox.scrollHeight;
 }
