@@ -1,24 +1,21 @@
-<main class="chat-panel">
-    <header class="chat-internal-header">
-        <div class="logo-area">
-            <h1 class="logo" style="font-size: 34px; font-weight: 900; letter-spacing: -2px;">Migo<span style="color:#f39c12">.</span></h1>
+<div class="chat-container-wrapper">
+    <div id="chat-box" class="chat-feed">
         </div>
-        
-        <div class="header-tools-right" style="display: flex; gap: 12px; align-items: center;">
-            <div class="anchor">
-                <button class="tool-btn-plain" onclick="togglePopup(event, 'popup-config')">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#cbd5e0"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
-                </button>
-                <div id="popup-config" class="popup-modal"></div>
-            </div>
 
-            <div class="anchor">
-                <button class="tool-btn-plain tool-border-sq" onclick="togglePopup(event, 'popup-translate')" style="border: 1px solid #edf2f7; border-radius: 12px; padding: 6px;">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Translate_logo.svg" width="20">
-                </button>
-                <div id="popup-translate" class="popup-modal"></div>
-            </div>
+    <div class="chat-input-wrapper">
+        <div class="input-container">
+            <input 
+                type="text" 
+                id="user-input" 
+                placeholder="Escribe en inglés o español..." 
+                autocomplete="off"
+            >
+            <button class="send-btn" onclick="sendMessage()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
         </div>
-    </header>
-    <div id="chat-box" class="chat-feed"></div>
-    </main>
+    </div>
+</div>
