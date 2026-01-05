@@ -10,16 +10,16 @@
             <button class="tr-at-reset" onclick="document.getElementById('in-es-at').value=''; document.getElementById('out-es-at').innerText='' ">🔄</button>
         </div>
         
-        <div class="tr-at-input-wrapper" style="position: relative;">
+        <div class="tr-at-input-wrapper">
             <textarea id="in-es-at" class="tr-at-input" placeholder="Escribe..." 
-                onkeydown="if(event.key==='Enter'){ event.preventDefault(); handleTranslate('es', 'en'); }"></textarea>
-            <button class="tr-at-inline-send" onclick="handleTranslate('es', 'en')" title="Traducir">➔</button>
+                onkeydown="if(event.key==='Enter'){ event.preventDefault(); runTranslate('es', 'en'); }"></textarea>
+            <button class="tr-at-inline-send" onclick="runTranslate('es', 'en')">➔</button>
         </div>
         
         <div class="tr-at-result-box">
             <span class="tr-at-label-green">RESULT</span>
             <div id="out-es-at" class="tr-at-output"></div>
-            <button class="tr-at-copy" onclick="copyToClipboard('out-es-at')">📋</button>
+            <button class="tr-at-copy" onclick="copyResult('out-es-at')">📋</button>
         </div>
     </div>
 
@@ -29,16 +29,42 @@
             <button class="tr-at-reset" onclick="document.getElementById('in-en-at').value=''; document.getElementById('out-en-at').innerText='' ">🔄</button>
         </div>
 
-        <div class="tr-at-input-wrapper" style="position: relative;">
+        <div class="tr-at-input-wrapper">
             <textarea id="in-en-at" class="tr-at-input" placeholder="Type..." 
-                onkeydown="if(event.key==='Enter'){ event.preventDefault(); handleTranslate('en', 'es'); }"></textarea>
-            <button class="tr-at-inline-send" onclick="handleTranslate('en', 'es')" title="Translate">➔</button>
+                onkeydown="if(event.key==='Enter'){ event.preventDefault(); runTranslate('en', 'es'); }"></textarea>
+            <button class="tr-at-inline-send" onclick="runTranslate('en', 'es')">➔</button>
         </div>
         
         <div class="tr-at-result-box">
             <span class="tr-at-label-green">RESULTADO</span>
             <div id="out-en-at" class="tr-at-output"></div>
-            <button class="tr-at-copy" onclick="copyToClipboard('out-en-at')">📋</button>
+            <button class="tr-at-copy" onclick="copyResult('out-en-at')">📋</button>
         </div>
     </div>
 </div>
+
+<script>
+    // Script de respaldo directo para asegurar funcionamiento
+    async function runTranslate(from, to) {
+        const inId = (from === 'es') ? 'in-es-at' : 'in-en-at';
+        const outId = (from === 'es') ? 'out-es-at' : 'out-en-at';
+        const text = document.getElementById(inId).value.trim();
+        const output = document.getElementById(outId);
+
+        if (!text) return;
+        output.innerText = "...";
+
+        try {
+            const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`);
+            const data = await res.json();
+            output.innerText = data.responseData.translatedText;
+        } catch (e) {
+            output.innerText = "Error de conexión";
+        }
+    }
+
+    function copyResult(id) {
+        const text = document.getElementById(id).innerText;
+        if(text && text !== "...") navigator.clipboard.writeText(text);
+    }
+</script>
