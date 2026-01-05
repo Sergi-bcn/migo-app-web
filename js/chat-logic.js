@@ -27,7 +27,7 @@ async function sendMessage() {
     const popups = document.querySelectorAll('.popup-modal');
     popups.forEach(p => p.innerHTML = '');
 
-    // Renderizar mensaje de usuario (A la izquierda, 17px)
+    // Renderizar mensaje de usuario (Izquierda, 17px)
     const userMsg = document.createElement('div');
     userMsg.style.cssText = "align-self: flex-start; background: #f39c12; color: white; padding: 12px 18px; border-radius: 15px 15px 15px 0; margin-bottom: 15px; max-width: 85%; font-size: 17px; font-weight: 500; text-align: left;";
     userMsg.innerText = userText;
@@ -40,10 +40,7 @@ async function sendMessage() {
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                message: userText,
-                config: currentMigoConfig 
-            })
+            body: JSON.stringify({ message: userText, config: currentMigoConfig })
         });
 
         const data = await response.json();
@@ -52,7 +49,8 @@ async function sendMessage() {
         
         renderMigoResponse(data.reply);
     } catch (error) {
-        renderMigoResponse("Error: No he podido conectar con la AI de Groq. Revisa la API KEY en Vercel.");
+        console.error("Error detallado:", error);
+        renderMigoResponse("Error: No he podido conectar con la AI. Revisa la GROQ_API_KEY en Vercel y redespliega.");
     }
 }
 
