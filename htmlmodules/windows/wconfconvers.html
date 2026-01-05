@@ -6,15 +6,19 @@
     
     <div style="padding: 10px;">
         <p class="label-orange" style="margin-bottom: 15px; font-size: 10px; font-weight: 800; color: #f39c12; text-transform: uppercase;">RIGOR LEVEL / NIVEL DE RIGOR</p>
-        <button class="conf-btn active" onclick="updateConfig('rigor', 'Estricto', event)">🔒 Estricto / Strict (Bloqueo)</button>
-        <button class="conf-btn" onclick="updateConfig('rigor', 'Normal', event)">🔓 Nivel normal / Normal level</button>
+        <div class="config-group">
+            <button class="conf-btn active" onclick="updateConfig('rigor', 'Estricto / Strict', event)">🔒 Estricto / Strict (Bloqueo)</button>
+            <button class="conf-btn" onclick="updateConfig('rigor', 'Normal', event)">🔓 Nivel normal / Normal level</button>
+        </div>
 
         <p class="label-orange" style="margin-top: 25px; margin-bottom: 15px; font-size: 10px; font-weight: 800; color: #f39c12; text-transform: uppercase;">CHAT STYLE / ESTILO DE CHAT</p>
-        <button class="conf-btn active" onclick="updateConfig('estilo', 'Normal', event)">📝 Normal</button>
-        <button class="conf-btn" onclick="updateConfig('estilo', 'Coloquial', event)">👍 Coloquial / Casual</button>
-        <button class="conf-btn" onclick="updateConfig('estilo', 'Formal', event)">📖 Formal (Grammar)</button>
-        <button class="conf-btn" onclick="updateConfig('estilo', 'Entrevista', event)">💼 Job Interview / Entrevista</button>
-        <button class="conf-btn" onclick="updateConfig('estilo', 'Viajes', event)">✈️ Travel / Viajes</button>
+        <div class="config-group">
+            <button class="conf-btn active" onclick="updateConfig('estilo', 'Normal', event)">📝 Normal</button>
+            <button class="conf-btn" onclick="updateConfig('estilo', 'Coloquial / Casual', event)">👍 Coloquial / Casual</button>
+            <button class="conf-btn" onclick="updateConfig('estilo', 'Formal (Grammar)', event)">📖 Formal (Grammar)</button>
+            <button class="conf-btn" onclick="updateConfig('estilo', 'Job Interview / Entrevista', event)">💼 Job Interview / Entrevista</button>
+            <button class="conf-btn" onclick="updateConfig('estilo', 'Travel / Viajes', event)">✈️ Travel / Viajes</button>
+        </div>
     </div>
 </div>
 
@@ -25,5 +29,10 @@
         text-align: left; cursor: pointer; font-family: inherit; font-size: 13px;
         transition: 0.2s; display: flex; align-items: center; gap: 10px;
     }
-    .conf-btn.active { background: #5cb85c !important; color: white !important; border-color: #4cae4c; font-weight: 600; }
+    .conf-btn.active { 
+        background: #5cb85c !important; 
+        color: white !important; 
+        border-color: #4cae4c; 
+        font-weight: 600; 
+    }
 </style>

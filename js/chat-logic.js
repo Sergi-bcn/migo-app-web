@@ -1,26 +1,39 @@
-let currentMigoConfig = { rigor: 'Estricto', estilo: 'Normal' };
+/**
+ * chat-logic.js - Gestión de configuración y traducción
+ */
+
+let currentMigoConfig = {
+    rigor: 'Estricto / Strict',
+    estilo: 'Normal'
+};
 
 function updateConfig(type, value, event) {
+    // 1. Actualizar el valor en el objeto global
     currentMigoConfig[type] = value;
     
-    // Obtenemos el contenedor específico (Rigor o Estilo) para no desmarcar el otro menú
+    // 2. Gestionar la iluminación verde (clase .active)
+    // Buscamos el contenedor padre del botón pulsado para actuar solo sobre su grupo
     const btnPulsado = event.currentTarget;
     const contenedorPadre = btnPulsado.parentElement;
     
-    // Solo quitamos el verde a los botones dentro del mismo grupo
+    // Quitamos el verde solo a los botones del mismo grupo (Rigor o Estilo)
     const botonesDelGrupo = contenedorPadre.querySelectorAll('.conf-btn');
     botonesDelGrupo.forEach(btn => btn.classList.remove('active'));
     
-    // Marcamos el actual en verde
+    // Ponemos en verde el botón pulsado para que permanezca marcado
     btnPulsado.classList.add('active');
 
-    // Actualizar ventana de usuario bilingüe
+    // 3. Registrar el cambio en la ventana de usuario de forma explícita
     const userStatus = document.getElementById('user-config-status');
     if (userStatus) {
-        userStatus.innerText = `${currentMigoConfig.rigor} / ${currentMigoConfig.estilo}`;
+        userStatus.innerHTML = `
+            <div style="margin-bottom: 5px;"><strong>RIGOR:</strong> ${currentMigoConfig.rigor}</div>
+            <div><strong>STYLE:</strong> ${currentMigoConfig.estilo}</div>
+        `;
     }
 }
 
+// Motor de traducción Google
 async function doMigoTrans(mode) {
     const inputId = mode === 'es-en' ? 'trans-es-en-in' : 'trans-en-es-in';
     const outputId = mode === 'es-en' ? 'res-es-en' : 'res-en-es';
