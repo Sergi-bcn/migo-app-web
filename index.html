@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo App</title>
+    <meta charset="UTF-8"><title>Migo App Modular</title>
     <link rel="stylesheet" href="CSS/layout.css">
     <link rel="stylesheet" href="CSS/cssmodules/csscomponents/sidebar.css">
     <link rel="stylesheet" href="CSS/cssmodules/csscomponents/header.css">
@@ -16,24 +14,16 @@
 </head>
 <body>
     <div id="slot-sidebar"></div>
-
     <div class="main-screen">
         <div class="content-layout">
             <div id="slot-register"></div>
-            
             <main class="chat-panel">
                 <div id="slot-header"></div>
-                <div id="chat-box" class="chat-feed"></div>
-                <div class="chat-input-wrapper">
-                    <input type="text" id="user-input" placeholder="Type in English...">
-                    <button class="send-btn">➔</button>
-                </div>
+                <div id="slot-convers-content"></div>
             </main>
         </div>
     </div>
-
     <script src="js/loader.js"></script>
     <script src="js/ui-manager.js"></script>
-    <script src="js/chat-logic.js"></script>
 </body>
 </html>
