@@ -1,3 +1,7 @@
+/**
+ * chat-logic.js - Gestión de configuración y traducción bilingüe
+ */
+
 let currentMigoConfig = {
     rigor: 'Estricto / Strict',
     estilo: 'Normal'
@@ -6,7 +10,6 @@ let currentMigoConfig = {
 function updateConfig(type, value, event) {
     currentMigoConfig[type] = value;
     
-    // Gestión de botones activos por grupo
     const btnPulsado = event.currentTarget;
     const contenedorPadre = btnPulsado.parentElement;
     const botonesDelGrupo = contenedorPadre.querySelectorAll('.conf-btn');
@@ -14,7 +17,6 @@ function updateConfig(type, value, event) {
     botonesDelGrupo.forEach(btn => btn.classList.remove('active'));
     btnPulsado.classList.add('active');
 
-    // Registro explícito en la ventana de usuario
     const userStatus = document.getElementById('user-config-status');
     if (userStatus) {
         userStatus.innerHTML = `
