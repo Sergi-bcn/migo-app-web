@@ -1,22 +1,24 @@
-<header class="chat-internal-header">
+<header class="chat-internal-header" style="padding: 20px 25px; border-bottom: 1px solid #f8f9fa; display: flex; justify-content: space-between; align-items: center;">
     <div class="logo-area">
-        <h1 class="logo">Migo<span>.</span></h1>
+        <h1 class="logo" style="font-size: 34px; font-weight: 900; margin: 0; letter-spacing: -2px;">Migo<span style="color: #f39c12;">.</span></h1>
     </div>
     <div class="header-tools-right" style="display: flex; gap: 15px; align-items: center;">
-        <div class="anchor">
-            <button class="tool-btn-plain" onclick="togglePopup(event, 'popup-config')">
+        
+        <div class="anchor" style="position: relative;">
+            <button class="tool-btn-plain" onclick="togglePopup(event, 'popup-config')" style="background: none; border: none; cursor: pointer;">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="#f39c12"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
             </button>
             <div id="popup-config" class="popup-modal"></div>
         </div>
 
-        <div class="anchor">
-            <button class="tool-btn-plain tool-border-sq" onclick="togglePopup(event, 'popup-translate')" style="border: 1px solid #edf2f7; border-radius: 12px; padding: 6px; display: flex; align-items: center; justify-content: center;">
+        <div class="anchor" style="position: relative;">
+            <button class="tool-btn-plain tool-border-sq" onclick="togglePopup(event, 'popup-translate')" style="border: 1px solid #edf2f7; border-radius: 12px; padding: 6px; background: white; cursor: pointer; display: flex; align-items: center;">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="#4a5568">
                     <path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/>
                 </svg>
             </button>
             <div id="popup-translate" class="popup-modal"></div>
         </div>
+
     </div>
 </header>
