@@ -1,35 +1,26 @@
-/**
- * chat-logic.js - Gestión de configuración y traducción
- */
-
-let currentMigoConfig = {
-    rigor: 'Estricto',
-    estilo: 'Normal'
-};
+let currentMigoConfig = { rigor: 'Estricto', estilo: 'Normal' };
 
 function updateConfig(type, value, event) {
-    // 1. Actualizar el valor en el objeto global
     currentMigoConfig[type] = value;
     
-    // 2. Gestionar la iluminación verde (clase .active)
-    // Buscamos el contenedor padre directo del botón pulsado para no afectar a la otra sección
-    const parentContainer = event.currentTarget.parentElement;
-    const siblingButtons = parentContainer.querySelectorAll('.conf-btn');
+    // Obtenemos el contenedor específico (Rigor o Estilo) para no desmarcar el otro menú
+    const btnPulsado = event.currentTarget;
+    const contenedorPadre = btnPulsado.parentElement;
     
-    // Quitamos el verde de los botones del mismo grupo
-    siblingButtons.forEach(btn => btn.classList.remove('active'));
+    // Solo quitamos el verde a los botones dentro del mismo grupo
+    const botonesDelGrupo = contenedorPadre.querySelectorAll('.conf-btn');
+    botonesDelGrupo.forEach(btn => btn.classList.remove('active'));
     
-    // Ponemos en verde el botón pulsado
-    event.currentTarget.classList.add('active');
+    // Marcamos el actual en verde
+    btnPulsado.classList.add('active');
 
-    // 3. Registrar el cambio en la ventana de usuario
+    // Actualizar ventana de usuario bilingüe
     const userStatus = document.getElementById('user-config-status');
     if (userStatus) {
         userStatus.innerText = `${currentMigoConfig.rigor} / ${currentMigoConfig.estilo}`;
     }
 }
 
-// Motor de traducción Google
 async function doMigoTrans(mode) {
     const inputId = mode === 'es-en' ? 'trans-es-en-in' : 'trans-en-es-in';
     const outputId = mode === 'es-en' ? 'res-es-en' : 'res-en-es';
@@ -37,7 +28,7 @@ async function doMigoTrans(mode) {
     const outputDiv = document.getElementById(outputId);
 
     if (!sourceText.trim()) return;
-    outputDiv.innerText = "Translating...";
+    outputDiv.innerText = "Translating / Traduciendo...";
 
     try {
         const sl = mode === 'es-en' ? 'es' : 'en';
@@ -52,4 +43,18 @@ async function doMigoTrans(mode) {
     } catch (e) {
         outputDiv.innerText = "Error";
     }
+}
+
+function sendMessage() {
+    const input = document.getElementById('user-input');
+    const chatBox = document.getElementById('chat-box');
+    if (!input.value.trim()) return;
+
+    const msg = document.createElement('div');
+    msg.className = 'message user-msg';
+    msg.innerText = input.value;
+    chatBox.appendChild(msg);
+
+    input.value = '';
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
