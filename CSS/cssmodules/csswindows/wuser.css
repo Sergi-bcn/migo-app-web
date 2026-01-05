@@ -1,14 +1,4 @@
-.user-premium-card { width: 320px; padding: 25px; position: relative; }
-.user-header { display: flex; align-items: center; margin-bottom: 25px; }
-.avatar-orange-box { 
-    width: 60px; height: 60px; background: #fff5e6; color: #f39c12; 
-    border-radius: 20px; display: flex; align-items: center; justify-content: center; 
-    font-size: 1.5rem; font-weight: 800; margin-right: 15px; 
-}
-.user-fullname { font-weight: 800; font-size: 1.1rem; margin: 0; color: #333; }
-.val-green { color: #5cb85c; font-weight: 700; margin-top: 5px; font-size: 14px; }
-.btn-reset-light-red { 
-    width: 100%; padding: 15px; border-radius: 20px; border: none; 
-    background: #fff0f0; color: #ff5c5c; font-weight: 800; cursor: pointer; 
-}
-.close-x-red { position: absolute; top: 20px; right: 20px; color: #ff5c5c; cursor: pointer; font-size: 20px; }
+.user-premium-card { width: 320px; padding: 20px; position: relative; }
+.user-fullname { font-weight: 800; font-size: 14px; margin: 0; color: #333; } /* Tamaño reducido */
+.val-green { color: #5cb85c; font-weight: 700; font-size: 12px; } /* Tamaño reducido */
+.avatar-orange-box { width: 45px; height: 45px; font-size: 1rem; }
