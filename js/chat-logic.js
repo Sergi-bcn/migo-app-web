@@ -1,45 +1,56 @@
-// Variable global para guardar la configuración
-let currentMigoConfig = {
-    rigor: 'Estricto',
-    estilo: 'Normal'
-};
-
-function updateConfig(type, value) {
-    // Actualizar objeto global
-    currentMigoConfig[type] = value;
-    
-    // Actualizar visualmente los botones en la ventana de config
-    const buttons = event.target.parentElement.querySelectorAll('.conf-btn');
-    buttons.forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
-
-    // Reflejar en la ventana de usuario si está abierta o al abrirse
-    const userStatus = document.getElementById('user-config-status');
-    if (userStatus) {
-        userStatus.innerText = `${currentMigoConfig.rigor} / ${currentMigoConfig.estilo}`;
-    }
-    
-    console.log("Configuración actualizada:", currentMigoConfig);
-}
-
-// Función de traducción corregida (manteniendo tu éxito actual)
+/**
+ * chat-logic.js - Motor Google Translate (Gratis)
+ */
 async function doMigoTrans(mode) {
     const inputId = mode === 'es-en' ? 'trans-es-en-in' : 'trans-en-es-in';
     const outputId = mode === 'es-en' ? 'res-es-en' : 'res-en-es';
+    
     const sourceText = document.getElementById(inputId).value;
     const outputDiv = document.getElementById(outputId);
 
     if (!sourceText.trim()) return;
-    outputDiv.innerText = "Traduciendo...";
-    const langPair = mode === 'es-en' ? 'es|en' : 'en|es';
+
+    outputDiv.innerText = "Translating...";
+    outputDiv.style.color = "#f39c12";
+
+    const sl = mode === 'es-en' ? 'es' : 'en'; // Source Language
+    const tl = mode === 'es-en' ? 'en' : 'es'; // Target Language
 
     try {
-        const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(sourceText)}&langpair=${langPair}&mt=1&de=example@migo.com`);
+        // Usamos el endpoint oficial de Google Translate (vía script fetch)
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(sourceText)}`;
+        
+        const response = await fetch(url);
         const data = await response.json();
-        if (data.responseData) {
-            outputDiv.innerText = data.responseData.translatedText;
+        
+        // Google devuelve un array anidado: data[0][0][0] es la traducción
+        if (data && data[0] && data[0][0] && data[0][0][0]) {
+            outputDiv.innerText = data[0][0][0];
+            outputDiv.style.color = "#2d3748";
+        } else {
+            outputDiv.innerText = "Error en formato";
         }
     } catch (error) {
-        outputDiv.innerText = "Error de conexión";
+        console.error("Error Google Trans:", error);
+        outputDiv.innerText = "Connection Error";
+        outputDiv.style.color = "#ff5c5c";
+    }
+}
+
+// Lógica de configuración (Rigor y Estilo)
+let currentMigoConfig = { rigor: 'Estricto', estilo: 'Normal' };
+
+function updateConfig(type, value, event) {
+    currentMigoConfig[type] = value;
+    
+    // UI Update
+    const buttons = event.target.parentElement.querySelectorAll('.conf-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+
+    // Sincronizar con ventana de usuario
+    const userStatus = document.getElementById('user-config-status');
+    if (userStatus) {
+        userStatus.innerText = `${currentMigoConfig.rigor} / ${currentMigoConfig.estilo}`;
     }
 }

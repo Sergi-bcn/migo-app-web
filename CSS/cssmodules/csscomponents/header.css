@@ -5,17 +5,29 @@
     justify-content: space-between; 
     align-items: center; 
 }
+
 .logo { 
     font-size: 34px; 
     font-weight: 900; 
     margin: 0; 
     letter-spacing: -2px; 
 }
+
 .logo span { 
     color: #f39c12; 
 }
+
 .header-tools-right { 
     display: flex; 
-    gap: 12px; 
+    gap: 15px; 
     align-items: center; 
+}
+
+.tool-border-sq {
+    border: 1px solid #edf2f7;
+    border-radius: 12px;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
