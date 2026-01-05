@@ -1,41 +1,28 @@
-/**
- * Lógica del Traductor de Migo
- */
-
-async function translateNow(sl, tl) {
-    const text = document.getElementById(`in-${sl}`).value.trim();
-    const out = document.getElementById(sl === 'es' ? 'out-en' : 'out-es');
-    if (!text) return;
-
-    out.innerText = "Translating...";
+async function handleTranslate(from, to) {
+    const inputId = (from === 'es') ? 'in-es-at' : 'in-en-at';
+    const outputId = (from === 'es') ? 'out-es-at' : 'out-en-at';
     
-    try {
-        const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`);
-        const data = await res.json();
-        const translatedText = data[0].map(s => s[0]).join('');
-        out.innerText = translatedText;
-    } catch (e) {
-        console.error("Translation error:", e);
-        out.innerText = "Error al traducir.";
-    }
-}
+    const inputEl = document.getElementById(inputId);
+    const outputEl = document.getElementById(outputId);
 
-function clearTrans(lang) {
-    document.getElementById(`in-${lang}`).value = "";
-    const outId = lang === 'es' ? 'out-en' : 'out-es';
-    document.getElementById(outId).innerText = "";
-}
+    if (!inputEl || !outputEl) return;
 
-function handleTransEnter(event, sl, tl) {
-    if (event.key === "Enter" && !event.shiftKey) {
-        event.preventDefault();
-        translateNow(sl, tl);
-    }
-}
-
-function copyToClipboard(id) {
-    const text = document.getElementById(id).innerText;
+    const text = inputEl.value.trim();
     if (!text) return;
-    navigator.clipboard.writeText(text);
-    alert("Copied to clipboard!");
+
+    outputEl.innerText = "...";
+
+    try {
+        const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`);
+        const data = await response.json();
+        
+        if (data.responseData) {
+            outputEl.innerText = data.responseData.translatedText;
+        } else {
+            outputEl.innerText = "Error";
+        }
+    } catch (error) {
+        outputEl.innerText = "Error de red";
+        console.error("Translation error:", error);
+    }
 }

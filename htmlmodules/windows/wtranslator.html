@@ -1,32 +1,36 @@
-<div class="translator-premium-card">
-    <div class="trans-header-main">
-        <span>TRANSLATOR / TRADUCTOR</span>
-        <span class="close-x-red" onclick="togglePopup(null, 'popup-translate')">×</span>
-    </div>
-    
-    <div class="trans-unit-box">
-        <p class="label-orange">ESPAÑOL > INGLÉS</p>
-        <div class="input-zone-styled">
-            <textarea id="trans-es-en-in" placeholder="Escribe en español..."></textarea>
-        </div>
-        <div class="result-zone-styled">
-            <div id="res-es-en" style="color: #718096; font-size: 14px;">Traducción...</div>
-            <div class="actions-row-mini">
-                <button class="green-arrow-btn-mini">➔</button>
-            </div>
-        </div>
+<div class="tr-at-container">
+    <div class="tr-at-header">
+        <span class="tr-at-title">TRANSLATOR / TRADUCTOR</span>
+        <button class="tr-at-close" onclick="togglePopup(event, 'popup-translate')">×</button>
     </div>
 
-    <div class="trans-unit-box">
-        <p class="label-orange">ENGLISH > SPANISH</p>
-        <div class="input-zone-styled">
-            <textarea id="trans-en-es-in" placeholder="Type in English..."></textarea>
+    <div class="tr-at-card">
+        <div class="tr-at-lang-row">
+            <span class="tr-at-orange">ESPAÑOL > INGLÉS</span>
+            <button class="tr-at-reset" onclick="document.getElementById('in-es-at').value='' ">🔄</button>
         </div>
-        <div class="result-zone-styled">
-            <div id="res-en-es" style="color: #718096; font-size: 14px;">Translation...</div>
-            <div class="actions-row-mini">
-                <button class="green-arrow-btn-mini">➔</button>
-            </div>
+        <textarea id="in-es-at" class="tr-at-input" placeholder="Escribe..."></textarea>
+        
+        <div class="tr-at-result-box">
+            <span class="tr-at-label-green">RESULT</span>
+            <div id="out-es-at" class="tr-at-output"></div>
+            <button class="tr-at-copy">📋</button>
         </div>
+        <button class="tr-at-btn-send" onclick="handleTranslate('es', 'en')">➔</button>
+    </div>
+
+    <div class="tr-at-card">
+        <div class="tr-at-lang-row">
+            <span class="tr-at-orange">ENGLISH > SPANISH</span>
+            <button class="tr-at-reset" onclick="document.getElementById('in-en-at').value='' ">🔄</button>
+        </div>
+        <textarea id="in-en-at" class="tr-at-input" placeholder="Type..."></textarea>
+        
+        <div class="tr-at-result-box">
+            <span class="tr-at-label-green">RESULTADO</span>
+            <div id="out-en-at" class="tr-at-output"></div>
+            <button class="tr-at-copy">📋</button>
+        </div>
+        <button class="tr-at-btn-send" onclick="handleTranslate('en', 'es')">➔</button>
     </div>
 </div>
