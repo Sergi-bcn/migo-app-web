@@ -1,18 +1,40 @@
-let currentMigoConfig = {
-    rigor: 'Estricto / Strict',
-    estilo: 'Normal'
-};
+let currentMigoConfig = { rigor: 'Estricto / Strict', estilo: 'Normal' };
 
-function updateConfig(type, value, event) {
-    currentMigoConfig[type] = value;
-    const btnPulsado = event.currentTarget;
-    const botonesDelGrupo = btnPulsado.parentElement.querySelectorAll('.conf-btn');
-    botonesDelGrupo.forEach(btn => btn.classList.remove('active'));
-    btnPulsado.classList.add('active');
+function writeLog(msg) {
+    const log = document.getElementById('log-content');
+    if(log) log.innerHTML = `<div>[${new Date().toLocaleTimeString()}] ${msg}</div>` + log.innerHTML;
+}
 
-    const userStatus = document.getElementById('user-config-status');
-    if (userStatus) {
-        userStatus.innerHTML = `<div><strong>RIGOR:</strong> ${currentMigoConfig.rigor}</div><div><strong>STYLE:</strong> ${currentMigoConfig.estilo}</div>`;
+async function togglePopup(event, popupId) {
+    if (event) { event.preventDefault(); event.stopPropagation(); }
+    const popup = document.getElementById(popupId);
+    if (!popup) return;
+
+    if (popup.innerHTML.trim() !== "") { popup.innerHTML = ""; return; }
+    
+    // Cerrar otros popups abiertos
+    document.querySelectorAll('.popup-modal').forEach(p => p.innerHTML = "");
+
+    // Ruta absoluta para Vercel
+    const file = (popupId === 'popup-config') ? '/htmlmodules/windows/wconfig.html' : '/htmlmodules/windows/wtranslator.html';
+
+    try {
+        const response = await fetch(file);
+        if (!response.ok) throw new Error(`404: No se encontró ${file}`);
+        popup.innerHTML = await response.text();
+        
+        // Estilo forzado de ventana modular
+        const card = popup.querySelector('div');
+        if (card) {
+            card.style.borderRadius = "15px";
+            card.style.boxShadow = "0 10px 40px rgba(0,0,0,0.15)";
+            card.style.border = "2px solid #f39c12";
+            card.style.background = "white";
+            card.style.padding = "10px";
+        }
+    } catch (err) {
+        writeLog(err.message);
+        popup.innerHTML = `<div style="background:white; padding:15px; border:1px solid red; border-radius:10px;">⚠️ Error cargando ventana</div>`;
     }
 }
 
@@ -21,46 +43,49 @@ async function sendMessage() {
     const chatBox = document.getElementById('chat-box');
     if (!input || !input.value.trim()) return;
 
-    const userText = input.value;
+    const text = input.value;
+    document.querySelectorAll('.popup-modal').forEach(p => p.innerHTML = "");
 
-    // Cierre automático de popups del header
-    const popups = document.querySelectorAll('.popup-modal');
-    popups.forEach(p => p.innerHTML = '');
-
-    // Renderizar mensaje de usuario (Izquierda, 17px)
-    const userMsg = document.createElement('div');
-    userMsg.style.cssText = "align-self: flex-start; background: #f39c12; color: white; padding: 12px 18px; border-radius: 15px 15px 15px 0; margin-bottom: 15px; max-width: 85%; font-size: 17px; font-weight: 500; text-align: left;";
-    userMsg.innerText = userText;
-    chatBox.appendChild(userMsg);
-
+    renderBubble(text, true); // Usuario
     input.value = '';
-    chatBox.scrollTop = chatBox.scrollHeight;
 
-    // Indicador de "escribiendo..." opcional o salto directo a la API
     try {
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: userText, config: currentMigoConfig })
+            body: JSON.stringify({ message: text, config: currentMigoConfig })
         });
-
         const data = await response.json();
-        
-        if (data.error) {
-            renderMigoResponse("Error: " + data.error);
-        } else {
-            renderMigoResponse(data.reply);
-        }
-    } catch (error) {
-        renderMigoResponse("Error: No se pudo establecer conexión con el servidor de Vercel.");
+        renderBubble(data.reply, false); // Migo
+    } catch (e) {
+        writeLog("Error en la respuesta de la IA");
+        renderBubble("Error de conexión.", false);
     }
 }
 
-function renderMigoResponse(text) {
+function renderBubble(text, isUser) {
     const chatBox = document.getElementById('chat-box');
-    const migoMsg = document.createElement('div');
-    migoMsg.style.cssText = "align-self: flex-start; background: #f1f5f9; color: #4a5568; padding: 12px 18px; border-radius: 15px 15px 15px 0; margin-bottom: 15px; max-width: 85%; font-size: 17px; border: 1px solid #edf2f7; text-align: left;";
-    migoMsg.innerText = text;
-    chatBox.appendChild(migoMsg);
+    const msg = document.createElement('div');
+    
+    // Diseño 16px, Izquierda, Sombra
+    msg.style.cssText = `
+        align-self: flex-start !important; 
+        background: ${isUser ? '#f39c12' : '#ffffff'} !important; 
+        color: ${isUser ? 'white' : '#1e293b'} !important; 
+        padding: 12px 18px !important; 
+        border-radius: 18px 18px 18px 2px !important; 
+        margin-bottom: 10px !important; 
+        max-width: 80% !important; 
+        font-size: 16px !important; 
+        text-align: left !important; 
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
+        border: ${isUser ? 'none' : '1px solid #e2e8f0'} !important;
+        word-wrap: break-word !important;
+    `;
+    
+    msg.innerText = text;
+    chatBox.appendChild(msg);
+    
+    // Scroll automático al último mensaje
     chatBox.scrollTop = chatBox.scrollHeight;
 }

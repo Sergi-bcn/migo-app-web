@@ -2,39 +2,100 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Migo App - Restauración Total</title>
-    
-    <link rel="stylesheet" href="CSS/layout.css">
-    <link rel="stylesheet" href="CSS/cssmodules/csscomponents/sidebar.css">
-    <link rel="stylesheet" href="CSS/cssmodules/csscomponents/header.css">
-    <link rel="stylesheet" href="CSS/cssmodules/csscomponents/wconvers.css">
-    <link rel="stylesheet" href="CSS/cssmodules/csscomponents/wregister.css">
-    <link rel="stylesheet" href="CSS/cssmodules/csswindows/wuser.css">
-    <link rel="stylesheet" href="CSS/cssmodules/csswindows/wtranslator.css">
-    <link rel="stylesheet" href="CSS/cssmodules/csswindows/wconfconvers.css">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-</head>
-<body class="bg-main">
-    <div id="slot-sidebar"></div>
-    
-    <div class="main-screen">
-        <div class="content-layout">
-            <div id="slot-register"></div>
-            
-            <main class="chat-panel">
-                <div id="slot-header"></div>
-                <div id="chat-box" class="chat-feed"></div>
-                <div class="chat-input-wrapper">
-                    <input type="text" id="user-input" placeholder="Type in English...">
-                    <button class="send-btn" onclick="sendMessage()">➔</button>
-                </div>
-            </main>
-        </div>
-    </div>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo AI - Modular</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* RESET MODULAR: Bloqueamos el scroll de la página entera */
+        html, body { 
+            margin: 0; padding: 0; height: 100vh; width: 100vw; 
+            overflow: hidden; font-family: 'Segoe UI', sans-serif; 
+            background: #f8fafc;
+        }
 
-    <script src="js/loader.js"></script>
-    <script src="js/ui-manager.js"></script>
-    <script src="js/chat-logic.js"></script>
+        /* SISTEMA DE REJILLA: 3 Filas, 2 Columnas */
+        .layout-master {
+            display: grid;
+            grid-template-areas: 
+                "header header"
+                "chat sidebar"
+                "footer sidebar";
+            grid-template-rows: 70px 1fr auto;
+            grid-template-columns: 1fr 320px;
+            height: 100vh;
+        }
+
+        /* HEADER: Siempre fijo arriba */
+        header { 
+            grid-area: header; background: white; 
+            border-bottom: 4px solid #f39c12; 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 0 25px; z-index: 1000; 
+        }
+
+        /* CHAT: Con scroll independiente e interno */
+        #chat-box { 
+            grid-area: chat; 
+            overflow-y: auto; /* Solo esta parte tiene scroll */
+            padding: 25px; 
+            display: flex; flex-direction: column; gap: 15px;
+            background: #f8fafc;
+            height: 100%; /* Ocupa el 100% de su celda en el grid */
+        }
+
+        /* SIDEBAR: Fijo a la derecha */
+        aside#error-sidebar { 
+            grid-area: sidebar; 
+            background: #ffffff; border-left: 1px solid #edf2f7; 
+            padding: 20px; overflow-y: auto; 
+        }
+
+        /* FOOTER: Siempre fijo abajo */
+        footer { 
+            grid-area: footer; background: white; 
+            border-top: 1px solid #edf2f7; padding: 20px; 
+        }
+
+        .input-wrapper { max-width: 800px; margin: 0 auto; display: flex; gap: 12px; }
+        input { flex: 1; padding: 14px 20px; border-radius: 25px; border: 1px solid #e2e8f0; outline: none; font-size: 16px; }
+        button { background: #f39c12; color: white; border: none; padding: 0 25px; border-radius: 25px; cursor: pointer; font-weight: bold; }
+
+        /* VENTANAS: Capa flotante absoluta */
+        .popup-modal { 
+            position: fixed; top: 80px; right: 340px; 
+            z-index: 9999; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout-master">
+    <header>
+        <div style="font-weight:bold; font-size:24px;">Migo<span style="color:#f39c12">.</span></div>
+        <div style="display:flex; gap:15px;">
+            <button onclick="togglePopup(event, 'popup-config')" style="background:none; border:none; cursor:pointer; font-size:22px;">⚙️</button>
+            <button onclick="togglePopup(event, 'popup-translate')" style="background:none; border:none; cursor:pointer; font-size:22px;">🌐</button>
+        </div>
+    </header>
+
+    <div id="popup-config" class="popup-modal"></div>
+    <div id="popup-translate" class="popup-modal"></div>
+
+    <main id="chat-box"></main>
+
+    <aside id="error-sidebar">
+        <h4 style="margin-top:0; border-bottom:2px solid #f39c12; padding-bottom:5px;">Log de Errores</h4>
+        <div id="log-content" style="font-size:12px; color:#64748b;"></div>
+    </aside>
+
+    <footer>
+        <div class="input-wrapper">
+            <input type="text" id="user-input" placeholder="Escribe un mensaje..." onkeypress="if(event.key === 'Enter') sendMessage()">
+            <button onclick="sendMessage()">Enviar</button>
+        </div>
+    </footer>
+</div>
+
+<script src="js/chat-logic.js"></script>
 </body>
 </html>
