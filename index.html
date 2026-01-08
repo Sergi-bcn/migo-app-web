@@ -2,39 +2,130 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Migo App - Restauración Total</title>
-    
-    <link rel="stylesheet" href="CSS/layout.css">
-    <link rel="stylesheet" href="CSS/cssmodules/csscomponents/sidebar.css">
-    <link rel="stylesheet" href="CSS/cssmodules/csscomponents/header.css">
-    <link rel="stylesheet" href="CSS/cssmodules/csscomponents/wconvers.css">
-    <link rel="stylesheet" href="CSS/cssmodules/csscomponents/wregister.css">
-    <link rel="stylesheet" href="CSS/cssmodules/csswindows/wuser.css">
-    <link rel="stylesheet" href="CSS/cssmodules/csswindows/wtranslator.css">
-    <link rel="stylesheet" href="CSS/cssmodules/csswindows/wconfconvers.css">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-</head>
-<body class="bg-main">
-    <div id="slot-sidebar"></div>
-    
-    <div class="main-screen">
-        <div class="content-layout">
-            <div id="slot-register"></div>
-            
-            <main class="chat-panel">
-                <div id="slot-header"></div>
-                <div id="chat-box" class="chat-feed"></div>
-                <div class="chat-input-wrapper">
-                    <input type="text" id="user-input" placeholder="Type in English...">
-                    <button class="send-btn" onclick="sendMessage()">➔</button>
-                </div>
-            </main>
-        </div>
-    </div>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo AI - Diseño Final</title>
+    <style>
+        /* REGLAS CRÍTICAS PARA EL SCROLL */
+        * { box-sizing: border-box !important; }
+        
+        body, html { 
+            margin: 0 !important; padding: 0 !important; 
+            height: 100vh !important; width: 100vw !important; 
+            overflow: hidden !important; /* Evita que la ventana entera haga scroll */
+            font-family: 'Segoe UI', Tahoma, sans-serif !important;
+            background-color: #f8fafc !important;
+        }
 
-    <script src="js/loader.js"></script>
-    <script src="js/ui-manager.js"></script>
-    <script src="js/chat-logic.js"></script>
+        /* Estructura Grid del diseño que te gusta (65071af) */
+        .master-layout {
+            display: grid !important;
+            grid-template-areas: 
+                "header header"
+                "chat sidebar"
+                "footer sidebar" !important;
+            grid-template-rows: 70px 1fr 100px !important; /* 1fr hace que el chat ocupe el resto */
+            grid-template-columns: 1fr 320px !important;
+            height: 100vh !important;
+            width: 100vw !important;
+        }
+
+        header {
+            grid-area: header !important;
+            background: white !important;
+            border-bottom: 4px solid #f39c12 !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            padding: 0 30px !important;
+            z-index: 1000 !important;
+        }
+
+        /* FIX DE SCROLL: Aquí es donde estaba el problema */
+        #chat-box {
+            grid-area: chat !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 15px !important;
+            padding: 25px !important;
+            background: #f8fafc !important;
+            
+            /* Estas 3 líneas activan el scroll dentro del área central */
+            overflow-y: auto !important; 
+            max-height: 100% !important; 
+            height: auto !important;
+        }
+
+        aside {
+            grid-area: sidebar !important;
+            background: white !important;
+            border-left: 1px solid #e2e8f0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: hidden !important;
+        }
+
+        .sidebar-header {
+            padding: 20px !important;
+            border-bottom: 2px solid #f39c12 !important;
+            font-weight: bold !important;
+        }
+
+        #log-content {
+            padding: 15px !important;
+            font-size: 12px !important;
+            overflow-y: auto !important;
+            flex: 1 !important;
+        }
+
+        footer {
+            grid-area: footer !important;
+            background: white !important;
+            border-top: 1px solid #e2e8f0 !important;
+            display: flex !important;
+            align-items: center !important;
+            padding: 0 25px !important;
+        }
+
+        /* Estilo de burbujas */
+        .bubble {
+            max-width: 80% !important;
+            padding: 12px 18px !important;
+            font-size: 16px !important;
+            border-radius: 18px 18px 18px 5px !important;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
+            line-height: 1.5 !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="master-layout">
+    <header>
+        <div style="font-weight:bold; font-size:26px;">Migo<span style="color:#f39c12">.</span></div>
+        <div style="display:flex; gap:15px;">
+            <button onclick="togglePopup(event, 'popup-config')" style="background:none; border:none; cursor:pointer; font-size:24px;">⚙️</button>
+            <button onclick="togglePopup(event, 'popup-translate')" style="background:none; border:none; cursor:pointer; font-size:24px;">🌐</button>
+        </div>
+    </header>
+
+    <div id="popup-config" style="position:fixed; top:80px; right:340px; z-index:2000;"></div>
+    <div id="popup-translate" style="position:fixed; top:80px; right:340px; z-index:2000;"></div>
+
+    <main id="chat-box"></main>
+
+    <aside>
+        <div class="sidebar-header">Registro de Errores</div>
+        <div id="log-content"></div>
+    </aside>
+
+    <footer>
+        <div style="width:100%; max-width:900px; margin:0 auto; display:flex; gap:12px;">
+            <input type="text" id="user-input" placeholder="Escribe un mensaje..." style="flex:1; padding:15px 25px; border-radius:30px; border:1px solid #e2e8f0; outline:none;" onkeypress="if(event.key === 'Enter') sendMessage()">
+            <button onclick="sendMessage()" style="background:#f39c12; color:white; border:none; padding:0 30px; border-radius:30px; cursor:pointer; font-weight:bold;">Enviar</button>
+        </div>
+    </footer>
+</div>
+
+<script src="js/chat-logic.js"></script>
 </body>
 </html>
