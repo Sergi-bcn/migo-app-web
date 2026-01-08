@@ -3,82 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo AI - Diseño Final</title>
+    <title>Migo AI - Estable</title>
     <style>
-        /* REGLAS CRÍTICAS PARA EL SCROLL */
-        * { box-sizing: border-box !important; }
+        /* RESET TOTAL PARA EVITAR CONFLICTOS */
+        * { box-sizing: border-box !important; margin: 0; padding: 0; }
         
         body, html { 
-            margin: 0 !important; padding: 0 !important; 
-            height: 100vh !important; width: 100vw !important; 
-            overflow: hidden !important; /* Evita que la ventana entera haga scroll */
-            font-family: 'Segoe UI', Tahoma, sans-serif !important;
+            height: 100vh !important; 
+            width: 100vw !important; 
+            overflow: hidden !important; 
+            font-family: 'Segoe UI', system-ui, sans-serif !important;
             background-color: #f8fafc !important;
         }
 
-        /* Estructura Grid del diseño que te gusta (65071af) */
-        .master-layout {
+        /* NOMBRES DE CLASES NUEVOS PARA EVITAR CACHÉ */
+        .migo-master-container {
             display: grid !important;
             grid-template-areas: 
-                "header header"
-                "chat sidebar"
-                "footer sidebar" !important;
-            grid-template-rows: 70px 1fr 100px !important; /* 1fr hace que el chat ocupe el resto */
+                "migo-head migo-head"
+                "migo-chat migo-side"
+                "migo-foot migo-side" !important;
+            grid-template-rows: 70px 1fr 100px !important;
             grid-template-columns: 1fr 320px !important;
             height: 100vh !important;
             width: 100vw !important;
         }
 
-        header {
-            grid-area: header !important;
+        .migo-head-area {
+            grid-area: migo-head !important;
             background: white !important;
             border-bottom: 4px solid #f39c12 !important;
             display: flex !important;
             justify-content: space-between !important;
             align-items: center !important;
             padding: 0 30px !important;
-            z-index: 1000 !important;
+            z-index: 9999 !important;
         }
 
-        /* FIX DE SCROLL: Aquí es donde estaba el problema */
+        /* ÁREA DE CHAT CON SCROLL INDEPENDIENTE */
         #chat-box {
-            grid-area: chat !important;
+            grid-area: migo-chat !important;
+            overflow-y: auto !important; 
             display: flex !important;
             flex-direction: column !important;
             gap: 15px !important;
             padding: 25px !important;
-            background: #f8fafc !important;
-            
-            /* Estas 3 líneas activan el scroll dentro del área central */
-            overflow-y: auto !important; 
-            max-height: 100% !important; 
-            height: auto !important;
+            background-color: #f8fafc !important;
+            /* El 1fr del grid maneja la altura automáticamente */
         }
 
-        aside {
-            grid-area: sidebar !important;
+        .migo-side-area {
+            grid-area: migo-side !important;
             background: white !important;
             border-left: 1px solid #e2e8f0 !important;
             display: flex !important;
             flex-direction: column !important;
-            overflow: hidden !important;
         }
 
-        .sidebar-header {
-            padding: 20px !important;
-            border-bottom: 2px solid #f39c12 !important;
-            font-weight: bold !important;
-        }
-
-        #log-content {
-            padding: 15px !important;
-            font-size: 12px !important;
-            overflow-y: auto !important;
-            flex: 1 !important;
-        }
-
-        footer {
-            grid-area: footer !important;
+        .migo-foot-area {
+            grid-area: migo-foot !important;
             background: white !important;
             border-top: 1px solid #e2e8f0 !important;
             display: flex !important;
@@ -86,42 +69,60 @@
             padding: 0 25px !important;
         }
 
-        /* Estilo de burbujas */
+        /* Estilo de burbujas restaurado */
         .bubble {
             max-width: 80% !important;
             padding: 12px 18px !important;
-            font-size: 16px !important;
             border-radius: 18px 18px 18px 5px !important;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
+            font-size: 16px !important;
             line-height: 1.5 !important;
+            margin-bottom: 5px !important;
+        }
+
+        /* Botones del header */
+        .head-btn {
+            background: none; border: none; cursor: pointer; font-size: 24px;
+        }
+
+        .migo-input-bar {
+            width: 100%; max-width: 900px; margin: 0 auto; display: flex; gap: 12px;
+        }
+
+        .migo-input-bar input {
+            flex: 1; padding: 15px 25px; border-radius: 30px; border: 1px solid #e2e8f0; outline: none;
+        }
+
+        .migo-input-bar button {
+            background: #f39c12; color: white; border: none; padding: 0 30px; border-radius: 30px; cursor: pointer; font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-<div class="master-layout">
-    <header>
+<div class="migo-master-container">
+    <header class="migo-head-area">
         <div style="font-weight:bold; font-size:26px;">Migo<span style="color:#f39c12">.</span></div>
         <div style="display:flex; gap:15px;">
-            <button onclick="togglePopup(event, 'popup-config')" style="background:none; border:none; cursor:pointer; font-size:24px;">⚙️</button>
-            <button onclick="togglePopup(event, 'popup-translate')" style="background:none; border:none; cursor:pointer; font-size:24px;">🌐</button>
+            <button class="head-btn" onclick="togglePopup(event, 'popup-config')">⚙️</button>
+            <button class="head-btn" onclick="togglePopup(event, 'popup-translate')">🌐</button>
         </div>
     </header>
 
-    <div id="popup-config" style="position:fixed; top:80px; right:340px; z-index:2000;"></div>
-    <div id="popup-translate" style="position:fixed; top:80px; right:340px; z-index:2000;"></div>
+    <div id="popup-config" style="position:fixed; top:80px; right:340px; z-index:10000;"></div>
+    <div id="popup-translate" style="position:fixed; top:80px; right:340px; z-index:10000;"></div>
 
     <main id="chat-box"></main>
 
-    <aside>
-        <div class="sidebar-header">Registro de Errores</div>
-        <div id="log-content"></div>
+    <aside class="migo-side-area">
+        <div style="padding:20px; border-bottom:2px solid #f39c12; font-weight:bold;">Registro de Errores</div>
+        <div id="log-content" style="padding:15px; font-size:12px; color:#64748b; overflow-y:auto; flex:1;"></div>
     </aside>
 
-    <footer>
-        <div style="width:100%; max-width:900px; margin:0 auto; display:flex; gap:12px;">
-            <input type="text" id="user-input" placeholder="Escribe un mensaje..." style="flex:1; padding:15px 25px; border-radius:30px; border:1px solid #e2e8f0; outline:none;" onkeypress="if(event.key === 'Enter') sendMessage()">
-            <button onclick="sendMessage()" style="background:#f39c12; color:white; border:none; padding:0 30px; border-radius:30px; cursor:pointer; font-weight:bold;">Enviar</button>
+    <footer class="migo-foot-area">
+        <div class="migo-input-bar">
+            <input type="text" id="user-input" placeholder="Escribe a Migo..." onkeypress="if(event.key === 'Enter') sendMessage()">
+            <button onclick="sendMessage()">Enviar</button>
         </div>
     </footer>
 </div>
