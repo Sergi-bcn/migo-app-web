@@ -1,0 +1,54 @@
+:root {
+    --bg-verde: #e1eee3;
+    --naranja: #f39c12;
+    --blanco: #ffffff;
+    --verde: #4caf50;
+    --gris-label: #a0a0a0;
+}
+
+body, html {
+    margin: 0; padding: 0;
+    height: 100vh; width: 100vw;
+    overflow: hidden; /* Evita que la web entera haga scroll */
+    font-family: 'Quicksand', sans-serif;
+    background-color: var(--bg-verde);
+    display: flex;
+}
+
+.side-nav-orange {
+    width: 75px; background: var(--naranja); height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    align-items: center; padding-bottom: 30px; flex-shrink: 0;
+}
+
+.main-app { 
+    display: flex; flex: 1; padding: 15px 25px 25px 25px; 
+    gap: 20px; box-sizing: border-box; height: 100vh; 
+}
+
+.section-card { 
+    background: var(--blanco); border-radius: 40px; 
+    display: flex; flex-direction: column; overflow: hidden; 
+}
+
+.chat-main { flex: 1; display: flex; flex-direction: column; }
+
+/* CHAT BOX CON SCROLL INDEPENDIENTE */
+.chat-box { 
+    flex: 1; 
+    padding: 20px 40px; 
+    overflow-y: auto; /* Activa el scroll aquí */
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+}
+
+.message { padding: 15px 20px; border-radius: 22px; max-width: 75%; }
+.migo { background: #fff9c4; align-self: flex-start; }
+.user { background: #f2f2f2; align-self: flex-end; }
+
+.input-area { padding: 15px 40px 30px; flex-shrink: 0; }
+.input-box { background: #f8f9fa; border-radius: 40px; padding: 12px 25px; display: flex; align-items: center; }
+textarea { flex: 1; border: none; background: transparent; outline: none; resize: none; height: 25px; }
+
+.popup-migo { display: none; position: absolute; background: white; border-radius: 30px; padding: 20px; top: 90px; right: 40px; width: 280px; z-index: 100; }

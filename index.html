@@ -3,130 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo AI - Estable</title>
-    <style>
-        /* RESET TOTAL PARA EVITAR CONFLICTOS */
-        * { box-sizing: border-box !important; margin: 0; padding: 0; }
-        
-        body, html { 
-            height: 100vh !important; 
-            width: 100vw !important; 
-            overflow: hidden !important; 
-            font-family: 'Segoe UI', system-ui, sans-serif !important;
-            background-color: #f8fafc !important;
-        }
-
-        /* NOMBRES DE CLASES NUEVOS PARA EVITAR CACHÉ */
-        .migo-master-container {
-            display: grid !important;
-            grid-template-areas: 
-                "migo-head migo-head"
-                "migo-chat migo-side"
-                "migo-foot migo-side" !important;
-            grid-template-rows: 70px 1fr 100px !important;
-            grid-template-columns: 1fr 320px !important;
-            height: 100vh !important;
-            width: 100vw !important;
-        }
-
-        .migo-head-area {
-            grid-area: migo-head !important;
-            background: white !important;
-            border-bottom: 4px solid #f39c12 !important;
-            display: flex !important;
-            justify-content: space-between !important;
-            align-items: center !important;
-            padding: 0 30px !important;
-            z-index: 9999 !important;
-        }
-
-        /* ÁREA DE CHAT CON SCROLL INDEPENDIENTE */
-        #chat-box {
-            grid-area: migo-chat !important;
-            overflow-y: auto !important; 
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 15px !important;
-            padding: 25px !important;
-            background-color: #f8fafc !important;
-            /* El 1fr del grid maneja la altura automáticamente */
-        }
-
-        .migo-side-area {
-            grid-area: migo-side !important;
-            background: white !important;
-            border-left: 1px solid #e2e8f0 !important;
-            display: flex !important;
-            flex-direction: column !important;
-        }
-
-        .migo-foot-area {
-            grid-area: migo-foot !important;
-            background: white !important;
-            border-top: 1px solid #e2e8f0 !important;
-            display: flex !important;
-            align-items: center !important;
-            padding: 0 25px !important;
-        }
-
-        /* Estilo de burbujas restaurado */
-        .bubble {
-            max-width: 80% !important;
-            padding: 12px 18px !important;
-            border-radius: 18px 18px 18px 5px !important;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
-            font-size: 16px !important;
-            line-height: 1.5 !important;
-            margin-bottom: 5px !important;
-        }
-
-        /* Botones del header */
-        .head-btn {
-            background: none; border: none; cursor: pointer; font-size: 24px;
-        }
-
-        .migo-input-bar {
-            width: 100%; max-width: 900px; margin: 0 auto; display: flex; gap: 12px;
-        }
-
-        .migo-input-bar input {
-            flex: 1; padding: 15px 25px; border-radius: 30px; border: 1px solid #e2e8f0; outline: none;
-        }
-
-        .migo-input-bar button {
-            background: #f39c12; color: white; border: none; padding: 0 30px; border-radius: 30px; cursor: pointer; font-weight: bold;
-        }
-    </style>
+    <title>Migo AI - English Coach</title>
+    <link rel="stylesheet" href="CSS/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="migo-master-container">
-    <header class="migo-head-area">
-        <div style="font-weight:bold; font-size:26px;">Migo<span style="color:#f39c12">.</span></div>
-        <div style="display:flex; gap:15px;">
-            <button class="head-btn" onclick="togglePopup(event, 'popup-config')">⚙️</button>
-            <button class="head-btn" onclick="togglePopup(event, 'popup-translate')">🌐</button>
+    <nav class="side-nav-orange">
+        <div class="nav-icons-group">
+            <div class="circle-btn-nav" id="menu-modes-btn" onclick="togglePopup('menu-modes')">⚙️</div>
+            <div class="circle-btn-nav" onclick="togglePopup('panel-translator')">🌐</div>
+            <div class="profile-circle-nav" onclick="togglePopup('user-card')">S</div>
         </div>
-    </header>
+    </nav>
 
-    <div id="popup-config" style="position:fixed; top:80px; right:340px; z-index:10000;"></div>
-    <div id="popup-translate" style="position:fixed; top:80px; right:340px; z-index:10000;"></div>
+    <main class="main-app">
+        <section class="section-card corrections-panel">
+            <header class="header-record-box">
+                <div class="record-dot"></div>
+                <span class="record-title">CORRECTION LOG</span>
+            </header>
+            <div id="correction-log" style="padding: 25px; overflow-y: auto; flex: 1;"></div>
+        </section>
 
-    <main id="chat-box"></main>
+        <section class="section-card chat-main">
+            <header class="chat-header">
+                <div class="migo-logo-container">
+                    <h1 class="migo-title">Migo<span class="title-dot">.</span></h1>
+                    <span class="migo-subtitle">Your English Coach</span>
+                </div>
+            </header>
 
-    <aside class="migo-side-area">
-        <div style="padding:20px; border-bottom:2px solid #f39c12; font-weight:bold;">Registro de Errores</div>
-        <div id="log-content" style="padding:15px; font-size:12px; color:#64748b; overflow-y:auto; flex:1;"></div>
-    </aside>
+            <div id="chat-box" class="chat-box">
+                <div class="message migo">
+                    <span class="msg-content">Hello! I'm Migo. Ready to practice?</span>
+                </div>
+            </div>
 
-    <footer class="migo-foot-area">
-        <div class="migo-input-bar">
-            <input type="text" id="user-input" placeholder="Escribe a Migo..." onkeypress="if(event.key === 'Enter') sendMessage()">
-            <button onclick="sendMessage()">Enviar</button>
+            <footer class="input-area">
+                <div class="input-box">
+                    <textarea id="user-input" placeholder="Type here..." onkeypress="handleChatEnter(event)"></textarea>
+                    <button class="go-btn-tool-clean" onclick="sendMessage()" style="font-size: 30px; margin-left: 10px;">➔</button>
+                </div>
+            </footer>
+        </section>
+    </main>
+
+    <div id="menu-modes" class="popup-migo">
+        <span class="close-x" onclick="togglePopup('menu-modes')">×</span>
+        <div class="opt-migo active">Relaxed</div>
+        <div class="opt-migo">Strict</div>
+    </div>
+
+    <div id="panel-translator" class="popup-migo translator-wide">
+        <span class="close-x" onclick="togglePopup('panel-translator')">×</span>
+        <div class="trans-unit">
+            <textarea id="in-es" placeholder="Escribe en español..." onkeypress="handleTransEnter(event, 'es', 'en')"></textarea>
+            <div id="out-en" class="res-text"></div>
+            <button onclick="translateNow('es', 'en')">Translate</button>
         </div>
-    </footer>
-</div>
+    </div>
 
-<script src="js/chat-logic.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
