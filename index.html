@@ -9,10 +9,11 @@
         :root { --migo-orange: #ff9800; --migo-green: #4caf50; --bg-color: #f0f2f5; }
         body { margin: 0; padding: 0; background-color: var(--bg-color); font-family: 'Quicksand', sans-serif; display: flex; height: 100vh; overflow: hidden; }
         
-        /* SIDEBAR */
-        .side-nav { width: 80px; background-color: var(--migo-orange); height: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 25px; gap: 20px; flex-shrink: 0; z-index: 100; }
-        .nav-icon, .profile-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .profile-circle { background: white; color: var(--migo-orange); font-weight: 800; font-size: 1.2rem; }
+        /* SIDEBAR CON ICONOS ABAJO */
+        .side-nav { width: 80px; background-color: var(--migo-orange); height: 100%; display: flex; flex-direction: column; align-items: center; padding-bottom: 25px; gap: 20px; flex-shrink: 0; z-index: 100; justify-content: flex-end; }
+        .nav-icon, .profile-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; }
+        .nav-icon:hover, .profile-circle:hover { transform: scale(1.1); }
+        .profile-circle { background: white; color: var(--migo-orange); font-weight: 800; font-size: 1.2rem; margin-top: 10px; }
 
         .main-app { display: flex; flex: 1; padding: 25px; gap: 25px; box-sizing: border-box; width: calc(100% - 80px); }
         .card { background: white; border-radius: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.04); display: flex; flex-direction: column; overflow: hidden; }
@@ -53,10 +54,10 @@
         }
         .close-pop { float: right; cursor: pointer; color: #ff5252; font-weight: bold; }
 
-        /* POSICIONES VENTANAS */
-        #pop-trans { top: 85px; right: 30px; width: 380px; }
-        #pop-chat-conf { top: 85px; right: 430px; width: 300px; }
-        #pop-profile { top: 85px; left: 100px; width: 260px; }
+        /* NUEVAS POSICIONES PARA EVITAR SOLAPES */
+        #pop-trans { top: 20px; right: 30px; width: 380px; }
+        #pop-chat-conf { bottom: 100px; right: 30px; width: 300px; } /* Encima del input de chat, a la derecha */
+        #pop-profile { bottom: 25px; left: 100px; width: 260px; } /* Vinculado al círculo de abajo */
 
         /* TRADUCTOR */
         .translator-container { display: flex; flex-direction: column; gap: 15px; margin-top: 10px; }
@@ -78,7 +79,7 @@
 <body>
 
 <nav class="side-nav">
-    <div class="nav-icon" onclick="togglePopup('pop-config')">⚙️</div>
+    <div class="nav-icon" onclick="togglePopup('pop-chat-conf')">⚙️</div>
     <div class="profile-circle" onclick="togglePopup('pop-profile')">S</div>
 </nav>
 
@@ -92,13 +93,12 @@
         <header class="chat-header">
             <h1 style="margin:0; font-weight:800; font-size: 28px;">Migo<span style="color:var(--migo-orange)">.</span></h1>
             <div style="display:flex; gap:18px; font-size:24px;">
-                <div style="cursor:pointer" onclick="togglePopup('pop-chat-conf')">💬</div>
                 <div style="cursor:pointer" onclick="togglePopup('pop-trans')">🌐</div>
             </div>
         </header>
 
         <div class="chat-box" id="chat-box">
-            <div class="msg migo">¡Hola Sergi! He alineado todo a la izquierda y añadido animaciones suaves.</div>
+            <div class="msg migo">¡Hola Sergi! He organizado las ventanas para que no se tapen y he movido los iconos al pie de la barra.</div>
         </div>
 
         <div class="input-area">
@@ -146,7 +146,7 @@
 
         <div class="popup-migo" id="pop-profile">
             <div style="display:flex; align-items:center; gap:12px; margin-bottom:15px;">
-                <div class="profile-circle" style="background:#fff3e0; width:50px; height:50px;">S</div>
+                <div class="profile-circle" style="background:#fff3e0; width:50px; height:50px; margin:0;">S</div>
                 <div><span style="font-size:0.6rem; color:#bbb;">USUARIO</span><h4 style="margin:0;font-size:0.9rem;">Sergi Pérez</h4></div>
             </div>
             <div style="background:#fcfcfc; border-radius:15px; padding:12px; border:1px solid #f0f0f0; font-size:0.8rem;">
