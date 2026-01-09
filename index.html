@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Migo Web</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="CSS/style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
@@ -24,7 +24,7 @@
             <span class="record-dot"></span>
             <span class="record-title">CORRECTIONS / CORRECCIONES</span>
         </div>
-        <div id="correction-log" class="log-container" style="padding: 20px;"></div>
+        <div id="correction-log" class="log-container" style="padding: 20px; overflow-y: auto;"></div>
         
         <div class="mini-profile-card" id="panel-profile-config" style="display:none;">
             <span class="close-x" onclick="togglePopup('panel-profile-config')">✕</span>
@@ -53,27 +53,27 @@
 
         <div class="chat-box" id="chat-box">
             <div class="message migo">
-                <span class="msg-content">Hello Sergi! I'm ready.</span>
+                <span class="msg-content">Hello Sergi! I'm ready. / ¡Hola Sergi! Estoy listo.</span>
             </div>
         </div>
 
         <div class="input-area">
             <div class="input-box">
-                <textarea id="user-input" placeholder="Type..." onkeydown="handleChatEnter(event)"></textarea>
+                <textarea id="user-input" placeholder="Type in English..." onkeydown="handleChatEnter(event)"></textarea>
                 <button class="send-btn-green" onclick="sendMessage()">➜</button>
             </div>
         </div>
 
         <div class="popup-migo" id="menu-modes" style="display:none;">
             <span class="close-x" onclick="togglePopup('menu-modes')">✕</span>
-            <div class="opt-migo active">🔓 Relaxed</div>
-            <div class="opt-migo">🔒 Strict</div>
+            <div class="opt-migo active">🔓 Relaxed / Relajado</div>
+            <div class="opt-migo">🔒 Strict / Estricto</div>
         </div>
 
         <div class="popup-migo translator-wide" id="panel-translator" style="display:none;">
             <span class="close-x" onclick="togglePopup('panel-translator')">✕</span>
-            <textarea id="in-es" placeholder="Escribe en español..." onkeydown="handleTransEnter(event, 'es', 'en')"></textarea>
-            <div id="out-en" class="res-text" style="background:#f9f9f9; padding:10px; border-radius:10px; margin:10px 0;"></div>
+            <textarea id="in-es" placeholder="Escribe en español..." onkeydown="handleTransEnter(event, 'es', 'en')" style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ddd;"></textarea>
+            <div id="out-en" style="background:#f9f9f9; padding:10px; margin:10px 0; border-radius:10px; min-height:40px;"></div>
             <button onclick="translateNow('es','en')" style="width:100%; padding:10px; background:#4caf50; color:white; border:none; border-radius:10px; cursor:pointer;">Translate</button>
         </div>
     </div>
