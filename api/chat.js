@@ -9,10 +9,9 @@ export default async function handler(req, res) {
         return res.status(500).json({ reply: "Error: Falta la API Key en Vercel." });
     }
 
-    // Construimos las instrucciones dinámicamente según lo elegido en los menús
     const systemPrompt = `You are Migo, a friendly English tutor. 
     Current user preference: Rigor Level is ${rigor} and Chat Style is ${style}.
-    Respond in English. If the user makes a grammar mistake, you MUST add a section at the end starting with 'CORRECTION:' followed by the improvement.`;
+    Respond in English. If the user makes a grammar mistake, you MUST add a section at the very end starting with 'CORRECTION:' followed by the improvement.`;
 
     try {
         const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {

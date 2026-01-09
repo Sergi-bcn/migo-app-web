@@ -37,13 +37,16 @@
         .popup-migo { display: none; position: absolute; background: white; border-radius: 25px; padding: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); z-index: 2000; }
         .close-pop { float: right; cursor: pointer; color: #ccc; font-weight: bold; }
         
-        /* Estilos Menú Selección */
-        .conf-btn { width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 12px; border: 1px solid #eee; background: white; text-align: left; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 10px; font-weight: 500; color: #555; }
+        /* ESTILOS TRADUCTOR CALCADOS DE CAPTURA */
+        .trans-box { background: #f9fbf9; border: 1px solid #eef2ee; border-radius: 18px; padding: 15px; margin-bottom: 15px; position: relative; }
+        .trans-label { color: var(--migo-orange); font-weight: 800; font-size: 0.75rem; display: block; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .trans-area { width: 90%; border: none; background: transparent; outline: none; font-family: inherit; font-size: 0.9rem; resize: none; height: 45px; color: #444; }
+        .trans-arrow { position: absolute; bottom: 12px; right: 15px; color: var(--migo-green); font-size: 22px; font-weight: bold; cursor: pointer; }
+
+        /* BOTONES SELECCIÓN */
+        .conf-btn { width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 12px; border: 1px solid #eee; background: white; text-align: left; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 10px; font-weight: 500; }
         .conf-btn.active { background: var(--migo-green); color: white; border-color: var(--migo-green); }
         .section-title { font-size: 0.7rem; font-weight: 800; color: #bbb; margin: 15px 0 8px 5px; text-transform: uppercase; }
-
-        .trans-box { background: #f9fbf9; border: 1px solid #eef2ee; border-radius: 15px; padding: 15px; margin-bottom: 15px; }
-        .trans-label { color: var(--migo-orange); font-weight: 800; font-size: 0.7rem; display: block; margin-bottom: 5px; }
     </style>
 </head>
 <body>
@@ -56,7 +59,7 @@
 <main class="main-app">
     <div class="card panel-left">
         <div class="header-box"><span class="dot"></span> CORRECTIONS</div>
-        <div id="correction-log" style="padding: 25px; color: #666;">Esperando tus frases...</div>
+        <div id="correction-log" style="padding: 25px; color: #666;">Waiting for phrases...</div>
     </div>
 
     <div class="card panel-right">
@@ -69,7 +72,7 @@
         </header>
 
         <div class="chat-box" id="chat-box">
-            <div class="msg migo">¡Hola Sergi! He configurado los menús operativos. Cambia el estilo y verás cómo se actualiza tu perfil.</div>
+            <div class="msg migo">¡Hola Sergi! He calidado el diseño del traductor. Pruébalo.</div>
         </div>
 
         <div class="input-area">
@@ -79,20 +82,28 @@
             </div>
         </div>
 
-        <div class="popup-migo" id="pop-trans" style="top: 85px; right: 30px; width: 340px;">
+        <div class="popup-migo" id="pop-trans" style="top: 85px; right: 30px; width: 360px;">
             <span class="close-pop" onclick="togglePopup('pop-trans')">×</span>
-            <center><h4 style="color:#aaa; font-size: 0.8rem;">TRANSLATOR</h4></center>
-            <div class="trans-box"><span class="trans-label">ES > EN</span><textarea style="width:100%;border:none;background:transparent;resize:none;"></textarea></div>
-            <div class="trans-box"><span class="trans-label">EN > ES</span><textarea style="width:100%;border:none;background:transparent;resize:none;"></textarea></div>
+            <center><h4 style="color:#bbb; font-size: 0.75rem; margin-top: 0; margin-bottom: 20px; letter-spacing: 1px;">TRANSLATOR / TRADUCTOR</h4></center>
+            
+            <div class="trans-box">
+                <span class="trans-label">ESPAÑOL > INGLÉS</span>
+                <textarea class="trans-area" placeholder="Escribe aquí..."></textarea>
+                <div class="trans-arrow">➔</div>
+            </div>
+
+            <div class="trans-box">
+                <span class="trans-label">ENGLISH > SPANISH</span>
+                <textarea class="trans-area" placeholder="Type here..."></textarea>
+                <div class="trans-arrow">➔</div>
+            </div>
         </div>
 
         <div class="popup-migo" id="pop-chat-conf" style="top: 85px; right: 80px; width: 300px;">
             <span class="close-pop" onclick="togglePopup('pop-chat-conf')">×</span>
-            
             <div class="section-title">Nivel de Rigor</div>
             <button class="conf-btn rigor-opt active" onclick="setOption('rigor', '🔒 Estricto')">🔒 Estricto (Bloqueo)</button>
             <button class="conf-btn rigor-opt" onclick="setOption('rigor', '🔓 No tan estricto')">🔓 No tan estricto</button>
-
             <div class="section-title">Estilo de Chat</div>
             <button class="conf-btn style-opt active" onclick="setOption('style', 'Normal')">📝 Normal</button>
             <button class="conf-btn style-opt" onclick="setOption('style', 'Coloquial')">💪 Coloquial</button>
@@ -103,7 +114,7 @@
 
         <div class="popup-migo" id="pop-profile" style="top: 85px; left: 90px; width: 280px;">
             <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
-                <div class="profile-circle" style="background:#fff3e0; width:55px; height:55px; border:1px solid #ffe0b2;">S</div>
+                <div class="profile-circle" style="background:#fff3e0; width:55px; height:55px;">S</div>
                 <div><span style="font-size:0.6rem; color:#bbb;">USER</span><h4 style="margin:0;">Sergi Pérez</h4></div>
             </div>
             <div style="background:#fcfcfc; border-radius:15px; padding:15px; border:1px solid #f0f0f0;">
@@ -155,7 +166,7 @@
                 addMessage(data.reply, 'migo');
                 document.getElementById('correction-log').innerHTML = `<div style="background:#fffcf0; padding:15px; border-radius:15px; border-left:4px solid var(--migo-orange);">${data.correction}</div>`;
             }
-        } catch (e) { console.error("Error de conexión"); }
+        } catch (e) { console.error("Error"); }
     }
 
     function addMessage(text, type) {
