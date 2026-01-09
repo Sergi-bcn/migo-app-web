@@ -9,12 +9,13 @@
         :root { --migo-orange: #ff9800; --migo-green: #4caf50; --bg-color: #f0f2f5; }
         body { margin: 0; padding: 0; background-color: var(--bg-color); font-family: 'Quicksand', sans-serif; display: flex; height: 100vh; overflow: hidden; }
         
-        /* SIDEBAR */
-        .side-nav { width: 80px; background-color: var(--migo-orange); height: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 25px; gap: 20px; flex-shrink: 0; }
+        /* SIDEBAR NARANJA */
+        .side-nav { width: 80px; background-color: var(--migo-orange); height: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 25px; gap: 20px; flex-shrink: 0; z-index: 100; }
         .nav-icon, .profile-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
         .nav-icon { background: rgba(255, 255, 255, 0.2); }
-        .profile-circle { background: white; color: var(--migo-orange); font-weight: 800; }
+        .profile-circle { background: white; color: var(--migo-orange); font-weight: 800; font-size: 1.2rem; }
 
+        /* MAIN APP */
         .main-app { display: flex; flex: 1; padding: 25px; gap: 25px; box-sizing: border-box; width: calc(100% - 80px); }
         .card { background: white; border-radius: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.04); display: flex; flex-direction: column; overflow: hidden; }
         
@@ -26,22 +27,30 @@
         /* PANEL DERECHO */
         .panel-right { flex: 2; position: relative; display: flex; flex-direction: column; }
         .chat-header { padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; }
-        .header-tools { display: flex; gap: 18px; align-items: center; }
-        .tool-btn { cursor: pointer; font-size: 24px; transition: transform 0.2s; }
-
         .chat-box { flex: 1; padding: 25px; overflow-y: auto; background-color: #fafafa; margin: 0 25px; border-radius: 25px; display: flex; flex-direction: column; gap: 15px; }
         .msg { padding: 14px 20px; border-radius: 20px; max-width: 75%; font-weight: 500; font-size: 0.95rem; line-height: 1.5; }
         .migo { background: var(--migo-orange); color: white; align-self: flex-start; border-bottom-left-radius: 4px; }
         .user { background: #e9ecef; color: #333; align-self: flex-end; border-bottom-right-radius: 4px; }
 
+        /* INPUT */
         .input-area { padding: 25px; display: flex; gap: 15px; }
         .input-box { flex: 1; display: flex; background: white; border: 2px solid #f0f0f0; border-radius: 20px; padding: 5px 20px; align-items: center; }
         #user-input { flex: 1; border: none; outline: none; padding: 12px 0; resize: none; font-family: inherit; font-size: 15px; height: 24px; }
         .btn-send { background: var(--migo-green); color: white; border: none; width: 50px; height: 50px; border-radius: 15px; cursor: pointer; font-size: 22px; display: flex; align-items: center; justify-content: center; }
 
-        /* POPUPS */
-        .popup-migo { display: none; position: absolute; top: 85px; right: 30px; width: 320px; background: white; border-radius: 25px; padding: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); z-index: 2000; }
-        .close-pop { position: absolute; top: 20px; right: 20px; cursor: pointer; color: #ccc; font-weight: bold; }
+        /* POPUPS BASADOS EN TUS CAPTURAS */
+        .popup-migo { display: none; position: absolute; background: white; border-radius: 25px; padding: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); z-index: 2000; }
+        .close-pop { float: right; cursor: pointer; color: #ccc; font-weight: bold; font-size: 1.2rem; }
+        
+        /* Estilos Traductor */
+        .trans-box { background: #f9fbf9; border: 1px solid #eef2ee; border-radius: 15px; padding: 15px; margin-bottom: 15px; }
+        .trans-label { color: var(--migo-orange); font-weight: 800; font-size: 0.7rem; margin-bottom: 5px; display: block; }
+        .trans-area { width: 100%; border: none; background: transparent; outline: none; font-family: inherit; resize: none; height: 40px; }
+
+        /* Estilos Perfil y Ajustes */
+        .conf-btn { width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 12px; border: 1px solid #eee; background: white; text-align: left; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 10px; }
+        .conf-btn.active { background: var(--migo-green); color: white; border-color: var(--migo-green); }
+        .section-title { font-size: 0.7rem; font-weight: 800; color: #bbb; margin: 15px 0 8px 5px; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -54,20 +63,20 @@
 <main class="main-app">
     <div class="card panel-left">
         <div class="header-box"><span class="dot"></span> CORRECTIONS</div>
-        <div id="correction-log" style="padding: 25px; color: #666;">Waiting for mistakes to help you...</div>
+        <div id="correction-log" style="padding: 25px; color: #666;">Esperando tus frases para ayudarte...</div>
     </div>
 
     <div class="card panel-right">
         <header class="chat-header">
             <h1 style="margin:0; font-weight:800; font-size: 28px;">Migo<span style="color:var(--migo-orange)">.</span></h1>
-            <div class="header-tools">
-                <div class="tool-btn" onclick="togglePopup('pop-chat-conf')">💬</div>
-                <div class="tool-btn" onclick="togglePopup('pop-trans')">🌐</div>
+            <div style="display:flex; gap:18px; font-size:24px;">
+                <div style="cursor:pointer" onclick="togglePopup('pop-chat-conf')">💬</div>
+                <div style="cursor:pointer" onclick="togglePopup('pop-trans')">🌐</div>
             </div>
         </header>
 
         <div class="chat-box" id="chat-box">
-            <div class="msg migo">¡Hola Sergi! Todo listo. ¿Practicamos inglés con Groq?</div>
+            <div class="msg migo">¡Hola Sergi! Todo sigue igual pero he añadido las ventanas de tus capturas. ¿Probamos?</div>
         </div>
 
         <div class="input-area">
@@ -77,10 +86,47 @@
             </div>
         </div>
 
-        <div class="popup-migo" id="pop-trans"><span class="close-pop" onclick="togglePopup('pop-trans')">✕</span><h3>Translator</h3><p>Listo para traducir frases.</p></div>
-        <div class="popup-migo" id="pop-chat-conf"><span class="close-pop" onclick="togglePopup('pop-chat-conf')">✕</span><h3>Settings</h3><p>Modo: Conversación Natural</p></div>
-        <div class="popup-migo" id="pop-config"><span class="close-pop" onclick="togglePopup('pop-config')">✕</span><h3>App Config</h3></div>
-        <div class="popup-migo" id="pop-profile"><span class="close-pop" onclick="togglePopup('pop-profile')">✕</span><h3>Profile</h3></div>
+        <div class="popup-migo" id="pop-trans" style="top: 85px; right: 30px; width: 340px;">
+            <span class="close-pop" onclick="togglePopup('pop-trans')">×</span>
+            <center><h4 style="color:#aaa; font-size: 0.8rem; margin-bottom: 20px;">TRANSLATOR / TRADUCTOR</h4></center>
+            <div class="trans-box">
+                <span class="trans-label">ESPAÑOL > INGLÉS</span>
+                <textarea class="trans-area" placeholder="Escribe aquí..."></textarea>
+                <div style="text-align:right; color:var(--migo-green);">➔</div>
+            </div>
+            <div class="trans-box">
+                <span class="trans-label">ENGLISH > SPANISH</span>
+                <textarea class="trans-area" placeholder="Type here..."></textarea>
+                <div style="text-align:right; color:var(--migo-green);">➔</div>
+            </div>
+        </div>
+
+        <div class="popup-migo" id="pop-chat-conf" style="top: 85px; right: 80px; width: 280px;">
+            <span class="close-pop" onclick="togglePopup('pop-chat-conf')">×</span>
+            <div class="section-title">Nivel de Rigor</div>
+            <button class="conf-btn active">🔒 Estricto (Bloqueo)</button>
+            <button class="conf-btn">🔓 No tan estricto</button>
+            <div class="section-title">Estilo de Chat</div>
+            <button class="conf-btn active">📝 Normal</button>
+            <button class="conf-btn">💪 Coloquial</button>
+        </div>
+
+        <div class="popup-migo" id="pop-profile" style="top: 85px; left: 90px; width: 260px;">
+            <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
+                <div class="profile-circle" style="background:#fff3e0; width:50px; height:50px;">S</div>
+                <div>
+                    <span style="font-size:0.6rem; color:#bbb;">USER</span>
+                    <h4 style="margin:0; font-size:1rem;">Sergi Pérez</h4>
+                </div>
+            </div>
+            <button class="conf-btn" style="color:#ff5252; background:#fff5f5; border:none; justify-content:center; font-weight:800;" onclick="location.reload()">Reiniciar App</button>
+        </div>
+        
+        <div class="popup-migo" id="pop-config" style="top: 85px; left: 90px; width: 200px;">
+            <span class="close-pop" onclick="togglePopup('pop-config')">×</span>
+            <div class="section-title">Configuración</div>
+            <p style="font-size:0.8rem; color:#666;">Voz: Activada<br>Modelo: Llama 3.3</p>
+        </div>
     </div>
 </main>
 
@@ -99,18 +145,14 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: text })
             });
-
             const data = await response.json();
-            
             if (response.ok) {
                 addMessage(data.reply, 'migo');
                 document.getElementById('correction-log').innerHTML = `<div style="background:#fffcf0; padding:15px; border-radius:15px; border-left:4px solid var(--migo-orange);">${data.correction}</div>`;
             } else {
-                addMessage("Migo Error: " + (data.reply || "Check API Key"), 'migo');
+                addMessage("Error: " + data.reply, 'migo');
             }
-        } catch (e) {
-            addMessage("Error de conexión. Revisa el Redeploy en Vercel.", 'migo');
-        }
+        } catch (e) { addMessage("Error de conexión.", 'migo'); }
     }
 
     function addMessage(text, type) {
@@ -126,7 +168,7 @@
     
     function togglePopup(id) {
         const el = document.getElementById(id);
-        const isOpen = el.style.display === 'block';
+        const isOpen = (el.style.display === 'block');
         document.querySelectorAll('.popup-migo').forEach(p => p.style.display = 'none');
         el.style.display = isOpen ? 'none' : 'block';
     }
