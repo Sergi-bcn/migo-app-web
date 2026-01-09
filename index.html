@@ -29,35 +29,46 @@
         <div id="correction-log" class="log-container"></div>
         
         <div class="mini-profile-card" id="panel-profile-config" style="display:none;">
+            <span class="close-x" onclick="togglePopup('panel-profile-config')">✕</span>
             <div class="avatar-large">S</div>
-            <button onclick="location.reload()">Reset</button>
+            <div class="user-name">Sergi Pérez</div>
+            <button class="btn-reset-ui" onclick="location.reload()">Reset</button>
         </div>
     </div>
 
     <div class="section-card chat-main">
         <header class="chat-header">
             <h1 class="migo-title">Migo.</h1>
-            <button onclick="togglePopup('panel-translator')">Translate</button>
+            <div class="header-controls">
+                <button class="icon-only-btn-plain" onclick="togglePopup('panel-translator')">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="#4caf50"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04z"/></svg>
+                </button>
+            </div>
         </header>
 
         <div class="chat-box" id="chat-box"></div>
 
         <div class="input-area">
-            <textarea id="user-input" placeholder="Escribe..." onkeydown="handleChatEnter(event)"></textarea>
-            <button onclick="sendMessage()">➜</button>
+            <textarea id="user-input" placeholder="Type in English..." onkeydown="handleChatEnter(event)"></textarea>
+            <button class="send-btn-green" onclick="sendMessage()">➜</button>
         </div>
 
-        <div class="popup-migo" id="panel-translator" style="display:none;">
-            <textarea id="in-es"></textarea>
-            <div id="out-en"></div>
+        <div class="popup-migo translator-wide" id="panel-translator" style="display:none;">
+            <span class="close-x" onclick="togglePopup('panel-translator')">✕</span>
+            <textarea id="in-es" placeholder="Escribe en español..."></textarea>
+            <div id="out-en" class="res-text"></div>
             <button onclick="translateNow('es','en')">Translate</button>
+        </div>
+
+        <div class="popup-migo" id="menu-modes" style="display:none;">
+            <span class="close-x" onclick="togglePopup('menu-modes')">✕</span>
+            <div class="opt-migo active">🔓 Relaxed</div>
+            <div class="opt-migo">🔒 Strict</div>
         </div>
     </div>
 </main>
 
 <script src="js/ui-manager.js"></script>
-<script src="js/translator.js"></script>
 <script src="js/chat-logic.js"></script>
-<script src="js/main.js"></script>
 </body>
 </html>
