@@ -14,6 +14,7 @@
         .nav-icon, .profile-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .profile-circle { background: white; color: var(--migo-orange); font-weight: 800; font-size: 1.2rem; }
 
+        /* ESTRUCTURA PRINCIPAL */
         .main-app { display: flex; flex: 1; padding: 25px; gap: 25px; box-sizing: border-box; width: calc(100% - 80px); }
         .card { background: white; border-radius: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.04); display: flex; flex-direction: column; overflow: hidden; }
         
@@ -24,6 +25,7 @@
         .panel-right { flex: 2; position: relative; display: flex; flex-direction: column; }
         .chat-header { padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; }
         .chat-box { flex: 1; padding: 25px; overflow-y: auto; background-color: #fafafa; margin: 0 25px; border-radius: 25px; display: flex; flex-direction: column; gap: 15px; }
+        
         .msg { padding: 14px 20px; border-radius: 20px; max-width: 75%; font-weight: 500; font-size: 0.95rem; }
         .migo { background: var(--migo-orange); color: white; align-self: flex-start; border-bottom-left-radius: 4px; }
         .user { background: #e9ecef; color: #333; align-self: flex-end; border-bottom-right-radius: 4px; }
@@ -33,17 +35,26 @@
         #user-input { flex: 1; border: none; outline: none; padding: 12px 0; resize: none; font-family: inherit; font-size: 15px; height: 24px; }
         .btn-send { background: var(--migo-green); color: white; border: none; width: 50px; height: 50px; border-radius: 15px; cursor: pointer; font-size: 22px; }
 
-        /* POPUPS */
-        .popup-migo { display: none; position: absolute; background: white; border-radius: 25px; padding: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); z-index: 2000; }
-        .close-pop { float: right; cursor: pointer; color: #ccc; font-weight: bold; }
-        
-        /* ESTILOS TRADUCTOR CALCADOS DE CAPTURA */
-        .trans-box { background: #f9fbf9; border: 1px solid #eef2ee; border-radius: 18px; padding: 15px; margin-bottom: 15px; position: relative; }
-        .trans-label { color: var(--migo-orange); font-weight: 800; font-size: 0.75rem; display: block; margin-bottom: 8px; letter-spacing: 0.5px; }
-        .trans-area { width: 90%; border: none; background: transparent; outline: none; font-family: inherit; font-size: 0.9rem; resize: none; height: 45px; color: #444; }
-        .trans-arrow { position: absolute; bottom: 12px; right: 15px; color: var(--migo-green); font-size: 22px; font-weight: bold; cursor: pointer; }
+        /* POPUPS GENERALES */
+        .popup-migo { display: none; position: absolute; background: white; border-radius: 30px; padding: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); z-index: 2000; }
+        .close-pop { float: right; cursor: pointer; color: #ff5252; font-weight: bold; font-size: 1.2rem; }
 
-        /* BOTONES SELECCIÓN */
+        /* DISEÑO TRADUCTOR (IDÉNTICO A CAPTURA) */
+        .translator-container { display: flex; flex-direction: column; gap: 20px; margin-top: 10px; }
+        .trans-section { background: #f8faf8; border: 1.5px solid #edf2ed; border-radius: 25px; padding: 20px; position: relative; }
+        .trans-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .trans-title { color: var(--migo-orange); font-weight: 800; font-size: 0.75rem; letter-spacing: 0.5px; }
+        .trans-refresh { color: #ccc; cursor: pointer; font-size: 1rem; }
+        
+        .trans-input-box { background: #ffffff; border-radius: 15px; padding: 12px; margin-bottom: 10px; border: 1px solid #f0f4f0; }
+        .trans-area { width: 100%; border: none; outline: none; font-family: inherit; font-size: 0.95rem; resize: none; height: 60px; color: #444; }
+        
+        .trans-result-box { background: #f2f7f2; border-radius: 15px; padding: 12px; position: relative; min-height: 50px; border: 1px solid #e8eee8; }
+        .result-label { color: var(--migo-green); font-size: 0.65rem; font-weight: 800; margin-bottom: 5px; display: block; }
+        .copy-icon { position: absolute; bottom: 12px; right: 12px; color: #888; cursor: pointer; font-size: 0.9rem; }
+        .green-arrow { text-align: right; margin-top: 10px; color: var(--migo-green); font-size: 1.4rem; font-weight: bold; cursor: pointer; }
+
+        /* MENÚS CONFIGURACIÓN */
         .conf-btn { width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 12px; border: 1px solid #eee; background: white; text-align: left; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 10px; font-weight: 500; }
         .conf-btn.active { background: var(--migo-green); color: white; border-color: var(--migo-green); }
         .section-title { font-size: 0.7rem; font-weight: 800; color: #bbb; margin: 15px 0 8px 5px; text-transform: uppercase; }
@@ -59,7 +70,7 @@
 <main class="main-app">
     <div class="card panel-left">
         <div class="header-box"><span class="dot"></span> CORRECTIONS</div>
-        <div id="correction-log" style="padding: 25px; color: #666;">Waiting for phrases...</div>
+        <div id="correction-log" style="padding: 25px; color: #666;">Esperando tus frases...</div>
     </div>
 
     <div class="card panel-right">
@@ -72,7 +83,7 @@
         </header>
 
         <div class="chat-box" id="chat-box">
-            <div class="msg migo">¡Hola Sergi! He calidado el diseño del traductor. Pruébalo.</div>
+            <div class="msg migo">¡Hola Sergi! He rediseñado el traductor para que sea idéntico a tu captura. ¿Qué te parece?</div>
         </div>
 
         <div class="input-area">
@@ -82,20 +93,42 @@
             </div>
         </div>
 
-        <div class="popup-migo" id="pop-trans" style="top: 85px; right: 30px; width: 360px;">
+        <div class="popup-migo" id="pop-trans" style="top: 85px; right: 30px; width: 420px;">
             <span class="close-pop" onclick="togglePopup('pop-trans')">×</span>
-            <center><h4 style="color:#bbb; font-size: 0.75rem; margin-top: 0; margin-bottom: 20px; letter-spacing: 1px;">TRANSLATOR / TRADUCTOR</h4></center>
+            <center><h4 style="color:#aaa; font-size: 0.8rem; margin-top: 0; letter-spacing: 1px; font-weight: 700;">TRANSLATOR / TRADUCTOR</h4></center>
             
-            <div class="trans-box">
-                <span class="trans-label">ESPAÑOL > INGLÉS</span>
-                <textarea class="trans-area" placeholder="Escribe aquí..."></textarea>
-                <div class="trans-arrow">➔</div>
-            </div>
+            <div class="translator-container">
+                <div class="trans-section">
+                    <div class="trans-header">
+                        <span class="trans-title">ESPAÑOL > INGLÉS</span>
+                        <span class="trans-refresh">↻</span>
+                    </div>
+                    <div class="trans-input-box">
+                        <textarea class="trans-area" placeholder="Escribe..."></textarea>
+                    </div>
+                    <div class="trans-result-box">
+                        <span class="result-label">RESULT</span>
+                        <div style="color:#888; font-size: 0.9rem;">...</div>
+                        <span class="copy-icon">📋</span>
+                    </div>
+                    <div class="green-arrow">➔</div>
+                </div>
 
-            <div class="trans-box">
-                <span class="trans-label">ENGLISH > SPANISH</span>
-                <textarea class="trans-area" placeholder="Type here..."></textarea>
-                <div class="trans-arrow">➔</div>
+                <div class="trans-section">
+                    <div class="trans-header">
+                        <span class="trans-title">ENGLISH > SPANISH</span>
+                        <span class="trans-refresh">↻</span>
+                    </div>
+                    <div class="trans-input-box">
+                        <textarea class="trans-area" placeholder="Type..."></textarea>
+                    </div>
+                    <div class="trans-result-box">
+                        <span class="result-label">RESULTADO</span>
+                        <div style="color:#888; font-size: 0.9rem;">...</div>
+                        <span class="copy-icon">📋</span>
+                    </div>
+                    <div class="green-arrow">➔</div>
+                </div>
             </div>
         </div>
 
@@ -104,6 +137,7 @@
             <div class="section-title">Nivel de Rigor</div>
             <button class="conf-btn rigor-opt active" onclick="setOption('rigor', '🔒 Estricto')">🔒 Estricto (Bloqueo)</button>
             <button class="conf-btn rigor-opt" onclick="setOption('rigor', '🔓 No tan estricto')">🔓 No tan estricto</button>
+
             <div class="section-title">Estilo de Chat</div>
             <button class="conf-btn style-opt active" onclick="setOption('style', 'Normal')">📝 Normal</button>
             <button class="conf-btn style-opt" onclick="setOption('style', 'Coloquial')">💪 Coloquial</button>
@@ -115,13 +149,13 @@
         <div class="popup-migo" id="pop-profile" style="top: 85px; left: 90px; width: 280px;">
             <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
                 <div class="profile-circle" style="background:#fff3e0; width:55px; height:55px;">S</div>
-                <div><span style="font-size:0.6rem; color:#bbb;">USER</span><h4 style="margin:0;">Sergi Pérez</h4></div>
+                <div><span style="font-size:0.6rem; color:#bbb;">USER / USUARIO</span><h4 style="margin:0;">Sergi Pérez</h4></div>
             </div>
             <div style="background:#fcfcfc; border-radius:15px; padding:15px; border:1px solid #f0f0f0;">
-                <p style="margin:0 0 10px 0; font-size:0.8rem; color:#888;">Nivel Rigor: <br><b id="display-rigor" style="color:var(--migo-green)">🔒 Estricto</b></p>
-                <p style="margin:0; font-size:0.8rem; color:#888;">Estilo Chat: <br><b id="display-style" style="color:var(--migo-green)">Normal</b></p>
+                <p style="margin:0 0 10px 0; font-size:0.8rem; color:#888;">RIGOR LEVEL: <br><b id="display-rigor" style="color:var(--migo-green)">🔒 Estricto</b></p>
+                <p style="margin:0; font-size:0.8rem; color:#888;">CHAT STYLE: <br><b id="display-style" style="color:var(--migo-green)">Normal</b></p>
             </div>
-            <button class="conf-btn" style="margin-top:15px; color:#ff5252; background:#fff5f5; border:none; justify-content:center;" onclick="location.reload()">Reiniciar App</button>
+            <button class="conf-btn" style="margin-top:15px; color:#ff5252; background:#fff5f5; border:none; justify-content:center; font-weight:800;" onclick="location.reload()">Reset / Reiniciar</button>
         </div>
     </div>
 </main>
@@ -155,11 +189,7 @@
             const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    message: text,
-                    rigor: currentRigor,
-                    style: currentStyle 
-                })
+                body: JSON.stringify({ message: text, rigor: currentRigor, style: currentStyle })
             });
             const data = await response.json();
             if (response.ok) {

@@ -1,4 +1,3 @@
-// api/chat.js
 export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).json({ reply: "Only POST allowed" });
 
@@ -42,7 +41,6 @@ export default async function handler(req, res) {
         }
 
         return res.status(200).json({ reply, correction });
-
     } catch (error) {
         return res.status(500).json({ reply: "Error crítico de servidor." });
     }
