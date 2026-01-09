@@ -24,29 +24,48 @@
         .panel-right { flex: 2; position: relative; display: flex; flex-direction: column; }
         .chat-header { padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; }
         .chat-box { flex: 1; padding: 25px; overflow-y: auto; background-color: #fafafa; margin: 0 25px; border-radius: 25px; display: flex; flex-direction: column; gap: 15px; }
-        .msg { padding: 14px 20px; border-radius: 20px; max-width: 75%; font-weight: 500; font-size: 0.95rem; }
-        .migo { background: var(--migo-orange); color: white; align-self: flex-start; border-bottom-left-radius: 4px; }
-        .user { background: #e9ecef; color: #333; align-self: flex-end; border-bottom-right-radius: 4px; }
+        
+        /* BOCADILLOS AMBOS A LA IZQUIERDA */
+        .msg { padding: 14px 20px; border-radius: 20px; max-width: 75%; font-weight: 500; font-size: 0.95rem; align-self: flex-start; }
+        .migo { background: var(--migo-orange); color: white; border-bottom-left-radius: 4px; }
+        .user { background: #e9ecef; color: #333; border-bottom-left-radius: 4px; }
 
         .input-area { padding: 25px; display: flex; gap: 15px; }
         .input-box { flex: 1; display: flex; background: white; border: 2px solid #f0f0f0; border-radius: 20px; padding: 5px 20px; align-items: center; }
         #user-input { flex: 1; border: none; outline: none; padding: 12px 0; resize: none; font-family: inherit; font-size: 15px; height: 24px; }
         .btn-send { background: var(--migo-green); color: white; border: none; width: 50px; height: 50px; border-radius: 15px; cursor: pointer; font-size: 22px; }
 
-        /* POPUPS */
-        .popup-migo { display: none; position: absolute; background: white; border-radius: 30px; padding: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); z-index: 2000; }
+        /* POPUPS CON ANIMACIÓN */
+        @keyframes popupShow {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .popup-migo { 
+            display: none; 
+            position: absolute; 
+            background: white; 
+            border-radius: 30px; 
+            padding: 25px; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15); 
+            z-index: 2000;
+            animation: popupShow 0.3s ease-out;
+        }
         .close-pop { float: right; cursor: pointer; color: #ff5252; font-weight: bold; }
 
-        /* TRADUCTOR OPERATIVO GOOGLE */
+        /* POSICIONES VENTANAS */
+        #pop-trans { top: 85px; right: 30px; width: 380px; }
+        #pop-chat-conf { top: 85px; right: 430px; width: 300px; }
+        #pop-profile { top: 85px; left: 100px; width: 260px; }
+
+        /* TRADUCTOR */
         .translator-container { display: flex; flex-direction: column; gap: 15px; margin-top: 10px; }
         .trans-section { background: #f8faf8; border: 1.5px solid #edf2ed; border-radius: 25px; padding: 18px; }
         .trans-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .trans-title { color: var(--migo-orange); font-weight: 800; font-size: 0.7rem; text-transform: uppercase; }
-        
         .trans-input-box { background: #ffffff; border-radius: 15px; padding: 12px; border: 1px solid #f0f4f0; position: relative; margin-bottom: 10px; }
         .trans-area { width: 85%; border: none; outline: none; font-family: inherit; font-size: 0.9rem; resize: none; height: 45px; color: #444; background: transparent; }
         .green-arrow-btn { position: absolute; right: 12px; bottom: 12px; color: var(--migo-green); font-size: 1.4rem; cursor: pointer; font-weight: bold; background: none; border: none; }
-        
         .trans-result-box { background: #f2f7f2; border-radius: 15px; padding: 12px; min-height: 40px; border: 1px solid #e8eee8; font-size: 0.9rem; color: #444; }
         .result-label { color: var(--migo-green); font-size: 0.6rem; font-weight: 800; margin-bottom: 4px; display: block; }
 
@@ -79,7 +98,7 @@
         </header>
 
         <div class="chat-box" id="chat-box">
-            <div class="msg migo">¡Hola Sergi! Ya he conectado Google Translator y puesto la flecha en su sitio.</div>
+            <div class="msg migo">¡Hola Sergi! He alineado todo a la izquierda y añadido animaciones suaves.</div>
         </div>
 
         <div class="input-area">
@@ -89,10 +108,9 @@
             </div>
         </div>
 
-        <div class="popup-migo" id="pop-trans" style="top: 85px; right: 30px; width: 380px;">
+        <div class="popup-migo" id="pop-trans">
             <span class="close-pop" onclick="togglePopup('pop-trans')">×</span>
             <center><h4 style="color:#aaa; font-size: 0.75rem; margin-top: 0; letter-spacing: 1px;">GOOGLE TRANSLATOR</h4></center>
-            
             <div class="translator-container">
                 <div class="trans-section">
                     <div class="trans-header"><span class="trans-title">Español > Inglés</span><span style="color:#ccc;cursor:pointer" onclick="resetTrans('es')">↻</span></div>
@@ -102,7 +120,6 @@
                     </div>
                     <div class="trans-result-box"><span class="result-label">RESULT</span><div id="out-en">...</div></div>
                 </div>
-
                 <div class="trans-section">
                     <div class="trans-header"><span class="trans-title">English > Spanish</span><span style="color:#ccc;cursor:pointer" onclick="resetTrans('en')">↻</span></div>
                     <div class="trans-input-box">
@@ -114,7 +131,7 @@
             </div>
         </div>
 
-        <div class="popup-migo" id="pop-chat-conf" style="top: 85px; right: 80px; width: 300px;">
+        <div class="popup-migo" id="pop-chat-conf">
             <span class="close-pop" onclick="togglePopup('pop-chat-conf')">×</span>
             <div class="section-title">Nivel de Rigor</div>
             <button class="conf-btn rigor-opt active" onclick="setOption('rigor', '🔒 Estricto')">🔒 Estricto (Bloqueo)</button>
@@ -127,7 +144,7 @@
             <button class="conf-btn style-opt" onclick="setOption('style', 'Viajes')">✈️ Viajes</button>
         </div>
 
-        <div class="popup-migo" id="pop-profile" style="top: 85px; left: 90px; width: 260px;">
+        <div class="popup-migo" id="pop-profile">
             <div style="display:flex; align-items:center; gap:12px; margin-bottom:15px;">
                 <div class="profile-circle" style="background:#fff3e0; width:50px; height:50px;">S</div>
                 <div><span style="font-size:0.6rem; color:#bbb;">USUARIO</span><h4 style="margin:0;font-size:0.9rem;">Sergi Pérez</h4></div>
@@ -145,16 +162,13 @@
     let currentRigor = "🔒 Estricto";
     let currentStyle = "Normal";
 
-    // API GOOGLE TRANSLATOR
     async function googleTranslate(lang) {
         const source = lang === 'es' ? 'es' : 'en';
         const target = lang === 'es' ? 'en' : 'es';
         const text = document.getElementById(lang === 'es' ? 'in-es' : 'in-en').value;
         const outDiv = document.getElementById(lang === 'es' ? 'out-en' : 'out-es');
-
         if(!text) return;
         outDiv.innerText = "Traduciendo...";
-
         try {
             const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${source}&tl=${target}&dt=t&q=${encodeURI(text)}`;
             const res = await fetch(url);
@@ -168,7 +182,6 @@
         document.getElementById(lang === 'es' ? 'out-en' : 'out-es').innerText = "...";
     }
 
-    // CHAT & CONFIG
     async function talkToMigo() {
         const input = document.getElementById('user-input');
         const text = input.value.trim();
@@ -216,7 +229,6 @@
     function togglePopup(id) {
         const el = document.getElementById(id);
         const isVisible = el.style.display === 'block';
-        document.querySelectorAll('.popup-migo').forEach(p => p.style.display = 'none');
         el.style.display = isVisible ? 'none' : 'block';
     }
 </script>

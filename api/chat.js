@@ -33,7 +33,7 @@ export default async function handler(req, res) {
         const fullContent = data.choices[0].message.content;
         
         let reply = fullContent;
-        let correction = "¡Perfecto! Sin errores.";
+        let correction = "¡Perfecto! Sin errores detectados.";
 
         if (fullContent.includes('CORRECTION:')) {
             const parts = fullContent.split('CORRECTION:');
