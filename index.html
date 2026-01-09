@@ -14,7 +14,6 @@
         .nav-icon, .profile-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .profile-circle { background: white; color: var(--migo-orange); font-weight: 800; font-size: 1.2rem; }
 
-        /* ESTRUCTURA PRINCIPAL */
         .main-app { display: flex; flex: 1; padding: 25px; gap: 25px; box-sizing: border-box; width: calc(100% - 80px); }
         .card { background: white; border-radius: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.04); display: flex; flex-direction: column; overflow: hidden; }
         
@@ -25,7 +24,6 @@
         .panel-right { flex: 2; position: relative; display: flex; flex-direction: column; }
         .chat-header { padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; }
         .chat-box { flex: 1; padding: 25px; overflow-y: auto; background-color: #fafafa; margin: 0 25px; border-radius: 25px; display: flex; flex-direction: column; gap: 15px; }
-        
         .msg { padding: 14px 20px; border-radius: 20px; max-width: 75%; font-weight: 500; font-size: 0.95rem; }
         .migo { background: var(--migo-orange); color: white; align-self: flex-start; border-bottom-left-radius: 4px; }
         .user { background: #e9ecef; color: #333; align-self: flex-end; border-bottom-right-radius: 4px; }
@@ -35,26 +33,24 @@
         #user-input { flex: 1; border: none; outline: none; padding: 12px 0; resize: none; font-family: inherit; font-size: 15px; height: 24px; }
         .btn-send { background: var(--migo-green); color: white; border: none; width: 50px; height: 50px; border-radius: 15px; cursor: pointer; font-size: 22px; }
 
-        /* POPUPS GENERALES */
+        /* POPUPS */
         .popup-migo { display: none; position: absolute; background: white; border-radius: 30px; padding: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); z-index: 2000; }
-        .close-pop { float: right; cursor: pointer; color: #ff5252; font-weight: bold; font-size: 1.2rem; }
+        .close-pop { float: right; cursor: pointer; color: #ff5252; font-weight: bold; }
 
-        /* DISEÑO TRADUCTOR (IDÉNTICO A CAPTURA) */
-        .translator-container { display: flex; flex-direction: column; gap: 20px; margin-top: 10px; }
-        .trans-section { background: #f8faf8; border: 1.5px solid #edf2ed; border-radius: 25px; padding: 20px; position: relative; }
-        .trans-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .trans-title { color: var(--migo-orange); font-weight: 800; font-size: 0.75rem; letter-spacing: 0.5px; }
-        .trans-refresh { color: #ccc; cursor: pointer; font-size: 1rem; }
+        /* TRADUCTOR OPERATIVO GOOGLE */
+        .translator-container { display: flex; flex-direction: column; gap: 15px; margin-top: 10px; }
+        .trans-section { background: #f8faf8; border: 1.5px solid #edf2ed; border-radius: 25px; padding: 18px; }
+        .trans-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .trans-title { color: var(--migo-orange); font-weight: 800; font-size: 0.7rem; text-transform: uppercase; }
         
-        .trans-input-box { background: #ffffff; border-radius: 15px; padding: 12px; margin-bottom: 10px; border: 1px solid #f0f4f0; }
-        .trans-area { width: 100%; border: none; outline: none; font-family: inherit; font-size: 0.95rem; resize: none; height: 60px; color: #444; }
+        .trans-input-box { background: #ffffff; border-radius: 15px; padding: 12px; border: 1px solid #f0f4f0; position: relative; margin-bottom: 10px; }
+        .trans-area { width: 85%; border: none; outline: none; font-family: inherit; font-size: 0.9rem; resize: none; height: 45px; color: #444; background: transparent; }
+        .green-arrow-btn { position: absolute; right: 12px; bottom: 12px; color: var(--migo-green); font-size: 1.4rem; cursor: pointer; font-weight: bold; background: none; border: none; }
         
-        .trans-result-box { background: #f2f7f2; border-radius: 15px; padding: 12px; position: relative; min-height: 50px; border: 1px solid #e8eee8; }
-        .result-label { color: var(--migo-green); font-size: 0.65rem; font-weight: 800; margin-bottom: 5px; display: block; }
-        .copy-icon { position: absolute; bottom: 12px; right: 12px; color: #888; cursor: pointer; font-size: 0.9rem; }
-        .green-arrow { text-align: right; margin-top: 10px; color: var(--migo-green); font-size: 1.4rem; font-weight: bold; cursor: pointer; }
+        .trans-result-box { background: #f2f7f2; border-radius: 15px; padding: 12px; min-height: 40px; border: 1px solid #e8eee8; font-size: 0.9rem; color: #444; }
+        .result-label { color: var(--migo-green); font-size: 0.6rem; font-weight: 800; margin-bottom: 4px; display: block; }
 
-        /* MENÚS CONFIGURACIÓN */
+        /* BOTONES AJUSTES */
         .conf-btn { width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 12px; border: 1px solid #eee; background: white; text-align: left; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 10px; font-weight: 500; }
         .conf-btn.active { background: var(--migo-green); color: white; border-color: var(--migo-green); }
         .section-title { font-size: 0.7rem; font-weight: 800; color: #bbb; margin: 15px 0 8px 5px; text-transform: uppercase; }
@@ -70,7 +66,7 @@
 <main class="main-app">
     <div class="card panel-left">
         <div class="header-box"><span class="dot"></span> CORRECTIONS</div>
-        <div id="correction-log" style="padding: 25px; color: #666;">Esperando tus frases...</div>
+        <div id="correction-log" style="padding: 25px; color: #666;">Waiting for phrases...</div>
     </div>
 
     <div class="card panel-right">
@@ -83,7 +79,7 @@
         </header>
 
         <div class="chat-box" id="chat-box">
-            <div class="msg migo">¡Hola Sergi! He rediseñado el traductor para que sea idéntico a tu captura. ¿Qué te parece?</div>
+            <div class="msg migo">¡Hola Sergi! Ya he conectado Google Translator y puesto la flecha en su sitio.</div>
         </div>
 
         <div class="input-area">
@@ -93,41 +89,27 @@
             </div>
         </div>
 
-        <div class="popup-migo" id="pop-trans" style="top: 85px; right: 30px; width: 420px;">
+        <div class="popup-migo" id="pop-trans" style="top: 85px; right: 30px; width: 380px;">
             <span class="close-pop" onclick="togglePopup('pop-trans')">×</span>
-            <center><h4 style="color:#aaa; font-size: 0.8rem; margin-top: 0; letter-spacing: 1px; font-weight: 700;">TRANSLATOR / TRADUCTOR</h4></center>
+            <center><h4 style="color:#aaa; font-size: 0.75rem; margin-top: 0; letter-spacing: 1px;">GOOGLE TRANSLATOR</h4></center>
             
             <div class="translator-container">
                 <div class="trans-section">
-                    <div class="trans-header">
-                        <span class="trans-title">ESPAÑOL > INGLÉS</span>
-                        <span class="trans-refresh">↻</span>
-                    </div>
+                    <div class="trans-header"><span class="trans-title">Español > Inglés</span><span style="color:#ccc;cursor:pointer" onclick="resetTrans('es')">↻</span></div>
                     <div class="trans-input-box">
-                        <textarea class="trans-area" placeholder="Escribe..."></textarea>
+                        <textarea id="in-es" class="trans-area" placeholder="Escribe aquí..."></textarea>
+                        <button class="green-arrow-btn" onclick="googleTranslate('es')">➔</button>
                     </div>
-                    <div class="trans-result-box">
-                        <span class="result-label">RESULT</span>
-                        <div style="color:#888; font-size: 0.9rem;">...</div>
-                        <span class="copy-icon">📋</span>
-                    </div>
-                    <div class="green-arrow">➔</div>
+                    <div class="trans-result-box"><span class="result-label">RESULT</span><div id="out-en">...</div></div>
                 </div>
 
                 <div class="trans-section">
-                    <div class="trans-header">
-                        <span class="trans-title">ENGLISH > SPANISH</span>
-                        <span class="trans-refresh">↻</span>
-                    </div>
+                    <div class="trans-header"><span class="trans-title">English > Spanish</span><span style="color:#ccc;cursor:pointer" onclick="resetTrans('en')">↻</span></div>
                     <div class="trans-input-box">
-                        <textarea class="trans-area" placeholder="Type..."></textarea>
+                        <textarea id="in-en" class="trans-area" placeholder="Type here..."></textarea>
+                        <button class="green-arrow-btn" onclick="googleTranslate('en')">➔</button>
                     </div>
-                    <div class="trans-result-box">
-                        <span class="result-label">RESULTADO</span>
-                        <div style="color:#888; font-size: 0.9rem;">...</div>
-                        <span class="copy-icon">📋</span>
-                    </div>
-                    <div class="green-arrow">➔</div>
+                    <div class="trans-result-box"><span class="result-label">RESULTADO</span><div id="out-es">...</div></div>
                 </div>
             </div>
         </div>
@@ -137,7 +119,6 @@
             <div class="section-title">Nivel de Rigor</div>
             <button class="conf-btn rigor-opt active" onclick="setOption('rigor', '🔒 Estricto')">🔒 Estricto (Bloqueo)</button>
             <button class="conf-btn rigor-opt" onclick="setOption('rigor', '🔓 No tan estricto')">🔓 No tan estricto</button>
-
             <div class="section-title">Estilo de Chat</div>
             <button class="conf-btn style-opt active" onclick="setOption('style', 'Normal')">📝 Normal</button>
             <button class="conf-btn style-opt" onclick="setOption('style', 'Coloquial')">💪 Coloquial</button>
@@ -146,16 +127,16 @@
             <button class="conf-btn style-opt" onclick="setOption('style', 'Viajes')">✈️ Viajes</button>
         </div>
 
-        <div class="popup-migo" id="pop-profile" style="top: 85px; left: 90px; width: 280px;">
-            <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
-                <div class="profile-circle" style="background:#fff3e0; width:55px; height:55px;">S</div>
-                <div><span style="font-size:0.6rem; color:#bbb;">USER / USUARIO</span><h4 style="margin:0;">Sergi Pérez</h4></div>
+        <div class="popup-migo" id="pop-profile" style="top: 85px; left: 90px; width: 260px;">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:15px;">
+                <div class="profile-circle" style="background:#fff3e0; width:50px; height:50px;">S</div>
+                <div><span style="font-size:0.6rem; color:#bbb;">USUARIO</span><h4 style="margin:0;font-size:0.9rem;">Sergi Pérez</h4></div>
             </div>
-            <div style="background:#fcfcfc; border-radius:15px; padding:15px; border:1px solid #f0f0f0;">
-                <p style="margin:0 0 10px 0; font-size:0.8rem; color:#888;">RIGOR LEVEL: <br><b id="display-rigor" style="color:var(--migo-green)">🔒 Estricto</b></p>
-                <p style="margin:0; font-size:0.8rem; color:#888;">CHAT STYLE: <br><b id="display-style" style="color:var(--migo-green)">Normal</b></p>
+            <div style="background:#fcfcfc; border-radius:15px; padding:12px; border:1px solid #f0f0f0; font-size:0.8rem;">
+                Rigor: <b id="display-rigor" style="color:var(--migo-green)">🔒 Estricto</b><br>
+                Estilo: <b id="display-style" style="color:var(--migo-green)">Normal</b>
             </div>
-            <button class="conf-btn" style="margin-top:15px; color:#ff5252; background:#fff5f5; border:none; justify-content:center; font-weight:800;" onclick="location.reload()">Reset / Reiniciar</button>
+            <button class="conf-btn" style="margin-top:10px; color:#ff5252; background:#fff5f5; border:none; justify-content:center; font-weight:800;" onclick="location.reload()">Reset</button>
         </div>
     </div>
 </main>
@@ -164,27 +145,36 @@
     let currentRigor = "🔒 Estricto";
     let currentStyle = "Normal";
 
-    function setOption(type, value) {
-        if(type === 'rigor') {
-            currentRigor = value;
-            document.querySelectorAll('.rigor-opt').forEach(b => b.classList.remove('active'));
-            document.getElementById('display-rigor').innerText = value;
-        } else {
-            currentStyle = value;
-            document.querySelectorAll('.style-opt').forEach(b => b.classList.remove('active'));
-            document.getElementById('display-style').innerText = value;
-        }
-        event.currentTarget.classList.add('active');
+    // API GOOGLE TRANSLATOR
+    async function googleTranslate(lang) {
+        const source = lang === 'es' ? 'es' : 'en';
+        const target = lang === 'es' ? 'en' : 'es';
+        const text = document.getElementById(lang === 'es' ? 'in-es' : 'in-en').value;
+        const outDiv = document.getElementById(lang === 'es' ? 'out-en' : 'out-es');
+
+        if(!text) return;
+        outDiv.innerText = "Traduciendo...";
+
+        try {
+            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${source}&tl=${target}&dt=t&q=${encodeURI(text)}`;
+            const res = await fetch(url);
+            const data = await res.json();
+            outDiv.innerText = data[0][0][0];
+        } catch (e) { outDiv.innerText = "Error API Google"; }
     }
 
+    function resetTrans(lang) {
+        document.getElementById(lang === 'es' ? 'in-es' : 'in-en').value = "";
+        document.getElementById(lang === 'es' ? 'out-en' : 'out-es').innerText = "...";
+    }
+
+    // CHAT & CONFIG
     async function talkToMigo() {
         const input = document.getElementById('user-input');
         const text = input.value.trim();
         if (!text) return;
-
         addMessage(text, 'user');
         input.value = "";
-
         try {
             const response = await fetch('/api/chat', {
                 method: 'POST',
@@ -197,6 +187,19 @@
                 document.getElementById('correction-log').innerHTML = `<div style="background:#fffcf0; padding:15px; border-radius:15px; border-left:4px solid var(--migo-orange);">${data.correction}</div>`;
             }
         } catch (e) { console.error("Error"); }
+    }
+
+    function setOption(type, value) {
+        if(type === 'rigor') {
+            currentRigor = value;
+            document.querySelectorAll('.rigor-opt').forEach(b => b.classList.remove('active'));
+            document.getElementById('display-rigor').innerText = value;
+        } else {
+            currentStyle = value;
+            document.querySelectorAll('.style-opt').forEach(b => b.classList.remove('active'));
+            document.getElementById('display-style').innerText = value;
+        }
+        event.currentTarget.classList.add('active');
     }
 
     function addMessage(text, type) {
