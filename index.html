@@ -9,11 +9,10 @@
         :root { --migo-orange: #ff9800; --migo-green: #4caf50; --bg-color: #f0f2f5; }
         body { margin: 0; padding: 0; background-color: var(--bg-color); font-family: 'Quicksand', sans-serif; display: flex; height: 100vh; overflow: hidden; }
         
-        /* SIDEBAR CON ICONOS ABAJO */
-        .side-nav { width: 80px; background-color: var(--migo-orange); height: 100%; display: flex; flex-direction: column; align-items: center; padding-bottom: 25px; gap: 20px; flex-shrink: 0; z-index: 100; justify-content: flex-end; }
-        .nav-icon, .profile-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; }
-        .nav-icon:hover, .profile-circle:hover { transform: scale(1.1); }
-        .profile-circle { background: white; color: var(--migo-orange); font-weight: 800; font-size: 1.2rem; margin-top: 10px; }
+        /* SIDEBAR CON SIMETRÍA */
+        .side-nav { width: 80px; background-color: var(--migo-orange); height: 100%; display: flex; flex-direction: column; align-items: center; padding-bottom: 40px; gap: 15px; flex-shrink: 0; z-index: 100; justify-content: flex-end; }
+        .profile-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; background: white; color: var(--migo-orange); font-weight: 800; font-size: 1.2rem; }
+        .profile-circle:hover { transform: scale(1.1); }
 
         .main-app { display: flex; flex: 1; padding: 25px; gap: 25px; box-sizing: border-box; width: calc(100% - 80px); }
         .card { background: white; border-radius: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.04); display: flex; flex-direction: column; overflow: hidden; }
@@ -41,7 +40,6 @@
             from { opacity: 0; transform: scale(0.95) translateY(10px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
-
         .popup-migo { 
             display: none; 
             position: absolute; 
@@ -54,10 +52,10 @@
         }
         .close-pop { float: right; cursor: pointer; color: #ff5252; font-weight: bold; }
 
-        /* NUEVAS POSICIONES PARA EVITAR SOLAPES */
-        #pop-trans { top: 20px; right: 30px; width: 380px; }
-        #pop-chat-conf { bottom: 100px; right: 30px; width: 300px; } /* Encima del input de chat, a la derecha */
-        #pop-profile { bottom: 25px; left: 100px; width: 260px; } /* Vinculado al círculo de abajo */
+        /* POSICIONES VINCULADAS */
+        #pop-trans { top: 80px; right: 30px; width: 380px; }
+        #pop-chat-conf { top: 80px; right: 430px; width: 300px; } /* Al lado del de traducción */
+        #pop-profile { bottom: 40px; left: 100px; width: 260px; } /* Vinculado al círculo S */
 
         /* TRADUCTOR */
         .translator-container { display: flex; flex-direction: column; gap: 15px; margin-top: 10px; }
@@ -79,7 +77,6 @@
 <body>
 
 <nav class="side-nav">
-    <div class="nav-icon" onclick="togglePopup('pop-chat-conf')">⚙️</div>
     <div class="profile-circle" onclick="togglePopup('pop-profile')">S</div>
 </nav>
 
@@ -92,13 +89,14 @@
     <div class="card panel-right">
         <header class="chat-header">
             <h1 style="margin:0; font-weight:800; font-size: 28px;">Migo<span style="color:var(--migo-orange)">.</span></h1>
-            <div style="display:flex; gap:18px; font-size:24px;">
-                <div style="cursor:pointer" onclick="togglePopup('pop-trans')">🌐</div>
+            <div style="display:flex; gap:18px; font-size:22px; align-items: center;">
+                <div style="cursor:pointer" title="Configuración Chat" onclick="togglePopup('pop-chat-conf')">⚙️</div>
+                <div style="cursor:pointer" title="Traductor" onclick="togglePopup('pop-trans')">🌐</div>
             </div>
         </header>
 
         <div class="chat-box" id="chat-box">
-            <div class="msg migo">¡Hola Sergi! He organizado las ventanas para que no se tapen y he movido los iconos al pie de la barra.</div>
+            <div class="msg migo">¡Hola Sergi! He reorganizado los iconos para que tengas la configuración y el traductor juntos en la cabecera.</div>
         </div>
 
         <div class="input-area">
