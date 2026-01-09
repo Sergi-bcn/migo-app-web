@@ -49,7 +49,7 @@
             </div>
         </header>
         <div class="chat-box" id="chat-box">
-            <div class="msg migo">¡Hola Sergi! He actualizado la configuración de Node.js. ¿Probamos ahora?</div>
+            <div class="msg migo">¡Hola Sergi! He limpiado la conexión. ¿Me recibes bien?</div>
         </div>
         <div class="input-area">
             <div class="input-box">
@@ -57,10 +57,9 @@
                 <button class="btn-send" onclick="talkToMigo()">➜</button>
             </div>
         </div>
-
-        <div class="popup-migo" id="pop-trans"><span class="close-pop" onclick="togglePopup('pop-trans')">✕</span><h3>Traductor</h3><p>Funcionalidad en pruebas...</p></div>
-        <div class="popup-migo" id="pop-chat-conf"><span class="close-pop" onclick="togglePopup('pop-chat-conf')">✕</span><h3>Ajustes de Chat</h3><p>Modo Relaxed Activado</p></div>
-        <div class="popup-migo" id="pop-config"><span class="close-pop" onclick="togglePopup('pop-config')">✕</span><h3>Configuración</h3></div>
+        <div class="popup-migo" id="pop-trans"><span class="close-pop" onclick="togglePopup('pop-trans')">✕</span><h3>Traductor</h3><p>Listo para traducir.</p></div>
+        <div class="popup-migo" id="pop-chat-conf"><span class="close-pop" onclick="togglePopup('pop-chat-conf')">✕</span><h3>Ajustes</h3><p>Modo Relaxed</p></div>
+        <div class="popup-migo" id="pop-config"><span class="close-pop" onclick="togglePopup('pop-config')">✕</span><h3>Config</h3></div>
         <div class="popup-migo" id="pop-profile"><span class="close-pop" onclick="togglePopup('pop-profile')">✕</span><h3>Perfil</h3></div>
     </div>
 </main>
@@ -83,16 +82,14 @@
 
             const data = await response.json();
             
-            if (!response.ok) {
-                addMessage("Error: " + (data.reply || "Fallo en el servidor"), 'migo');
-                return;
+            if (response.ok) {
+                addMessage(data.reply, 'migo');
+                document.getElementById('correction-log').innerText = data.correction;
+            } else {
+                addMessage("Migo Error: " + (data.reply || "Check Vercel Logs"), 'migo');
             }
-            
-            addMessage(data.reply, 'migo');
-            document.getElementById('correction-log').innerText = data.correction;
-            
         } catch (e) {
-            addMessage("Error crítico de conexión. Revisa que el package.json esté en GitHub.", 'migo');
+            addMessage("Error: Error connecting to AI. Revisa que la carpeta /api existe en GitHub.", 'migo');
         }
     }
 
