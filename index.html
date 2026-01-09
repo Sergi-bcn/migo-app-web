@@ -53,28 +53,28 @@
 
         <div class="chat-box" id="chat-box">
             <div class="message migo">
-                <span class="msg-content">Hello Sergi! I'm ready. / ¡Hola Sergi! Estoy listo.</span>
+                <span class="msg-content">Hello Sergi! I'm ready.</span>
             </div>
         </div>
 
         <div class="input-area">
             <div class="input-box">
-                <textarea id="user-input" placeholder="Type in English..." onkeydown="handleChatEnter(event)"></textarea>
+                <textarea id="user-input" placeholder="Type..." onkeydown="handleChatEnter(event)"></textarea>
                 <button class="send-btn-green" onclick="sendMessage()">➜</button>
             </div>
         </div>
 
-        <div class="popup-migo" id="menu-modes" style="display:none;">
-            <span class="close-x" onclick="togglePopup('menu-modes')">✕</span>
-            <div class="opt-migo active">🔓 Relaxed / Relajado</div>
-            <div class="opt-migo">🔒 Strict / Estricto</div>
-        </div>
-
         <div class="popup-migo translator-wide" id="panel-translator" style="display:none;">
             <span class="close-x" onclick="togglePopup('panel-translator')">✕</span>
-            <textarea id="in-es" placeholder="Escribe en español..." onkeydown="handleTransEnter(event, 'es', 'en')" style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ddd;"></textarea>
-            <div id="out-en" style="background:#f9f9f9; padding:10px; margin:10px 0; border-radius:10px; min-height:40px;"></div>
-            <button onclick="translateNow('es','en')" style="width:100%; padding:10px; background:#4caf50; color:white; border:none; border-radius:10px; cursor:pointer;">Translate</button>
+            <textarea id="in-es" placeholder="Escribe..." style="width:100%; height:60px; border-radius:10px; border:1px solid #eee; padding:10px;"></textarea>
+            <div id="out-en" style="background:#f9f9f9; padding:10px; border-radius:10px; margin:10px 0; min-height:40px;"></div>
+            <button class="send-btn-green" style="width:100%; height:40px;" onclick="translateNow('es','en')">Translate</button>
+        </div>
+
+        <div class="popup-migo" id="menu-modes" style="display:none;">
+            <span class="close-x" onclick="togglePopup('menu-modes')">✕</span>
+            <div class="opt-migo active">🔓 Relaxed</div>
+            <div class="opt-migo">🔒 Strict</div>
         </div>
     </div>
 </main>
