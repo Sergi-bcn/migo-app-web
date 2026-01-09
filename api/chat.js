@@ -2,12 +2,17 @@
 export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).json({ reply: "Only POST allowed" });
 
-    const { message } = req.body;
+    const { message, rigor, style } = req.body;
     const apiKey = process.env.GROQ_API_KEY;
 
     if (!apiKey) {
         return res.status(500).json({ reply: "Error: Falta la API Key en Vercel." });
     }
+
+    // Construimos las instrucciones dinámicamente según lo elegido en los menús
+    const systemPrompt = `You are Migo, a friendly English tutor. 
+    Current user preference: Rigor Level is ${rigor} and Chat Style is ${style}.
+    Respond in English. If the user makes a grammar mistake, you MUST add a section at the end starting with 'CORRECTION:' followed by the improvement.`;
 
     try {
         const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -19,10 +24,7 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 model: "llama-3.3-70b-versatile",
                 messages: [
-                    { 
-                        role: "system", 
-                        content: "You are Migo, a friendly English tutor. Respond in English. If the user makes a grammar mistake, add a section at the very end of your message starting with 'CORRECTION:' followed by the improvement." 
-                    },
+                    { role: "system", content: systemPrompt },
                     { role: "user", content: message }
                 ]
             })
