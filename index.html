@@ -3,121 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo Alfa - Conversación Fix</title>
+    <title>Migo Web - Alfa Real</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
-    
     <style>
         /* DISEÑO ALFA ORIGINAL */
         body { margin: 0; padding: 0; background-color: #f0f2f5; font-family: 'Quicksand', sans-serif; display: flex; height: 100vh; overflow: hidden; }
         .side-nav-orange { width: 80px; background-color: #ff9800; height: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 20px; gap: 20px; flex-shrink: 0; }
-        .circle-btn-nav, .profile-circle-nav { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .circle-btn-nav { background-color: rgba(255, 255, 255, 0.2); }
+        .circle-btn-nav, .profile-circle-nav { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
         .profile-circle-nav { background-color: white; color: #ff9800; font-weight: 800; }
         .main-app { display: flex; flex: 1; padding: 20px; gap: 20px; box-sizing: border-box; width: calc(100% - 80px); }
         .section-card { background: white; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; overflow: hidden; }
         .corrections-panel { flex: 1; max-width: 350px; }
         .chat-main { flex: 2; position: relative; display: flex; flex-direction: column; }
-        .chat-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .migo-title { font-weight: 800; font-size: 24px; margin: 0; }
-        
-        /* SCROLL BOX */
-        .chat-box { flex: 1; padding: 20px; overflow-y: auto; background-color: #fafafa; margin: 0 20px; border-radius: 20px; display: flex; flex-direction: column; gap: 10px; }
-        
-        /* MENSAJES */
+        .chat-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f9f9f9; }
+        .header-tools { display: flex; gap: 15px; font-size: 24px; }
+        .tool-icon { cursor: pointer; }
+        .chat-box { flex: 1; padding: 20px; overflow-y: auto; background-color: #fafafa; margin: 0 20px; border-radius: 20px; display: flex; flex-direction: column; gap: 12px; }
         .message { padding: 12px 16px; border-radius: 15px; max-width: 80%; font-weight: 500; }
         .migo { background: #ff9800; color: white; align-self: flex-start; border-bottom-left-radius: 2px; }
         .user { background: #e0e0e0; color: #333; align-self: flex-end; border-bottom-right-radius: 2px; }
-
-        /* INPUT AREA */
         .input-area { padding: 20px; display: flex; gap: 10px; }
         .input-box { flex: 1; display: flex; background: #fff; border: 1px solid #eee; border-radius: 15px; padding: 5px 15px; align-items: center; }
         #user-input { flex: 1; border: none; outline: none; padding: 10px 0; resize: none; font-family: inherit; font-size: 15px; height: 24px; }
-        .send-btn-green { background: #4caf50; color: white; border: none; width: 45px; height: 45px; border-radius: 12px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; }
-
-        /* POPUPS */
-        .popup-migo { display: none; position: absolute; top: 75px; right: 20px; width: 280px; background: white; border-radius: 20px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 1000; }
+        .send-btn { background: #4caf50; color: white; border: none; width: 45px; height: 45px; border-radius: 12px; cursor: pointer; font-size: 20px; }
+        .popup-migo { display: none; position: absolute; top: 80px; right: 20px; width: 280px; background: white; border-radius: 20px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); z-index: 1000; }
         .close-x { float: right; cursor: pointer; color: #ccc; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <nav class="side-nav-orange">
-    <div class="circle-btn-nav" onclick="handlePopup('menu-modes')">⚙️</div>
-    <div class="profile-circle-nav" onclick="handlePopup('panel-profile')">S</div>
+    <div class="circle-btn-nav" onclick="togglePopup('menu-settings')">⚙️</div>
+    <div class="profile-circle-nav" onclick="togglePopup('panel-profile')">S</div>
 </nav>
 
 <main class="main-app">
     <div class="section-card corrections-panel">
-        <div style="padding:20px; border-bottom:1px solid #eee; font-weight:800; color:#ff9800;">CORRECTIONS</div>
-        <div id="correction-log"></div>
+        <div style="padding:20px; border-bottom:1px solid #eee; font-weight:800; color:#ff9800;">📝 CORRECTIONS</div>
+        <div id="correction-log" style="padding:15px; font-size:0.9rem;">Esperando conversación...</div>
     </div>
 
     <div class="section-card chat-main">
         <header class="chat-header">
-            <h1 class="migo-title">Migo<span style="color:#ff9800">.</span></h1>
-            <div onclick="handlePopup('panel-translator')" style="cursor:pointer; font-size: 24px;">🌐</div>
+            <h1 style="margin:0; font-weight:800;">Migo<span style="color:#ff9800">.</span></h1>
+            <div class="header-tools">
+                <div class="tool-icon" onclick="togglePopup('panel-translator')">🌐</div>
+                <div class="tool-icon" onclick="togglePopup('panel-modes')">💬</div>
+            </div>
         </header>
 
-        <div class="chat-box" id="chat-box-area">
-            <div class="message migo">¡Hola Sergi! El chat ya funciona. Escribe algo para probar.</div>
+        <div class="chat-box" id="chat-box">
+            <div class="message migo">¡Hola Sergi! Mi cerebro ya está conectado. ¿Hablamos en inglés?</div>
         </div>
 
         <div class="input-area">
             <div class="input-box">
                 <textarea id="user-input" placeholder="Escribe aquí..." onkeydown="checkKey(event)"></textarea>
-                <button class="send-btn-green" onclick="sendNow()">➜</button>
+                <button class="send-btn" onclick="sendToMigo()">➜</button>
             </div>
         </div>
 
-        <div class="popup-migo" id="panel-translator"><span class="close-x" onclick="handlePopup('panel-translator')">✕</span><h4>Traductor</h4><p>Pronto disponible...</p></div>
-        <div class="popup-migo" id="menu-modes"><span class="close-x" onclick="handlePopup('menu-modes')">✕</span><p>🔓 Relaxed</p></div>
-        <div class="popup-migo" id="panel-profile"><span class="close-x" onclick="handlePopup('panel-profile')">✕</span><p>Sergi Pérez</p></div>
+        <div class="popup-migo" id="panel-translator">
+            <span class="close-x" onclick="togglePopup('panel-translator')">✕</span>
+            <h4>Traductor</h4>
+            <input type="text" id="word-search" placeholder="Traducir..." style="width:100%; padding:8px; border-radius:10px; border:1px solid #ddd;">
+        </div>
+
+        <div class="popup-migo" id="panel-modes">
+            <span class="close-x" onclick="togglePopup('panel-modes')">✕</span>
+            <h4>Conversación</h4>
+            <p>🔓 Modo Relaxed</p>
+            <p>🔒 Modo Estricto</p>
+        </div>
+
+        <div class="popup-migo" id="menu-settings">
+            <span class="close-x" onclick="togglePopup('menu-settings')">✕</span>
+            <h4>Ajustes</h4>
+            <p>Voz: Activada</p>
+        </div>
+
+        <div class="popup-migo" id="panel-profile">
+            <span class="close-x" onclick="togglePopup('panel-profile')">✕</span>
+            <h4>Perfil</h4>
+            <p>Sergi Pérez</p>
+        </div>
     </div>
 </main>
 
 <script>
-    /* LÓGICA DE CONVERSACIÓN */
-    function sendNow() {
+    async function sendToMigo() {
         const input = document.getElementById('user-input');
-        const box = document.getElementById('chat-box-area');
         const text = input.value.trim();
+        if (!text) return;
 
-        if (text !== "") {
-            // 1. Crear globo del usuario
-            const uDiv = document.createElement('div');
-            uDiv.className = 'message user';
-            uDiv.innerText = text;
-            box.appendChild(uDiv);
+        appendMsg(text, 'user');
+        input.value = "";
 
-            // 2. Limpiar input
-            input.value = "";
-
-            // 3. Scroll al fondo
-            box.scrollTop = box.scrollHeight;
-
-            // 4. Respuesta de Migo (Simulada por ahora)
-            setTimeout(() => {
-                const mDiv = document.createElement('div');
-                mDiv.className = 'message migo';
-                mDiv.innerText = "¡Te escucho! Estoy listo para practicar inglés contigo.";
-                box.appendChild(mDiv);
-                box.scrollTop = box.scrollHeight;
-            }, 600);
+        // LLAMADA A LA API DE VERCEL (Serverless Function)
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text })
+            });
+            const data = await response.json();
+            appendMsg(data.reply, 'migo');
+            if(data.correction) {
+                document.getElementById('correction-log').innerText = data.correction;
+            }
+        } catch (e) {
+            appendMsg("Lo siento, tengo problemas para conectar.", 'migo');
         }
     }
 
-    function checkKey(e) {
-        if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            sendNow();
-        }
+    function appendMsg(text, side) {
+        const box = document.getElementById('chat-box');
+        const div = document.createElement('div');
+        div.className = 'message ' + side;
+        div.innerText = text;
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
     }
 
-    function handlePopup(id) {
+    function checkKey(e) { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendToMigo(); } }
+
+    function togglePopup(id) {
+        document.querySelectorAll('.popup-migo').forEach(p => { if(p.id !== id) p.style.display = 'none'; });
         const el = document.getElementById(id);
-        const isVisible = el.style.display === 'block';
-        document.querySelectorAll('.popup-migo').forEach(p => p.style.display = 'none');
-        el.style.display = isVisible ? 'none' : 'block';
+        el.style.display = el.style.display === 'block' ? 'none' : 'block';
     }
 </script>
 </body>
