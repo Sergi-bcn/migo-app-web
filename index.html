@@ -3,93 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo Web Companion</title>
+    <title>Migo Web - Alfa</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
     
     <style>
-        :root { --migo-orange: #ff9800; --migo-green: #4caf50; --bg: #f0f2f5; }
-        body, html { margin: 0; padding: 0; height: 100vh; font-family: 'Quicksand', sans-serif; background: var(--bg); overflow: hidden; }
+        /* --- DISEÑO ALFA INTEGRADO --- */
+        :root {
+            --migo-orange: #ff9800;
+            --migo-green: #4caf50;
+            --migo-bg: #f0f2f5;
+            --white: #ffffff;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            height: 100vh; width: 100vw;
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--migo-bg);
+            overflow: hidden;
+        }
+
+        .main-wrapper { display: flex; height: 100vh; }
+
+        /* Sidebar */
+        .side-nav-orange {
+            width: 80px; background: var(--migo-orange);
+            display: flex; flex-direction: column; align-items: center;
+            padding: 25px 0; gap: 20px; flex-shrink: 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .circle-btn-nav, .profile-circle-nav {
+            width: 50px; height: 50px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: transform 0.2s;
+        }
+        .circle-btn-nav { background: rgba(255,255,255,0.2); }
+        .profile-circle-nav { background: white; font-weight: 800; color: var(--migo-orange); }
+        .circle-btn-nav:hover { transform: scale(1.1); }
+
+        /* Contenedor Principal */
+        .app-content {
+            display: flex; flex: 1; padding: 25px; gap: 25px;
+            box-sizing: border-box; width: calc(100% - 80px);
+        }
+
+        .section-card {
+            background: var(--white); border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+
+        /* Panel Izquierdo (Correcciones) */
+        .corrections-panel { flex: 1; max-width: 380px; }
+        .header-box { padding: 25px; border-bottom: 1px solid #f0f0f0; font-weight: 800; color: var(--migo-orange); }
+
+        /* Panel Derecho (Chat) */
+        .chat-main { flex: 2; position: relative; }
+        .chat-header { padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .chat-box {
+            flex: 1; padding: 20px; overflow-y: auto;
+            background: #fafafa; margin: 0 25px; border-radius: 25px;
+            display: flex; flex-direction: column; gap: 12px;
+        }
+
+        /* Mensajes */
+        .msg { padding: 12px 18px; border-radius: 18px; max-width: 80%; font-weight: 500; line-height: 1.4; }
+        .migo-msg { background: var(--migo-orange); color: white; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .user-msg { background: #e0e0e0; color: #333; align-self: flex-end; border-bottom-right-radius: 4px; }
+
+        /* Entrada de texto */
+        .input-area { padding: 25px; display: flex; gap: 15px; }
+        #user-input {
+            flex: 1; border-radius: 18px; border: 2px solid #f0f0f0;
+            padding: 15px; resize: none; font-family: inherit; font-size: 15px; outline: none;
+        }
+        .send-btn {
+            background: var(--migo-green); color: white; border: none;
+            border-radius: 18px; width: 60px; cursor: pointer; font-size: 20px;
+        }
+
+        /* POPUPS (Diseño Alfa) */
+        .popup-migo {
+            display: none; position: absolute; top: 85px; right: 30px;
+            width: 300px; background: white; border-radius: 25px;
+            padding: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            z-index: 1000; animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .main-wrapper { display: flex; height: 100vh; width: 100vw; }
-        
-        /* Barra Lateral */
-        .side-nav-orange { width: 80px; background: var(--migo-orange); display: flex; flex-direction: column; align-items: center; padding: 20px 0; gap: 20px; flex-shrink: 0; }
-        .circle-btn { width: 50px; height: 50px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
-        .circle-btn:hover { background: rgba(255,255,255,0.4); }
-        .profile-circle { width: 50px; height: 50px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--migo-orange); cursor: pointer; }
-
-        /* Contenido Principal */
-        .app-content { display: flex; flex: 1; padding: 20px; gap: 20px; box-sizing: border-box; }
-        .card { background: white; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: flex; flex-direction: column; overflow: hidden; }
-        .panel-left { flex: 1; max-width: 400px; }
-        .panel-right { flex: 2; position: relative; }
-
-        /* Chat */
-        .chat-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .chat-box { flex: 1; padding: 20px; overflow-y: auto; background: #fafafa; margin: 0 20px; border-radius: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .input-area { padding: 20px; display: flex; gap: 10px; }
-        textarea { flex: 1; border-radius: 15px; border: 1px solid #eee; padding: 15px; resize: none; font-family: inherit; font-size: 16px; outline: none; }
-        .send-btn { background: var(--migo-green); color: white; border: none; border-radius: 15px; width: 60px; cursor: pointer; font-size: 20px; }
-
-        /* Popups */
-        .popup { display: none; position: absolute; top: 80px; right: 20px; width: 280px; background: white; border-radius: 20px; padding: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.15); z-index: 1000; }
-        .close-btn { position: absolute; top: 10px; right: 15px; cursor: pointer; font-weight: bold; color: #ccc; }
+        .close-x { position: absolute; top: 15px; right: 20px; cursor: pointer; color: #ccc; font-weight: bold; }
     </style>
-
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 
 <div class="main-wrapper">
     <nav class="side-nav-orange">
-        <div class="circle-btn" onclick="togglePopup('menu-modes')">
+        <div class="circle-btn-nav" onclick="togglePopup('menu-modes')">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
         </div>
-        <div class="profile-circle" onclick="togglePopup('panel-profile')">S</div>
+        <div class="profile-circle-nav" onclick="togglePopup('panel-profile')">S</div>
     </nav>
 
     <div class="app-content">
-        <div class="card panel-left">
-            <div style="padding: 20px; border-bottom: 1px solid #eee; font-weight: 800; color: var(--migo-orange);">CORRECTIONS</div>
-            <div id="correction-log" style="flex:1; padding: 20px;"></div>
-        </div>
+        <section class="section-card corrections-panel">
+            <div class="header-box">CORRECTIONS / CORRECCIONES</div>
+            <div id="correction-log" style="padding: 20px; overflow-y: auto;"></div>
+        </section>
 
-        <div class="card panel-right">
+        <section class="section-card chat-main">
             <header class="chat-header">
-                <h1 style="margin:0; font-weight: 800;">Migo.</h1>
-                <div onclick="togglePopup('panel-translator')" style="cursor:pointer; font-size: 24px;">🌐</div>
+                <h1 style="margin:0; font-weight: 800; font-size: 26px;">Migo<span style="color:var(--migo-orange)">.</span></h1>
+                <div onclick="togglePopup('panel-translator')" style="cursor:pointer; font-size: 26px;">🌐</div>
             </header>
 
             <div class="chat-box" id="chat-box">
-                <div style="background: var(--migo-orange); color: white; padding: 12px 18px; border-radius: 18px 18px 18px 0; align-self: flex-start; max-width: 80%;">
-                    System Rebuilt. Can you see me now?
-                </div>
+                <div class="msg migo-msg">Hello Sergi! I'm back to life. How can I help you?</div>
             </div>
 
             <div class="input-area">
-                <textarea id="user-input" placeholder="Escribe en inglés..." onkeydown="handleChatEnter(event)"></textarea>
-                <button class="send-btn" onclick="sendMessage()">➜</button>
+                <textarea id="user-input" placeholder="Escribe en inglés..." onkeydown="handleEnter(event)"></textarea>
+                <button class="send-btn" onclick="processMessage()">➜</button>
             </div>
 
-            <div class="popup" id="panel-translator">
-                <span class="close-btn" onclick="togglePopup('panel-translator')">✕</span>
-                <h4 style="margin-top:0">Translator</h4>
-                <textarea id="in-es" style="width:100%; height: 60px; margin-bottom: 10px;"></textarea>
-                <button onclick="translateNow('es','en')" style="width:100%; background: var(--migo-orange); border:none; color:white; padding:10px; border-radius:10px; cursor:pointer;">Translate</button>
-                <div id="out-en" style="margin-top:10px; font-weight: bold; color: #555;"></div>
+            <div class="popup-migo" id="panel-translator">
+                <span class="close-x" onclick="togglePopup('panel-translator')">✕</span>
+                <h3 style="margin-top:0">Translator</h3>
+                <textarea id="in-es" style="width:100%; border-radius:10px; border:1px solid #eee; padding:10px;" placeholder="Escribe en español..."></textarea>
+                <button onclick="mockTranslate()" style="width:100%; margin-top:10px; background:var(--migo-orange); color:white; border:none; padding:12px; border-radius:10px; cursor:pointer;">Translate</button>
+                <div id="out-en" style="margin-top:15px; font-weight:700; color:#555;"></div>
             </div>
 
-            <div class="popup" id="menu-modes">
-                <span class="close-btn" onclick="togglePopup('menu-modes')">✕</span>
-                <div style="padding: 10px; cursor:pointer;">🔓 Relaxed Mode</div>
-                <div style="padding: 10px; cursor:pointer;">🔒 Strict Mode</div>
+            <div class="popup-migo" id="menu-modes">
+                <span class="close-x" onclick="togglePopup('menu-modes')">✕</span>
+                <div style="padding: 15px; border-bottom: 1px solid #f0f0f0; cursor:pointer;">🔓 Relaxed Mode</div>
+                <div style="padding: 15px; cursor:pointer;">🔒 Strict Mode</div>
             </div>
-        </div>
+
+            <div class="popup-migo" id="panel-profile">
+                <span class="close-x" onclick="togglePopup('panel-profile')">✕</span>
+                <div style="text-align:center">
+                    <div style="width:60px; height:60px; background:var(--migo-orange); color:white; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:24px; font-weight:800; margin-bottom:10px;">S</div>
+                    <div style="font-weight:800">Sergi Pérez</div>
+                    <button onclick="location.reload()" style="margin-top:15px; width:100%; padding:10px; border-radius:10px; border:1px solid #ddd; background:none; cursor:pointer;">Reset App</button>
+                </div>
+            </div>
+        </section>
     </div>
 </div>
 
-<script src="js/ui-manager.js"></script>
-<script src="js/chat-logic.js"></script>
-</body>
-</html>
+<script>
+    /* --- LÓGICA INTEGRADA (UI & CHAT) --- */
+    
+    function togglePopup(id) {
+        const p = document.getElementById(id);
+        const isVisible = p.style.display === 'block';
+        document.querySelectorAll('.popup-migo').forEach(el => el.style.display = 'none');
+        p.style.display = isVisible ? 'none' : 'block';
+    }
+
+    function processMessage() {
+        const input = document.getElementById('user-input');
+        const text = input.value.trim();
+        if (!text) return;
+
+        addMessage(text, 'user-msg');
+        input.value = '';
+
+        // Simulación de respuesta (Hasta que conectes tu API)
+        setTimeout(() => {
+            addMessage("Great! I'm processing your English...", 'migo-msg');
+        }, 800);
+    }
+
+    function addMessage(text, className) {
+        const box = document.getElementById('chat-box');
+        const div = document.createElement('div');
+        div.className = `msg ${className}`;
+        div.innerText = text;
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+    }
+
+    function handleEnter(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            processMessage();
+        }
+    }
+
+    async function mockTranslate() {
+        const text = document.getElementById('in-es
