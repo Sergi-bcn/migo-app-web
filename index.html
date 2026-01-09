@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo Web - App</title>
+    <title>Migo Web Companion</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/style.css">
+    
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 
@@ -22,63 +24,40 @@
     <div class="section-card corrections-panel">
         <div class="header-record-box">
             <span class="record-dot"></span>
-            <span class="record-title">CORRECTIONS / CORRECCIONES</span>
+            <span class="record-title">CORRECTIONS</span>
         </div>
-        <div id="correction-log" class="log-container" style="padding: 20px; overflow-y: auto;"></div>
+        <div id="correction-log" class="log-container"></div>
         
         <div class="mini-profile-card" id="panel-profile-config" style="display:none;">
-            <span class="close-x" onclick="togglePopup('panel-profile-config')">✕</span>
-            <div class="profile-header-ui">
-                <div class="avatar-large">S</div>
-                <div class="user-info-ui">
-                    <div class="label-small">USER / USUARIO</div>
-                    <div class="user-name">Sergi Pérez</div>
-                </div>
-            </div>
-            <button class="btn-reset-ui" onclick="location.reload()">Reset</button>
+            <div class="avatar-large">S</div>
+            <button onclick="location.reload()">Reset</button>
         </div>
     </div>
 
     <div class="section-card chat-main">
         <header class="chat-header">
-            <div class="migo-logo-container">
-                <h1 class="migo-title">Migo<span class="title-dot">.</span></h1>
-            </div>
-            <div class="header-controls">
-                <button class="icon-only-btn-plain" onclick="togglePopup('panel-translator')">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="#4caf50"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04z"/></svg>
-                </button>
-            </div>
+            <h1 class="migo-title">Migo.</h1>
+            <button onclick="togglePopup('panel-translator')">Translate</button>
         </header>
 
-        <div class="chat-box" id="chat-box">
-            <div class="message migo">
-                <span class="msg-content">Hello Sergi! I'm ready to practice.</span>
-            </div>
-        </div>
+        <div class="chat-box" id="chat-box"></div>
 
         <div class="input-area">
-            <div class="input-box">
-                <textarea id="user-input" placeholder="Type in English..." onkeydown="handleChatEnter(event)"></textarea>
-                <button class="send-btn-green" onclick="sendMessage()">➜</button>
-            </div>
+            <textarea id="user-input" placeholder="Escribe..." onkeydown="handleChatEnter(event)"></textarea>
+            <button onclick="sendMessage()">➜</button>
         </div>
 
-        <div class="popup-migo translator-wide" id="panel-translator" style="display:none;">
-            <span class="close-x" onclick="togglePopup('panel-translator')">✕</span>
-            <textarea id="in-es" placeholder="Escribe..." style="width:100%; height:80px; padding:10px; border-radius:10px; border:1px solid #ddd;"></textarea>
-            <div id="out-en" style="background:#f9f9f9; padding:10px; border-radius:10px; margin:10px 0; min-height:40px;"></div>
-            <button class="send-btn-green" style="width:100%;" onclick="translateNow('es','en')">Translate</button>
-        </div>
-
-        <div class="popup-migo" id="menu-modes" style="display:none;">
-            <span class="close-x" onclick="togglePopup('menu-modes')">✕</span>
-            <div class="opt-migo active">🔓 Relaxed</div>
-            <div class="opt-migo">🔒 Strict</div>
+        <div class="popup-migo" id="panel-translator" style="display:none;">
+            <textarea id="in-es"></textarea>
+            <div id="out-en"></div>
+            <button onclick="translateNow('es','en')">Translate</button>
         </div>
     </div>
 </main>
 
-<script src="./js/script.js"></script>
+<script src="js/ui-manager.js"></script>
+<script src="js/translator.js"></script>
+<script src="js/chat-logic.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
