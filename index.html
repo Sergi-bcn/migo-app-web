@@ -3,183 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo Web - Alfa Pro</title>
+    <title>Migo Web - Alfa</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
     <style>
         :root { --migo-orange: #ff9800; --migo-green: #4caf50; --bg-color: #f0f2f5; }
         body { margin: 0; padding: 0; background-color: var(--bg-color); font-family: 'Quicksand', sans-serif; display: flex; height: 100vh; overflow: hidden; }
-        
-        /* SIDEBAR CON SIMETRÍA */
-        .side-nav { width: 80px; background-color: var(--migo-orange); height: 100%; display: flex; flex-direction: column; align-items: center; padding-bottom: 40px; gap: 15px; flex-shrink: 0; z-index: 100; justify-content: flex-end; }
-        .profile-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; background: white; color: var(--migo-orange); font-weight: 800; font-size: 1.2rem; }
-        .profile-circle:hover { transform: scale(1.1); }
-
-        .main-app { display: flex; flex: 1; padding: 25px; gap: 25px; box-sizing: border-box; width: calc(100% - 80px); }
+        .side-nav { width: 80px; background-color: var(--migo-orange); height: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 30px; gap: 20px; flex-shrink: 0; }
+        .nav-item { width: 50px; height: 50px; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; font-size: 24px; transition: 0.2s; }
+        .nav-item:hover { background: rgba(255,255,255,0.2); }
+        .main-app { display: flex; flex: 1; padding: 25px; gap: 25px; box-sizing: border-box; }
         .card { background: white; border-radius: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.04); display: flex; flex-direction: column; overflow: hidden; }
-        
         .panel-left { flex: 1; max-width: 380px; }
         .header-box { padding: 25px; border-bottom: 1px solid #f0f0f0; font-weight: 800; color: var(--migo-orange); display: flex; align-items: center; gap: 10px; }
         .dot { width: 10px; height: 10px; background: #ff5252; border-radius: 50%; }
-
         .panel-right { flex: 2; position: relative; display: flex; flex-direction: column; }
         .chat-header { padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; }
         .chat-box { flex: 1; padding: 25px; overflow-y: auto; background-color: #fafafa; margin: 0 25px; border-radius: 25px; display: flex; flex-direction: column; gap: 15px; }
-        
-        /* BOCADILLOS AMBOS A LA IZQUIERDA */
-        .msg { padding: 14px 20px; border-radius: 20px; max-width: 75%; font-weight: 500; font-size: 0.95rem; align-self: flex-start; }
-        .migo { background: var(--migo-orange); color: white; border-bottom-left-radius: 4px; }
-        .user { background: #e9ecef; color: #333; border-bottom-left-radius: 4px; }
-
+        .msg { padding: 14px 20px; border-radius: 20px; max-width: 75%; font-weight: 500; font-size: 0.95rem; }
+        .migo { background: var(--migo-orange); color: white; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .user { background: #e9ecef; color: #333; align-self: flex-end; border-bottom-right-radius: 4px; }
         .input-area { padding: 25px; display: flex; gap: 15px; }
         .input-box { flex: 1; display: flex; background: white; border: 2px solid #f0f0f0; border-radius: 20px; padding: 5px 20px; align-items: center; }
         #user-input { flex: 1; border: none; outline: none; padding: 12px 0; resize: none; font-family: inherit; font-size: 15px; height: 24px; }
         .btn-send { background: var(--migo-green); color: white; border: none; width: 50px; height: 50px; border-radius: 15px; cursor: pointer; font-size: 22px; }
-
-        /* POPUPS CON ANIMACIÓN */
-        @keyframes popupShow {
-            from { opacity: 0; transform: scale(0.95) translateY(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        .popup-migo { 
-            display: none; 
-            position: absolute; 
-            background: white; 
-            border-radius: 30px; 
-            padding: 25px; 
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15); 
-            z-index: 2000;
-            animation: popupShow 0.3s ease-out;
-        }
-        .close-pop { float: right; cursor: pointer; color: #ff5252; font-weight: bold; }
-
-        /* POSICIONES VINCULADAS */
-        #pop-trans { top: 80px; right: 30px; width: 380px; }
-        #pop-chat-conf { top: 80px; right: 430px; width: 300px; } /* Al lado del de traducción */
-        #pop-profile { bottom: 40px; left: 100px; width: 260px; } /* Vinculado al círculo S */
-
-        /* TRADUCTOR */
-        .translator-container { display: flex; flex-direction: column; gap: 15px; margin-top: 10px; }
-        .trans-section { background: #f8faf8; border: 1.5px solid #edf2ed; border-radius: 25px; padding: 18px; }
-        .trans-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .trans-title { color: var(--migo-orange); font-weight: 800; font-size: 0.7rem; text-transform: uppercase; }
-        .trans-input-box { background: #ffffff; border-radius: 15px; padding: 12px; border: 1px solid #f0f4f0; position: relative; margin-bottom: 10px; }
-        .trans-area { width: 85%; border: none; outline: none; font-family: inherit; font-size: 0.9rem; resize: none; height: 45px; color: #444; background: transparent; }
-        .green-arrow-btn { position: absolute; right: 12px; bottom: 12px; color: var(--migo-green); font-size: 1.4rem; cursor: pointer; font-weight: bold; background: none; border: none; }
-        .trans-result-box { background: #f2f7f2; border-radius: 15px; padding: 12px; min-height: 40px; border: 1px solid #e8eee8; font-size: 0.9rem; color: #444; }
-        .result-label { color: var(--migo-green); font-size: 0.6rem; font-weight: 800; margin-bottom: 4px; display: block; }
-
-        /* BOTONES AJUSTES */
-        .conf-btn { width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 12px; border: 1px solid #eee; background: white; text-align: left; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 10px; font-weight: 500; }
-        .conf-btn.active { background: var(--migo-green); color: white; border-color: var(--migo-green); }
-        .section-title { font-size: 0.7rem; font-weight: 800; color: #bbb; margin: 15px 0 8px 5px; text-transform: uppercase; }
+        .popup-migo { display: none; position: absolute; background: white; border-radius: 25px; padding: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.1); z-index: 100; border: 1px solid #eee; }
+        #pop-chat-conf { top: 80px; right: 80px; width: 280px; }
+        #pop-trans { top: 80px; right: 380px; width: 350px; }
+        .conf-btn { width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 12px; border: 1px solid #eee; background: white; text-align: left; cursor: pointer; font-family: inherit; }
+        .conf-btn.active { background: var(--migo-green); color: white; }
     </style>
 </head>
 <body>
-
 <nav class="side-nav">
-    <div class="profile-circle" onclick="togglePopup('pop-profile')">S</div>
+    <div class="nav-item">🏠</div>
+    <div class="nav-item">📚</div>
+    <div class="nav-item" style="margin-top: auto; background: white; color: var(--migo-orange); border-radius: 50%; font-weight: 800;">S</div>
 </nav>
-
 <main class="main-app">
     <div class="card panel-left">
         <div class="header-box"><span class="dot"></span> CORRECTIONS</div>
         <div id="correction-log" style="padding: 25px; color: #666;">Waiting for phrases...</div>
     </div>
-
     <div class="card panel-right">
         <header class="chat-header">
             <h1 style="margin:0; font-weight:800; font-size: 28px;">Migo<span style="color:var(--migo-orange)">.</span></h1>
-            <div style="display:flex; gap:18px; font-size:22px; align-items: center;">
-                <div style="cursor:pointer" title="Configuración Chat" onclick="togglePopup('pop-chat-conf')">⚙️</div>
-                <div style="cursor:pointer" title="Traductor" onclick="togglePopup('pop-trans')">🌐</div>
+            <div style="display:flex; gap:20px; font-size:22px;">
+                <div style="cursor:pointer" onclick="togglePopup('pop-chat-conf')">⚙️</div>
+                <div style="cursor:pointer" onclick="togglePopup('pop-trans')">🌐</div>
             </div>
         </header>
-
         <div class="chat-box" id="chat-box">
-            <div class="msg migo">¡Hola Sergi! He reorganizado los iconos para que tengas la configuración y el traductor juntos en la cabecera.</div>
+            <div class="msg migo">Hi! I'm Migo. Everything is back to normal.</div>
         </div>
-
         <div class="input-area">
             <div class="input-box">
-                <textarea id="user-input" placeholder="Escribe aquí..." onkeydown="handleEnter(event)"></textarea>
+                <textarea id="user-input" placeholder="Type a message..." onkeydown="handleEnter(event)"></textarea>
                 <button class="btn-send" onclick="talkToMigo()">➜</button>
             </div>
         </div>
-
-        <div class="popup-migo" id="pop-trans">
-            <span class="close-pop" onclick="togglePopup('pop-trans')">×</span>
-            <center><h4 style="color:#aaa; font-size: 0.75rem; margin-top: 0; letter-spacing: 1px;">GOOGLE TRANSLATOR</h4></center>
-            <div class="translator-container">
-                <div class="trans-section">
-                    <div class="trans-header"><span class="trans-title">Español > Inglés</span><span style="color:#ccc;cursor:pointer" onclick="resetTrans('es')">↻</span></div>
-                    <div class="trans-input-box">
-                        <textarea id="in-es" class="trans-area" placeholder="Escribe aquí..."></textarea>
-                        <button class="green-arrow-btn" onclick="googleTranslate('es')">➔</button>
-                    </div>
-                    <div class="trans-result-box"><span class="result-label">RESULT</span><div id="out-en">...</div></div>
-                </div>
-                <div class="trans-section">
-                    <div class="trans-header"><span class="trans-title">English > Spanish</span><span style="color:#ccc;cursor:pointer" onclick="resetTrans('en')">↻</span></div>
-                    <div class="trans-input-box">
-                        <textarea id="in-en" class="trans-area" placeholder="Type here..."></textarea>
-                        <button class="green-arrow-btn" onclick="googleTranslate('en')">➔</button>
-                    </div>
-                    <div class="trans-result-box"><span class="result-label">RESULTADO</span><div id="out-es">...</div></div>
-                </div>
-            </div>
-        </div>
-
         <div class="popup-migo" id="pop-chat-conf">
-            <span class="close-pop" onclick="togglePopup('pop-chat-conf')">×</span>
-            <div class="section-title">Nivel de Rigor</div>
-            <button class="conf-btn rigor-opt active" onclick="setOption('rigor', '🔒 Estricto')">🔒 Estricto (Bloqueo)</button>
-            <button class="conf-btn rigor-opt" onclick="setOption('rigor', '🔓 No tan estricto')">🔓 No tan estricto</button>
-            <div class="section-title">Estilo de Chat</div>
-            <button class="conf-btn style-opt active" onclick="setOption('style', 'Normal')">📝 Normal</button>
-            <button class="conf-btn style-opt" onclick="setOption('style', 'Coloquial')">💪 Coloquial</button>
-            <button class="conf-btn style-opt" onclick="setOption('style', 'Gramática')">📖 Gramática (Formal)</button>
-            <button class="conf-btn style-opt" onclick="setOption('style', 'Entrevista Trabajo')">💼 Entrevista Trabajo</button>
-            <button class="conf-btn style-opt" onclick="setOption('style', 'Viajes')">✈️ Viajes</button>
+            <h4 style="margin-top:0">Chat Settings</h4>
+            <button class="conf-btn active">🔒 Strict</button>
         </div>
-
-        <div class="popup-migo" id="pop-profile">
-            <div style="display:flex; align-items:center; gap:12px; margin-bottom:15px;">
-                <div class="profile-circle" style="background:#fff3e0; width:50px; height:50px; margin:0;">S</div>
-                <div><span style="font-size:0.6rem; color:#bbb;">USUARIO</span><h4 style="margin:0;font-size:0.9rem;">Sergi Pérez</h4></div>
-            </div>
-            <div style="background:#fcfcfc; border-radius:15px; padding:12px; border:1px solid #f0f0f0; font-size:0.8rem;">
-                Rigor: <b id="display-rigor" style="color:var(--migo-green)">🔒 Estricto</b><br>
-                Estilo: <b id="display-style" style="color:var(--migo-green)">Normal</b>
-            </div>
-            <button class="conf-btn" style="margin-top:10px; color:#ff5252; background:#fff5f5; border:none; justify-content:center; font-weight:800;" onclick="location.reload()">Reset</button>
+        <div class="popup-migo" id="pop-trans">
+            <h4 style="margin-top:0">Translator</h4>
+            <textarea id="in-es" style="width:100%; border: 1px solid #eee; border-radius: 10px; padding: 10px; font-family: inherit;"></textarea>
+            <div id="out-en" style="margin-top:10px; background: #f9f9f9; padding: 10px; border-radius: 10px; font-size: 0.9rem;">...</div>
+            <button onclick="googleTranslate()" style="margin-top:10px; width: 100%; background: var(--migo-orange); color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer;">Translate</button>
         </div>
     </div>
 </main>
-
 <script>
-    let currentRigor = "🔒 Estricto";
-    let currentStyle = "Normal";
-
-    async function googleTranslate(lang) {
-        const source = lang === 'es' ? 'es' : 'en';
-        const target = lang === 'es' ? 'en' : 'es';
-        const text = document.getElementById(lang === 'es' ? 'in-es' : 'in-en').value;
-        const outDiv = document.getElementById(lang === 'es' ? 'out-en' : 'out-es');
-        if(!text) return;
-        outDiv.innerText = "Traduciendo...";
-        try {
-            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${source}&tl=${target}&dt=t&q=${encodeURI(text)}`;
-            const res = await fetch(url);
-            const data = await res.json();
-            outDiv.innerText = data[0][0][0];
-        } catch (e) { outDiv.innerText = "Error API Google"; }
+    function togglePopup(id) {
+        const el = document.getElementById(id);
+        const isVisible = el.style.display === 'block';
+        document.querySelectorAll('.popup-migo').forEach(p => p.style.display = 'none');
+        el.style.display = isVisible ? 'none' : 'block';
     }
-
-    function resetTrans(lang) {
-        document.getElementById(lang === 'es' ? 'in-es' : 'in-en').value = "";
-        document.getElementById(lang === 'es' ? 'out-en' : 'out-es').innerText = "...";
-    }
-
     async function talkToMigo() {
         const input = document.getElementById('user-input');
         const text = input.value.trim();
@@ -190,29 +90,13 @@
             const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: text, rigor: currentRigor, style: currentStyle })
+                body: JSON.stringify({ message: text, rigor: '🔒 Strict', style: 'Normal' })
             });
             const data = await response.json();
-            if (response.ok) {
-                addMessage(data.reply, 'migo');
-                document.getElementById('correction-log').innerHTML = `<div style="background:#fffcf0; padding:15px; border-radius:15px; border-left:4px solid var(--migo-orange);">${data.correction}</div>`;
-            }
-        } catch (e) { console.error("Error"); }
+            addMessage(data.reply, 'migo');
+            document.getElementById('correction-log').innerHTML = data.correction;
+        } catch (e) { console.error(e); }
     }
-
-    function setOption(type, value) {
-        if(type === 'rigor') {
-            currentRigor = value;
-            document.querySelectorAll('.rigor-opt').forEach(b => b.classList.remove('active'));
-            document.getElementById('display-rigor').innerText = value;
-        } else {
-            currentStyle = value;
-            document.querySelectorAll('.style-opt').forEach(b => b.classList.remove('active'));
-            document.getElementById('display-style').innerText = value;
-        }
-        event.currentTarget.classList.add('active');
-    }
-
     function addMessage(text, type) {
         const box = document.getElementById('chat-box');
         const div = document.createElement('div');
@@ -221,13 +105,17 @@
         box.appendChild(div);
         box.scrollTop = box.scrollHeight;
     }
-
     function handleEnter(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); talkToMigo(); } }
-    
-    function togglePopup(id) {
-        const el = document.getElementById(id);
-        const isVisible = el.style.display === 'block';
-        el.style.display = isVisible ? 'none' : 'block';
+    async function googleTranslate() {
+        const text = document.getElementById('in-es').value;
+        const outDiv = document.getElementById('out-en');
+        if(!text) return;
+        outDiv.innerText = "Translating...";
+        try {
+            const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=en&dt=t&q=${encodeURI(text)}`);
+            const data = await res.json();
+            outDiv.innerText = data[0][0][0];
+        } catch (e) { outDiv.innerText = "Error"; }
     }
 </script>
 </body>
