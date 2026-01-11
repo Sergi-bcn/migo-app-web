@@ -3,120 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo Web - Alfa</title>
+    <title>Migo Web</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root { --migo-orange: #ff9800; --migo-green: #4caf50; --bg-color: #f0f2f5; }
-        body { margin: 0; padding: 0; background-color: var(--bg-color); font-family: 'Quicksand', sans-serif; display: flex; height: 100vh; overflow: hidden; }
-        .side-nav { width: 80px; background-color: var(--migo-orange); height: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 30px; gap: 20px; flex-shrink: 0; }
-        .nav-item { width: 50px; height: 50px; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; font-size: 24px; transition: 0.2s; }
-        .nav-item:hover { background: rgba(255,255,255,0.2); }
-        .main-app { display: flex; flex: 1; padding: 25px; gap: 25px; box-sizing: border-box; }
-        .card { background: white; border-radius: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.04); display: flex; flex-direction: column; overflow: hidden; }
-        .panel-left { flex: 1; max-width: 380px; }
-        .header-box { padding: 25px; border-bottom: 1px solid #f0f0f0; font-weight: 800; color: var(--migo-orange); display: flex; align-items: center; gap: 10px; }
-        .dot { width: 10px; height: 10px; background: #ff5252; border-radius: 50%; }
-        .panel-right { flex: 2; position: relative; display: flex; flex-direction: column; }
-        .chat-header { padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; }
-        .chat-box { flex: 1; padding: 25px; overflow-y: auto; background-color: #fafafa; margin: 0 25px; border-radius: 25px; display: flex; flex-direction: column; gap: 15px; }
-        .msg { padding: 14px 20px; border-radius: 20px; max-width: 75%; font-weight: 500; font-size: 0.95rem; }
-        .migo { background: var(--migo-orange); color: white; align-self: flex-start; border-bottom-left-radius: 4px; }
-        .user { background: #e9ecef; color: #333; align-self: flex-end; border-bottom-right-radius: 4px; }
-        .input-area { padding: 25px; display: flex; gap: 15px; }
-        .input-box { flex: 1; display: flex; background: white; border: 2px solid #f0f0f0; border-radius: 20px; padding: 5px 20px; align-items: center; }
-        #user-input { flex: 1; border: none; outline: none; padding: 12px 0; resize: none; font-family: inherit; font-size: 15px; height: 24px; }
-        .btn-send { background: var(--migo-green); color: white; border: none; width: 50px; height: 50px; border-radius: 15px; cursor: pointer; font-size: 22px; }
-        .popup-migo { display: none; position: absolute; background: white; border-radius: 25px; padding: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.1); z-index: 100; border: 1px solid #eee; }
-        #pop-chat-conf { top: 80px; right: 80px; width: 280px; }
-        #pop-trans { top: 80px; right: 380px; width: 350px; }
-        .conf-btn { width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 12px; border: 1px solid #eee; background: white; text-align: left; cursor: pointer; font-family: inherit; }
-        .conf-btn.active { background: var(--migo-green); color: white; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<nav class="side-nav">
-    <div class="nav-item">🏠</div>
-    <div class="nav-item">📚</div>
-    <div class="nav-item" style="margin-top: auto; background: white; color: var(--migo-orange); border-radius: 50%; font-weight: 800;">S</div>
-</nav>
-<main class="main-app">
-    <div class="card panel-left">
-        <div class="header-box"><span class="dot"></span> CORRECTIONS</div>
-        <div id="correction-log" style="padding: 25px; color: #666;">Waiting for phrases...</div>
+
+<nav class="side-nav-orange">
+    <div class="nav-icons-group">
+        <div class="circle-btn-nav">
+            ⚙️
+        </div>
+        <div class="profile-circle-nav" onclick="togglePopup('panel-profile-config')">S</div>
     </div>
-    <div class="card panel-right">
-        <header class="chat-header">
-            <h1 style="margin:0; font-weight:800; font-size: 28px;">Migo<span style="color:var(--migo-orange)">.</span></h1>
-            <div style="display:flex; gap:20px; font-size:22px;">
-                <div style="cursor:pointer" onclick="togglePopup('pop-chat-conf')">⚙️</div>
-                <div style="cursor:pointer" onclick="togglePopup('pop-trans')">🌐</div>
-            </div>
-        </header>
-        <div class="chat-box" id="chat-box">
-            <div class="msg migo">Hi! I'm Migo. Everything is back to normal.</div>
-        </div>
-        <div class="input-area">
-            <div class="input-box">
-                <textarea id="user-input" placeholder="Type a message..." onkeydown="handleEnter(event)"></textarea>
-                <button class="btn-send" onclick="talkToMigo()">➜</button>
-            </div>
-        </div>
-        <div class="popup-migo" id="pop-chat-conf">
-            <h4 style="margin-top:0">Chat Settings</h4>
-            <button class="conf-btn active">🔒 Strict</button>
-        </div>
-        <div class="popup-migo" id="pop-trans">
-            <h4 style="margin-top:0">Translator</h4>
-            <textarea id="in-es" style="width:100%; border: 1px solid #eee; border-radius: 10px; padding: 10px; font-family: inherit;"></textarea>
-            <div id="out-en" style="margin-top:10px; background: #f9f9f9; padding: 10px; border-radius: 10px; font-size: 0.9rem;">...</div>
-            <button onclick="googleTranslate()" style="margin-top:10px; width: 100%; background: var(--migo-orange); color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer;">Translate</button>
-        </div>
-    </div>
-</main>
-<script>
-    function togglePopup(id) {
-        const el = document.getElementById(id);
-        const isVisible = el.style.display === 'block';
-        document.querySelectorAll('.popup-migo').forEach(p => p.style.display = 'none');
-        el.style.display = isVisible ? 'none' : 'block';
-    }
-    async function talkToMigo() {
-        const input = document.getElementById('user-input');
-        const text = input.value.trim();
-        if (!text) return;
-        addMessage(text, 'user');
-        input.value = "";
-        try {
-            const response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: text, rigor: '🔒 Strict', style: 'Normal' })
-            });
-            const data = await response.json();
-            addMessage(data.reply, 'migo');
-            document.getElementById('correction-log').innerHTML = data.correction;
-        } catch (e) { console.error(e); }
-    }
-    function addMessage(text, type) {
-        const box = document.getElementById('chat-box');
-        const div = document.createElement('div');
-        div.className = `msg ${type}`;
-        div.innerText = text;
-        box.appendChild(div);
-        box.scrollTop = box.scrollHeight;
-    }
-    function handleEnter(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); talkToMigo(); } }
-    async function googleTranslate() {
-        const text = document.getElementById('in-es').value;
-        const outDiv = document.getElementById('out-en');
-        if(!text) return;
-        outDiv.innerText = "Translating...";
-        try {
-            const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=en&dt=t&q=${encodeURI(text)}`);
-            const data = await res.json();
-            outDiv.innerText = data[0][0][0];
-        } catch (e) { outDiv.innerText = "Error"; }
-    }
-</script>
-</body>
-</html>
+</na
