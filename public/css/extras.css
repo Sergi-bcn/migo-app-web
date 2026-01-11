@@ -1,0 +1,4 @@
+/* Ventanas popup y animaciones */
+.popup-migo.shifted-left { right: 440px; }
+.translator-wide { top: 90px; right: 40px; width: 380px; z-index: 101; padding: 25px; }
+.mini-profile-card { display: none; position: absolute; bottom: 85px; left: 20px; width: 280px; }
