@@ -19,14 +19,13 @@
     
     <nav class="w-20 bg-migo-orange h-full flex flex-col items-center py-8 flex-shrink-0 shadow-xl">
         <div class="flex flex-col gap-6">
-            <button class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-white hover:bg-white/30 transition"><i data-lucide="home"></i></button>
-            <button class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-white hover:bg-white/30 transition"><i data-lucide="book-open"></i></button>
+            <button class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-white"><i data-lucide="home"></i></button>
+            <button class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-white"><i data-lucide="book-open"></i></button>
         </div>
-        <button @click="popups.user = !popups.user; if(popups.user) $nextTick(() => lucide.createIcons())" class="mt-auto w-12 h-12 bg-white rounded-full flex items-center justify-center text-migo-orange font-black text-xl shadow-lg hover:scale-110 transition">S</button>
+        <button @click="popups.user = !popups.user; $nextTick(() => lucide.createIcons())" class="mt-auto w-12 h-12 bg-white rounded-full flex items-center justify-center text-migo-orange font-black text-xl shadow-lg">S</button>
     </nav>
 
     <main class="flex-1 flex p-6 gap-6 overflow-hidden">
-        
         <section class="w-full max-w-[360px] bg-white rounded-[35px] shadow-sm flex flex-col border border-gray-100 overflow-hidden">
             <header class="p-6 border-b border-gray-50 flex items-center gap-3">
                 <div class="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></div>
@@ -39,14 +38,14 @@
             <header class="p-7 flex justify-between items-center text-gray-400">
                 <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">Migo<span class="text-migo-orange">.</span></h1>
                 <div class="flex gap-6">
-                    <button @click="popups.config = !popups.config; if(popups.config) $nextTick(() => lucide.createIcons())" class="hover:text-migo-orange transition hover:rotate-45"><i data-lucide="settings"></i></button>
-                    <button @click="popups.trans = !popups.trans; if(popups.trans) $nextTick(() => lucide.createIcons())" class="hover:text-migo-orange transition hover:scale-110"><i data-lucide="languages"></i></button>
+                    <button @click="popups.config = !popups.config; $nextTick(() => lucide.createIcons())" class="hover:text-migo-orange transition"><i data-lucide="settings"></i></button>
+                    <button @click="popups.trans = !popups.trans; $nextTick(() => lucide.createIcons())" class="hover:text-migo-orange transition"><i data-lucide="languages"></i></button>
                 </div>
             </header>
 
             <div class="flex-1 mx-6 bg-gray-50/50 rounded-[30px] p-6 overflow-y-auto flex flex-col gap-4" id="chat-container">
                 <template x-for="msg in messages">
-                    <div :class="msg.role === 'migo' ? 'self-start bg-migo-orange text-white rounded-bl-none' : 'self-end bg-white text-gray-700 shadow-sm rounded-br-none'" 
+                    <div :class="msg.role === 'migo' ? 'self-start bg-migo-orange text-white' : 'self-end bg-white text-gray-700 shadow-sm'" 
                          class="max-w-[80%] p-4 px-6 rounded-[22px] font-semibold text-[15px]" x-text="msg.text"></div>
                 </template>
             </div>
@@ -55,23 +54,17 @@
                 <div class="flex-1 bg-gray-50 rounded-[22px] px-6 py-1">
                     <textarea x-model="userInput" @keydown.enter.prevent="send()" class="w-full outline-none py-3 text-[15px] h-12 bg-transparent text-gray-700" placeholder="Type here..."></textarea>
                 </div>
-                <button @click="send()" class="w-14 h-12 bg-migo-green text-white rounded-[18px] flex items-center justify-center text-2xl shadow-lg hover:brightness-105 transition">➜</button>
+                <button @click="send()" class="w-14 h-12 bg-migo-green text-white rounded-[18px] flex items-center justify-center text-2xl shadow-lg">➜</button>
             </div>
 
-            <div x-show="popups.config" x-cloak x-transition class="absolute top-24 left-10 w-72 bg-white rounded-[30px] shadow-2xl p-7 z-[100] border border-gray-100">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-gray-800 text-sm">Conversation Mode</h3>
-                    <button @click="popups.config = false" class="text-gray-300 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>
-                </div>
+            <div x-show="popups.config" x-cloak x-transition class="absolute top-24 right-[380px] w-72 bg-white rounded-[30px] shadow-2xl p-7 z-[100] border border-gray-100">
+                <h3 class="font-bold text-gray-800 text-sm mb-4">Conversation Mode</h3>
                 <button class="w-full text-left p-3 rounded-2xl bg-migo-green text-white font-bold mb-2">Strict 🔒</button>
                 <button class="w-full text-left p-3 rounded-2xl bg-gray-50 text-gray-500 font-bold hover:bg-gray-100 transition">Relaxed 🔓</button>
             </div>
 
             <div x-show="popups.trans" x-cloak x-transition class="absolute top-24 right-8 w-80 bg-white rounded-[30px] shadow-2xl p-7 z-[100] border border-gray-100">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-gray-800 text-sm">Quick Translator</h3>
-                    <button @click="popups.trans = false" class="text-gray-300 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>
-                </div>
+                <h3 class="font-bold text-gray-800 text-sm mb-4">Quick Translator</h3>
                 <textarea x-model="transInput" class="w-full bg-gray-50 rounded-2xl p-4 text-xs mb-3 outline-none h-24" placeholder="Spanish..."></textarea>
                 <div class="bg-orange-50/50 p-4 rounded-2xl text-xs mb-4 text-gray-700 font-medium" x-text="transOutput || 'Result...'"></div>
                 <button @click="translate()" class="w-full bg-migo-orange text-white py-3 rounded-2xl font-extrabold shadow-lg">Translate</button>
@@ -80,10 +73,9 @@
             <div x-show="popups.user" x-cloak x-transition class="absolute bottom-28 left-4 w-64 bg-white rounded-[30px] shadow-2xl p-6 border border-gray-100 z-[100]">
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-migo-orange font-black">S</div>
-                    <div><h4 class="font-extrabold text-gray-800 text-sm">Sergi Pérez</h4><p class="text-[10px] text-migo-orange font-bold uppercase tracking-widest">Student</p></div>
+                    <div><h4 class="font-extrabold text-gray-800 text-sm">Sergi Pérez</h4><p class="text-[10px] text-migo-orange font-bold uppercase tracking-widest text-xs">Student</p></div>
                 </div>
             </div>
-
         </section>
     </main>
 
@@ -92,8 +84,7 @@
             return {
                 userInput: '', transInput: '', transOutput: '', correction: '',
                 popups: { config: false, trans: false, user: false },
-                messages: [{ role: 'migo', text: '¡Ahora las ventanas son independientes! Puedes abrirlas todas a la vez.' }],
-                
+                messages: [{ role: 'migo', text: '¡Ventanas agrupadas! Pruébalas ahora.' }],
                 async send() {
                     if (!this.userInput.trim()) return;
                     const text = this.userInput;
@@ -108,7 +99,7 @@
                 },
                 async translate() {
                     if(!this.transInput) return;
-                    this.transOutput = "Working...";
+                    this.transOutput = "...";
                     const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=en&dt=t&q=${encodeURI(this.transInput)}`);
                     const data = await res.json();
                     this.transOutput = data[0][0][0];
