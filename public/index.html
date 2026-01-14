@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo - English Tutor</title>
+    <title>Migo - App</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -15,120 +15,122 @@
     </script>
     <style>
         [x-cloak] { display: none !important; }
-        .popup-arrow::before {
-            content: '';
-            position: absolute;
-            width: 15px;
-            height: 15px;
-            background: white;
-            transform: rotate(45deg);
-        }
+        .popup-card { border: 1px solid #f1f5f9; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
+        .popup-arrow-top::before { content: ''; position: absolute; top: -8px; right: 24px; width: 16px; height: 16px; background: white; transform: rotate(45deg); border-left: 1px solid #f1f5f9; border-top: 1px solid #f1f5f9; }
+        .popup-arrow-left::before { content: ''; position: absolute; left: -8px; top: 50%; transform: translateY(-50%) rotate(45deg); width: 16px; height: 16px; background: white; border-left: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
     </style>
 </head>
 <body class="bg-migo-bg h-screen flex overflow-hidden font-sans" x-data="migoApp()" x-init="lucide.createIcons()">
     
-    <nav class="w-20 bg-migo-orange h-full flex flex-col items-center py-8 flex-shrink-0 shadow-xl relative z-[110]">
+    <nav class="w-20 bg-migo-orange h-full flex flex-col items-center py-8 flex-shrink-0 relative z-[110]">
         <div class="flex flex-col gap-6">
             <button class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-white"><i data-lucide="home"></i></button>
             <button class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-white"><i data-lucide="book-open"></i></button>
         </div>
-        
-        <button @click="popups.user = !popups.user; $nextTick(() => lucide.createIcons())" 
-                class="mt-auto w-12 h-12 bg-white rounded-full flex items-center justify-center text-migo-orange font-black text-xl shadow-lg hover:scale-110 transition active:scale-95">S</button>
+        <button @click="popups.user = !popups.user" class="mt-auto w-12 h-12 bg-white rounded-full flex items-center justify-center text-migo-orange font-black text-xl shadow-lg active:scale-95 transition-transform">S</button>
     </nav>
 
-    <main class="flex-1 flex p-6 gap-6 overflow-hidden">
-        <section class="w-full max-w-[360px] bg-white rounded-[35px] shadow-sm flex flex-col border border-gray-100 overflow-hidden">
+    <main class="flex-1 flex p-6 gap-6 overflow-hidden relative">
+        
+        <section class="w-full max-w-[360px] bg-white rounded-[40px] shadow-sm flex flex-col border border-gray-100 overflow-hidden">
             <header class="p-6 border-b border-gray-50 flex items-center gap-3">
                 <div class="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></div>
-                <h2 class="font-extrabold text-migo-orange text-sm tracking-widest uppercase">Corrections</h2>
+                <h2 class="font-extrabold text-migo-orange text-[10px] tracking-[0.2em] uppercase">Corrections</h2>
             </header>
-            <div class="flex-1 p-6 overflow-y-auto text-gray-700 text-sm" x-html="correction || 'Waiting for phrases...'"></div>
+            <div class="flex-1 p-6 text-gray-700 text-sm" x-html="correction || 'Waiting for phrases...'"></div>
         </section>
 
-        <section class="flex-1 bg-white rounded-[35px] shadow-sm flex flex-col relative overflow-hidden border border-gray-100">
-            <header class="p-7 flex justify-between items-center text-gray-400">
+        <section class="flex-1 bg-white rounded-[40px] shadow-sm flex flex-col relative overflow-hidden border border-gray-100">
+            <header class="p-7 flex justify-between items-center">
                 <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">Migo<span class="text-migo-orange">.</span></h1>
-                <div class="flex gap-6">
-                    <button @click="popups.config = !popups.config; $nextTick(() => lucide.createIcons())" class="hover:text-migo-orange transition"><i data-lucide="settings"></i></button>
-                    <button @click="popups.trans = !popups.trans; $nextTick(() => lucide.createIcons())" class="hover:text-migo-orange transition"><i data-lucide="languages"></i></button>
+                <div class="flex bg-gray-100 p-1.5 rounded-full gap-2">
+                    <button @click="popups.config = !popups.config" class="w-10 h-10 flex items-center justify-center rounded-full transition" :class="popups.config ? 'bg-white shadow-sm text-migo-orange' : 'text-gray-400 hover:text-gray-600'"><i data-lucide="settings" class="w-5 h-5"></i></button>
+                    <button @click="popups.trans = !popups.trans" class="w-10 h-10 flex items-center justify-center rounded-full transition" :class="popups.trans ? 'bg-white shadow-sm text-migo-orange' : 'text-gray-400 hover:text-gray-600'"><i data-lucide="languages" class="w-5 h-5"></i></button>
                 </div>
             </header>
 
-            <div class="flex-1 mx-6 bg-gray-50/50 rounded-[30px] p-6 overflow-y-auto flex flex-col gap-4" id="chat-container">
+            <div class="flex-1 mx-6 bg-gray-50/50 rounded-[35px] p-8 overflow-y-auto flex flex-col gap-5">
                 <template x-for="msg in messages">
                     <div :class="msg.role === 'migo' ? 'self-start bg-migo-orange text-white rounded-bl-none' : 'self-end bg-white text-gray-700 shadow-sm rounded-br-none'" 
-                         class="max-w-[80%] p-4 px-6 rounded-[22px] font-semibold text-[15px]" x-text="msg.text"></div>
+                         class="max-w-[75%] p-5 px-7 rounded-[28px] font-semibold text-[15px]" x-text="msg.text"></div>
                 </template>
             </div>
 
-            <div class="p-7 flex gap-4">
-                <div class="flex-1 bg-gray-50 rounded-[22px] px-6 py-1">
-                    <textarea x-model="userInput" @keydown.enter.prevent="send()" class="w-full outline-none py-3 text-[15px] h-12 bg-transparent text-gray-700" placeholder="Type here..."></textarea>
+            <div class="p-8 flex gap-4 items-center">
+                <div class="flex-1 bg-gray-50 rounded-[25px] px-6 py-2 border border-transparent focus-within:border-migo-orange/20 transition-all">
+                    <textarea x-model="userInput" @keydown.enter.prevent="send()" class="w-full outline-none py-3 text-[15px] h-12 bg-transparent text-gray-700 resize-none" placeholder="Escribe aquí..."></textarea>
                 </div>
-                <button @click="send()" class="w-14 h-12 bg-migo-green text-white rounded-[18px] flex items-center justify-center text-2xl shadow-lg">➜</button>
+                <button @click="send()" class="w-14 h-14 bg-migo-green text-white rounded-[20px] flex items-center justify-center shadow-lg hover:brightness-105 active:scale-95 transition-all"><i data-lucide="arrow-right" class="w-6 h-6"></i></button>
             </div>
 
-            <div x-show="popups.config" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:leave="transition ease-in duration-150"
-                 class="absolute top-24 right-[380px] w-72 bg-white rounded-[30px] shadow-2xl p-7 z-[100] border border-gray-100 popup-arrow before:-top-2 before:right-6">
+            <div x-show="popups.config" x-cloak x-transition class="absolute top-24 right-[110px] w-[280px] bg-white rounded-[30px] popup-card z-[100] p-6 popup-arrow-top">
+                <h4 class="text-[10px] font-extrabold text-gray-400 tracking-widest uppercase mb-4">Nivel de Rigor</h4>
+                <div class="flex flex-col gap-2">
+                    <button class="w-full flex items-center gap-3 p-3 rounded-2xl bg-migo-green text-white font-bold text-sm shadow-md shadow-green-100"><span>🔒</span> Estricto (Bloqueo)</button>
+                    <button class="w-full flex items-center gap-3 p-3 rounded-2xl bg-gray-50 text-gray-600 font-semibold text-sm hover:bg-gray-100 transition"><span>🔓</span> No tan estricto</button>
+                    <button class="w-full flex items-center gap-3 p-3 rounded-2xl bg-migo-green text-white font-bold text-sm"><span>🍃</span> Normal</button>
+                    <hr class="my-2 border-gray-50">
+                    <button class="w-full flex items-center gap-3 p-3 rounded-2xl bg-gray-50 text-gray-600 font-semibold text-sm hover:bg-gray-100 transition"><span>✍️</span> Gramática (Formal)</button>
+                    <button class="w-full flex items-center gap-3 p-3 rounded-2xl bg-gray-50 text-gray-600 font-semibold text-sm hover:bg-gray-100 transition"><span>💼</span> Entrevista Trabajo</button>
+                    <button @click="resetApp()" class="w-full flex items-center gap-3 p-3 rounded-2xl bg-red-50 text-red-500 font-bold text-sm mt-2 border border-red-100 hover:bg-red-100 transition"><span>🔄</span> Reiniciar App</button>
+                </div>
+            </div>
+
+            <div x-show="popups.trans" x-cloak x-transition class="absolute top-24 right-6 w-[320px] bg-white rounded-[30px] popup-card z-[100] p-6 popup-arrow-top">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-gray-800 text-sm">Conversation Mode</h3>
-                    <button @click="popups.config = false" class="text-gray-300 hover:text-red-500 transition"><i data-lucide="x" class="w-4 h-4"></i></button>
+                    <h4 class="text-[10px] font-extrabold text-gray-400 tracking-widest uppercase">Translator / Traductor</h4>
+                    <button @click="popups.trans = false" class="text-red-400 hover:text-red-600 transition"><i data-lucide="x" class="w-4 h-4"></i></button>
                 </div>
-                <button class="w-full text-left p-3 rounded-2xl bg-migo-green text-white font-bold mb-2">Strict 🔒</button>
-                <button class="w-full text-left p-3 rounded-2xl bg-gray-50 text-gray-500 font-bold hover:bg-gray-100 transition">Relaxed 🔓</button>
+                <div class="mb-4">
+                    <div class="flex justify-between items-center mb-2 px-1"><span class="text-[9px] font-bold text-orange-400 uppercase tracking-tighter">Español > Inglés</span><i data-lucide="refresh-cw" class="w-3 h-3 text-gray-300"></i></div>
+                    <textarea class="w-full bg-green-50/30 border border-green-100 rounded-xl p-3 text-xs min-h-[60px] outline-none" placeholder="Escribe..."></textarea>
+                    <div class="mt-2 p-3 bg-gray-50 rounded-xl border border-dashed border-gray-200 text-[10px] text-gray-400 flex justify-between items-center">RESULT <i data-lucide="copy" class="w-3 h-3"></i></div>
+                </div>
+                <div>
+                    <div class="flex justify-between items-center mb-2 px-1"><span class="text-[9px] font-bold text-orange-400 uppercase tracking-tighter">English > Spanish</span><i data-lucide="refresh-cw" class="w-3 h-3 text-gray-300"></i></div>
+                    <textarea class="w-full bg-green-50/30 border border-green-100 rounded-xl p-3 text-xs min-h-[60px] outline-none" placeholder="Type..."></textarea>
+                    <div class="mt-2 p-3 bg-gray-50 rounded-xl border border-dashed border-gray-200 text-[10px] text-gray-400 flex justify-between items-center">RESULTADO <i data-lucide="copy" class="w-3 h-3"></i></div>
+                </div>
             </div>
 
-            <div x-show="popups.trans" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95"
-                 class="absolute top-24 right-8 w-80 bg-white rounded-[30px] shadow-2xl p-7 z-[100] border border-gray-100 popup-arrow before:-top-2 before:right-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-gray-800 text-sm">Quick Translator</h3>
-                    <button @click="popups.trans = false" class="text-gray-300 hover:text-red-500 transition"><i data-lucide="x" class="w-4 h-4"></i></button>
-                </div>
-                <textarea x-model="transInput" class="w-full bg-gray-50 rounded-2xl p-4 text-xs mb-3 outline-none h-24" placeholder="Spanish..."></textarea>
-                <div class="bg-orange-50/50 p-4 rounded-2xl text-xs mb-4 text-gray-700 font-medium" x-text="transOutput || 'Result...'"></div>
-                <button @click="translate()" class="w-full bg-migo-orange text-white py-3 rounded-2xl font-extrabold shadow-lg">Translate</button>
-            </div>
-
-            <div x-show="popups.user" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-x-4"
-                 class="absolute bottom-8 -left-4 w-64 bg-white rounded-[30px] shadow-2xl p-6 border border-gray-100 z-[120] popup-arrow before:top-1/2 before:-left-2 before:-translate-y-1/2">
-                <div class="flex justify-between items-start mb-2">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-migo-orange font-black text-sm">S</div>
-                        <div>
-                            <h4 class="font-extrabold text-gray-800 text-xs">Sergi Pérez</h4>
-                            <p class="text-[9px] text-migo-orange font-bold uppercase tracking-widest">Student</p>
-                        </div>
+            <div x-show="popups.user" x-cloak x-transition class="absolute bottom-8 left-4 w-[280px] bg-white rounded-[35px] popup-card z-[120] p-8 popup-arrow-left">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center text-migo-orange font-black text-xl">S</div>
+                    <div>
+                        <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">User / Usuario</h4>
+                        <p class="font-bold text-gray-800 text-lg">Sergi Pérez</p>
                     </div>
-                    <button @click="popups.user = false" class="text-gray-300 hover:text-red-500 transition"><i data-lucide="x" class="w-4 h-4"></i></button>
                 </div>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <p class="text-[9px] font-bold text-gray-300 uppercase">Rigor Level</p>
+                        <p class="text-[11px] font-bold text-migo-green leading-tight">Relajado / Relaxed</p>
+                    </div>
+                    <div>
+                        <p class="text-[9px] font-bold text-gray-300 uppercase">Chat Style</p>
+                        <p class="text-[11px] font-bold text-migo-green leading-tight">Normal</p>
+                    </div>
+                </div>
+                <button @click="resetApp()" class="w-full py-4 rounded-2xl bg-red-50 text-red-500 font-extrabold text-sm hover:bg-red-100 transition">Reset / Reiniciar</button>
             </div>
+
         </section>
     </main>
 
     <script>
         function migoApp() {
             return {
-                userInput: '', transInput: '', transOutput: '', correction: '',
+                userInput: '', correction: '',
                 popups: { config: false, trans: false, user: false },
-                messages: [{ role: 'migo', text: '¡Popups mejorados! Ahora la ventana de usuario nace del icono y todas tienen cierre elegante.' }],
+                messages: [{ role: 'migo', text: '¡Hola Sergi! He actualizado las ventanas para que coincidan exactamente con tu diseño. ¿Qué te parecen?' }],
                 async send() {
                     if (!this.userInput.trim()) return;
-                    this.messages.push({ role: 'user', text: this.userInput });
+                    const text = this.userInput;
+                    this.messages.push({ role: 'user', text: text });
                     this.userInput = '';
-                    try {
-                        const res = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: this.messages[this.messages.length-1].text }) });
-                        const data = await res.json();
-                        this.messages.push({ role: 'migo', text: data.reply });
-                        this.correction = data.correction;
-                    } catch (e) { console.error(e); }
                 },
-                async translate() {
-                    if(!this.transInput) return;
-                    this.transOutput = "Translating...";
-                    const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=en&dt=t&q=${encodeURI(this.transInput)}`);
-                    const data = await res.json();
-                    this.transOutput = data[0][0][0];
+                resetApp() {
+                    if(confirm('¿Reiniciar aplicación?')) window.location.reload();
                 }
             }
         }
