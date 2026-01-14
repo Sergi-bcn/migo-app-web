@@ -47,9 +47,11 @@ body {
   color: var(--migo-orange);
   font-weight: 800;
   cursor: pointer;
+}
 
-  /* ✅ ÚNICO CAMBIO */
-  transform: translateY(-80px);
+/* ✅ CAMBIO ÚNICO Y LOCAL */
+.user-icon {
+  margin-bottom: 80px; /* ≈ 2 cm */
 }
 
 /* MAIN */
@@ -243,7 +245,7 @@ body {
 <body>
 
 <nav class="side-nav">
-  <div class="nav-item" onclick="togglePopup('pop-user')">S</div>
+  <div class="nav-item user-icon" onclick="togglePopup('pop-user')">S</div>
 </nav>
 
 <main class="main-app">

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migo - English Tutor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        migo: {
+                            orange: '#ff9800',
+                            green: '#4caf50',
+                            bg: '#f0f2f5',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .chat-scroll::-webkit-scrollbar { width: 5px; }
+        .chat-scroll::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-migo-bg h-screen flex overflow-hidden font-sans" x-data="migoApp()">
+
+    <nav class="w-20 bg-migo-orange h-full flex flex-col items-center py-8 flex-shrink-0">
+        <div class="space-y-6">
+            <button class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-white text-2xl hover:bg-white/30 transition">🏠</button>
+            <button class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-white text-2xl hover:bg-white/30 transition">📚</button>
+        </div>
+        
+        <button @click="popups.user = !popups.user" 
+                class="mt-auto w-12 h-12 bg-white rounded-full flex items-center justify-center text-migo-orange font-extrabold text-xl shadow-lg hover:scale-110 transition">
+            S
+        </button>
+    </nav>
+
+    <main class="flex-1 flex p-6 gap-6 overflow-hidden">
+        
+        <section class="w-full max-w-[380px] bg-white rounded-[30px] shadow-sm flex flex-col overflow-hidden">
+            <header class="p-6 border-b border-gray-100 flex items-center gap-3">
+                <span class="w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+                <h2 class="font-extrabold text-migo-orange tracking-wide">CORRECTIONS</h2>
+            </header>
+            <div class="flex-1 p-6 text-gray-500 overflow-y-auto chat-scroll">
+                <template x-if="correction">
+                    <div class="bg-orange-50 p-4 rounded-2xl border border-orange-100 text-sm leading-relaxed" x-text="correction"></div>
+                </template>
+                <template x-if="!correction">
+                    <p class="text-sm italic">Waiting for phrases...</p>
+                </template>
+            </div>
+        </section>
+
+        <section class="flex-1 bg-white rounded-[30px] shadow-sm flex flex-col relative overflow-hidden">
+            <header class="p-6 flex justify-between items-center">
+                <h1 class="text-3xl font-extrabold">Migo<span class="text-migo-orange">.</span></h1>
+                <div class="flex gap-5 text-2xl">
+                    <button @click="togglePopup('config')" class="hover:rotate-45 transition transform">⚙️</button>
+                    <button @click="togglePopup('trans')" class="hover:scale-110 transition">🌐</button>
+                </div>
+            </header>
+
+            <div class="flex-1 mx-6 bg-gray-50 rounded-[25px] p-6 overflow-y-auto flex flex-col gap-4 chat-scroll" id="chat-container">
+                <template x-for="msg in messages" :key="msg.id">
+                    <div :class="msg.role === 'migo' ? 'self-start bg-migo-orange text-white rounded-bl-none' : 'self-end bg-gray-200 text-gray-800 rounded-br-none'" 
+                         class="max-w-[75%] p-4 rounded-[20px] font-medium text-sm shadow-sm"
+                         x-text="msg.text">
+                    </div>
+                </template>
+            </div>
+
+            <div class="p-6 flex gap-4">
+                <div class="flex-1 flex items-center bg-white border-2 border-gray-100 rounded-2xl px-5 py-1 focus-within:border-migo-orange transition">
+                    <textarea x-model="userInput" 
+                              @keydown.enter.prevent="sendMessage()"
+                              class="flex-1 outline-none resize-none py-3 text-sm h-12" 
+                              placeholder="Type your message in English..."></textarea>
+                </div>
+                <button @click="sendMessage()" class="w-12 h-12 bg-migo-green text-white rounded-xl flex items-center justify-center text-xl hover:brightness-110 transition shadow-md">
+                    ➜
+                </button>
+            </div>
+
+            <div x-show="popups.config" x-cloak x-transition class="absolute top-20 right-20 w-72 bg-white rounded-3xl shadow-2xl p-6 z-50 border border-gray-100">
+                <h3 class="font-bold mb-4">Settings</h3>
+                <button class="w-full text-left p-3 rounded-xl bg-migo-green text-white font-semibold mb-2">🔒 Strict Mode</button>
+                <button class="w-full text-left p-3 rounded-xl bg-gray-50 text-gray-600 font-semibold hover:bg-gray-100">🔓 Relaxed Mode</button>
+            </div>
+
+            <div x-show="popups.trans" x-cloak x-transition class="absolute top-20 right-4 w-96 bg-white rounded-3xl shadow-2xl p-6 z-50 border border-gray-100">
+                <h3 class="font-bold mb-4">Migo Translator</h3>
+                <textarea x-model="transInput" class="w-full bg-gray-50 border border-gray-100 rounded-xl p-3 text-sm mb-3 outline-none focus:border-migo-orange" placeholder="Spanish to English..."></textarea>
+                <div class="bg-gray-50 p-3 rounded-xl text-sm min-h-[40px] mb-4 text-gray-700" x-text="transOutput || '...'"></div>
+                <button @click="translate()" class="w-full bg-migo-orange text-white py-3 rounded-xl font-bold shadow-md hover:brightness-110 transition">Translate</button>
+            </div>
+
+            <div x-show="popups.user" x-cloak x-transition class="absolute bottom-24 left-[-60px] w-64 bg-white rounded-3xl shadow-2xl p-6 z-50 border border-gray-100">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-migo-orange font-bold text-lg">S</div>
+                    <div>
+                        <h4 class="font-bold text-gray-800">Sergi Pérez</h4>
+                        <p class="text-xs text-gray-400">Student Profile</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <script>
+        function migoApp() {
+            return {
+                userInput: '',
+                transInput: '',
+                transOutput: '',
+                correction: '',
+                messages: [
+                    { id: 1, role: 'migo', text: 'Hi Sergi! How can I help you with your English today?' }
+                ],
+                popups: {
+                    config: false,
+                    trans: false,
+                    user: false
+                },
+                togglePopup(key) {
+                    Object.keys(this.popups).forEach(k => {
+                        if(k !== key) this.popups[k] = false;
+                    });
+                    this.popups[key] = !this.popups[key];
+                },
+                async sendMessage() {
+                    if (!this.userInput.trim()) return;
+                    
+                    const text = this.userInput;
+                    this.messages.push({ id: Date.now(), role: 'user', text: text });
+                    this.userInput = '';
+                    
+                    // Auto-scroll
+                    setTimeout(() => {
+                        const container = document.getElementById('chat-container');
+                        container.scrollTop = container.scrollHeight;
+                    }, 10);
+
+                    try {
+                        const response = await fetch('/api/chat', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ message: text, rigor: '🔒 Strict', style: 'Normal' })
+                        });
+                        const data = await response.json();
+                        this.messages.push({ id: Date.now() + 1, role: 'migo', text: data.reply });
+                        this.correction = data.correction;
+                    } catch (e) {
+                        this.messages.push({ id: Date.now() + 1, role: 'migo', text: "Sorry, I'm having trouble connecting." });
+                    }
+                },
+                async translate() {
+                    if(!this.transInput) return;
+                    this.transOutput = "Translating...";
+                    try {
+                        const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=en&dt=t&q=${encodeURI(this.transInput)}`);
+                        const data = await res.json();
+                        this.transOutput = data[0][0][0];
+                    } catch (e) { this.transOutput = "Error."; }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
