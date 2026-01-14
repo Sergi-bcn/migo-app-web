@@ -13,16 +13,28 @@
             theme: { extend: { colors: { migo: { orange: '#ff9800', green: '#4caf50', bg: '#f0f2f5' } }, fontFamily: { sans: ['Quicksand', 'sans-serif'] } } }
         }
     </script>
-    <style>[x-cloak] { display: none !important; }</style>
+    <style>
+        [x-cloak] { display: none !important; }
+        .popup-arrow::before {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: white;
+            transform: rotate(45deg);
+        }
+    </style>
 </head>
 <body class="bg-migo-bg h-screen flex overflow-hidden font-sans" x-data="migoApp()" x-init="lucide.createIcons()">
     
-    <nav class="w-20 bg-migo-orange h-full flex flex-col items-center py-8 flex-shrink-0 shadow-xl">
+    <nav class="w-20 bg-migo-orange h-full flex flex-col items-center py-8 flex-shrink-0 shadow-xl relative z-[110]">
         <div class="flex flex-col gap-6">
             <button class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-white"><i data-lucide="home"></i></button>
             <button class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-white"><i data-lucide="book-open"></i></button>
         </div>
-        <button @click="popups.user = !popups.user; $nextTick(() => lucide.createIcons())" class="mt-auto w-12 h-12 bg-white rounded-full flex items-center justify-center text-migo-orange font-black text-xl shadow-lg">S</button>
+        
+        <button @click="popups.user = !popups.user; $nextTick(() => lucide.createIcons())" 
+                class="mt-auto w-12 h-12 bg-white rounded-full flex items-center justify-center text-migo-orange font-black text-xl shadow-lg hover:scale-110 transition active:scale-95">S</button>
     </nav>
 
     <main class="flex-1 flex p-6 gap-6 overflow-hidden">
@@ -45,7 +57,7 @@
 
             <div class="flex-1 mx-6 bg-gray-50/50 rounded-[30px] p-6 overflow-y-auto flex flex-col gap-4" id="chat-container">
                 <template x-for="msg in messages">
-                    <div :class="msg.role === 'migo' ? 'self-start bg-migo-orange text-white' : 'self-end bg-white text-gray-700 shadow-sm'" 
+                    <div :class="msg.role === 'migo' ? 'self-start bg-migo-orange text-white rounded-bl-none' : 'self-end bg-white text-gray-700 shadow-sm rounded-br-none'" 
                          class="max-w-[80%] p-4 px-6 rounded-[22px] font-semibold text-[15px]" x-text="msg.text"></div>
                 </template>
             </div>
@@ -57,23 +69,38 @@
                 <button @click="send()" class="w-14 h-12 bg-migo-green text-white rounded-[18px] flex items-center justify-center text-2xl shadow-lg">➜</button>
             </div>
 
-            <div x-show="popups.config" x-cloak x-transition class="absolute top-24 right-[380px] w-72 bg-white rounded-[30px] shadow-2xl p-7 z-[100] border border-gray-100">
-                <h3 class="font-bold text-gray-800 text-sm mb-4">Conversation Mode</h3>
+            <div x-show="popups.config" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:leave="transition ease-in duration-150"
+                 class="absolute top-24 right-[380px] w-72 bg-white rounded-[30px] shadow-2xl p-7 z-[100] border border-gray-100 popup-arrow before:-top-2 before:right-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-gray-800 text-sm">Conversation Mode</h3>
+                    <button @click="popups.config = false" class="text-gray-300 hover:text-red-500 transition"><i data-lucide="x" class="w-4 h-4"></i></button>
+                </div>
                 <button class="w-full text-left p-3 rounded-2xl bg-migo-green text-white font-bold mb-2">Strict 🔒</button>
                 <button class="w-full text-left p-3 rounded-2xl bg-gray-50 text-gray-500 font-bold hover:bg-gray-100 transition">Relaxed 🔓</button>
             </div>
 
-            <div x-show="popups.trans" x-cloak x-transition class="absolute top-24 right-8 w-80 bg-white rounded-[30px] shadow-2xl p-7 z-[100] border border-gray-100">
-                <h3 class="font-bold text-gray-800 text-sm mb-4">Quick Translator</h3>
+            <div x-show="popups.trans" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95"
+                 class="absolute top-24 right-8 w-80 bg-white rounded-[30px] shadow-2xl p-7 z-[100] border border-gray-100 popup-arrow before:-top-2 before:right-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-gray-800 text-sm">Quick Translator</h3>
+                    <button @click="popups.trans = false" class="text-gray-300 hover:text-red-500 transition"><i data-lucide="x" class="w-4 h-4"></i></button>
+                </div>
                 <textarea x-model="transInput" class="w-full bg-gray-50 rounded-2xl p-4 text-xs mb-3 outline-none h-24" placeholder="Spanish..."></textarea>
                 <div class="bg-orange-50/50 p-4 rounded-2xl text-xs mb-4 text-gray-700 font-medium" x-text="transOutput || 'Result...'"></div>
                 <button @click="translate()" class="w-full bg-migo-orange text-white py-3 rounded-2xl font-extrabold shadow-lg">Translate</button>
             </div>
 
-            <div x-show="popups.user" x-cloak x-transition class="absolute bottom-28 left-4 w-64 bg-white rounded-[30px] shadow-2xl p-6 border border-gray-100 z-[100]">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-migo-orange font-black">S</div>
-                    <div><h4 class="font-extrabold text-gray-800 text-sm">Sergi Pérez</h4><p class="text-[10px] text-migo-orange font-bold uppercase tracking-widest text-xs">Student</p></div>
+            <div x-show="popups.user" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-x-4"
+                 class="absolute bottom-8 -left-4 w-64 bg-white rounded-[30px] shadow-2xl p-6 border border-gray-100 z-[120] popup-arrow before:top-1/2 before:-left-2 before:-translate-y-1/2">
+                <div class="flex justify-between items-start mb-2">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-migo-orange font-black text-sm">S</div>
+                        <div>
+                            <h4 class="font-extrabold text-gray-800 text-xs">Sergi Pérez</h4>
+                            <p class="text-[9px] text-migo-orange font-bold uppercase tracking-widest">Student</p>
+                        </div>
+                    </div>
+                    <button @click="popups.user = false" class="text-gray-300 hover:text-red-500 transition"><i data-lucide="x" class="w-4 h-4"></i></button>
                 </div>
             </div>
         </section>
@@ -84,14 +111,13 @@
             return {
                 userInput: '', transInput: '', transOutput: '', correction: '',
                 popups: { config: false, trans: false, user: false },
-                messages: [{ role: 'migo', text: '¡Ventanas agrupadas! Pruébalas ahora.' }],
+                messages: [{ role: 'migo', text: '¡Popups mejorados! Ahora la ventana de usuario nace del icono y todas tienen cierre elegante.' }],
                 async send() {
                     if (!this.userInput.trim()) return;
-                    const text = this.userInput;
-                    this.messages.push({ role: 'user', text: text });
+                    this.messages.push({ role: 'user', text: this.userInput });
                     this.userInput = '';
                     try {
-                        const res = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: text }) });
+                        const res = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: this.messages[this.messages.length-1].text }) });
                         const data = await res.json();
                         this.messages.push({ role: 'migo', text: data.reply });
                         this.correction = data.correction;
@@ -99,7 +125,7 @@
                 },
                 async translate() {
                     if(!this.transInput) return;
-                    this.transOutput = "...";
+                    this.transOutput = "Translating...";
                     const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=en&dt=t&q=${encodeURI(this.transInput)}`);
                     const data = await res.json();
                     this.transOutput = data[0][0][0];
