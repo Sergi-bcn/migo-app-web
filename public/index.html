@@ -17,7 +17,7 @@
         [x-cloak] { display: none !important; }
         .popup-card { border: 1px solid #f1f5f9; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
         .popup-arrow-top::before { content: ''; position: absolute; top: -8px; right: 24px; width: 16px; height: 16px; background: white; transform: rotate(45deg); border-left: 1px solid #f1f5f9; border-top: 1px solid #f1f5f9; }
-        .popup-arrow-left::before { content: ''; position: absolute; left: -8px; top: 50%; transform: translateY(-50%) rotate(45deg); width: 16px; height: 16px; background: white; border-left: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
+        .popup-arrow-left::before { content: ''; position: absolute; left: -8px; bottom: 30px; transform: rotate(45deg); width: 16px; height: 16px; background: white; border-left: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
     </style>
 </head>
 <body class="bg-migo-bg h-screen flex overflow-hidden font-sans" x-data="migoApp()" x-init="lucide.createIcons()">
@@ -27,7 +27,7 @@
             <button class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-white"><i data-lucide="home"></i></button>
             <button class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-white"><i data-lucide="book-open"></i></button>
         </div>
-        <button @click="popups.user = !popups.user" class="mt-auto w-12 h-12 bg-white rounded-full flex items-center justify-center text-migo-orange font-black text-xl shadow-lg active:scale-95 transition-transform">S</button>
+        <button @click="popups.user = !popups.user" class="mt-auto w-12 h-12 bg-white rounded-full flex items-center justify-center text-migo-orange font-black text-xl shadow-lg active:scale-95 transition-transform relative">S</button>
     </nav>
 
     <main class="flex-1 flex p-6 gap-6 overflow-hidden relative">
@@ -43,9 +43,15 @@
         <section class="flex-1 bg-white rounded-[40px] shadow-sm flex flex-col relative overflow-hidden border border-gray-100">
             <header class="p-7 flex justify-between items-center">
                 <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">Migo<span class="text-migo-orange">.</span></h1>
-                <div class="flex bg-gray-100 p-1.5 rounded-full gap-2">
-                    <button @click="popups.config = !popups.config" class="w-10 h-10 flex items-center justify-center rounded-full transition" :class="popups.config ? 'bg-white shadow-sm text-migo-orange' : 'text-gray-400 hover:text-gray-600'"><i data-lucide="message-square-text" class="w-5 h-5"></i></button>
-                    <button @click="popups.trans = !popups.trans" class="w-10 h-10 flex items-center justify-center rounded-full transition" :class="popups.trans ? 'bg-white shadow-sm text-migo-orange' : 'text-gray-400 hover:text-gray-600'"><i data-lucide="languages" class="w-5 h-5"></i></button>
+                <div class="flex bg-gray-100 p-1.5 rounded-full relative">
+                    <button @click="popups.config = !popups.config" 
+                            class="w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ease-in-out z-20" 
+                            :class="popups.config ? 'bg-white shadow-sm text-migo-orange -translate-x-[345px]' : 'text-gray-400 hover:text-gray-600'">
+                        <i data-lucide="message-square-text" class="w-5 h-5"></i>
+                    </button>
+                    <button @click="popups.trans = !popups.trans" class="w-10 h-10 flex items-center justify-center rounded-full transition z-20" :class="popups.trans ? 'bg-white shadow-sm text-migo-orange' : 'text-gray-400 hover:text-gray-600'">
+                        <i data-lucide="languages" class="w-5 h-5"></i>
+                    </button>
                 </div>
             </header>
 
@@ -93,7 +99,7 @@
                 </div>
             </div>
 
-            <div x-show="popups.user" x-cloak x-transition class="absolute bottom-8 left-4 w-[280px] bg-white rounded-[35px] popup-card z-[120] p-8 popup-arrow-left">
+            <div x-show="popups.user" x-cloak x-transition class="absolute bottom-4 left-2 w-[280px] bg-white rounded-[35px] popup-card z-[120] p-8 popup-arrow-left">
                 <div class="flex items-center gap-4 mb-6">
                     <div class="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center text-migo-orange font-black text-xl">S</div>
                     <div>
@@ -122,7 +128,7 @@
             return {
                 userInput: '', correction: '',
                 popups: { config: false, trans: false, user: false },
-                messages: [{ role: 'migo', text: '¡Ajustes realizados! He cambiado el icono de configuración por uno de conversación y separado ligeramente las ventanas.' }],
+                messages: [{ role: 'migo', text: '¡Efecto dinámico activado! El icono de modo ahora sigue a su ventana.' }],
                 async send() {
                     if (!this.userInput.trim()) return;
                     this.messages.push({ role: 'user', text: this.userInput });
