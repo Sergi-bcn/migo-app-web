@@ -16,23 +16,25 @@
     <style>
         [x-cloak] { display: none !important; }
         .popup-card { border: 1px solid #f1f5f9; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
+        /* Flecha superior para Modo y Traductor */
         .popup-arrow-top::before { content: ''; position: absolute; top: -8px; right: 24px; width: 16px; height: 16px; background: white; transform: rotate(45deg); border-left: 1px solid #f1f5f9; border-top: 1px solid #f1f5f9; }
-        .popup-arrow-left::before { content: ''; position: absolute; left: -8px; bottom: 30px; transform: rotate(45deg); width: 16px; height: 16px; background: white; border-left: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
+        /* Flecha lateral para Usuario (ajustada para nacer desde la franja) */
+        .popup-arrow-left::before { content: ''; position: absolute; left: -8px; bottom: 32px; transform: rotate(45deg); width: 16px; height: 16px; background: white; border-left: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; z-index: -1; }
     </style>
 </head>
 <body class="bg-migo-bg h-screen flex overflow-hidden font-sans" x-data="migoApp()" x-init="lucide.createIcons()">
     
-    <nav class="w-20 bg-migo-orange h-full flex flex-col items-center py-8 flex-shrink-0 relative z-[110]">
+    <nav class="w-20 bg-migo-orange h-full flex flex-col items-center py-8 flex-shrink-0 relative z-[200]">
         <div class="flex flex-col gap-6">
             <button class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-white"><i data-lucide="home"></i></button>
             <button class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-white"><i data-lucide="book-open"></i></button>
         </div>
-        <button @click="popups.user = !popups.user" class="mt-auto w-12 h-12 bg-white rounded-full flex items-center justify-center text-migo-orange font-black text-xl shadow-lg active:scale-95 transition-transform relative">S</button>
+        <button @click="popups.user = !popups.user" class="mt-auto w-12 h-12 bg-white rounded-full flex items-center justify-center text-migo-orange font-black text-xl shadow-lg active:scale-95 transition-transform relative z-[210]">S</button>
     </nav>
 
     <main class="flex-1 flex p-6 gap-6 overflow-hidden relative">
         
-        <section class="w-full max-w-[360px] bg-white rounded-[40px] shadow-sm flex flex-col border border-gray-100 overflow-hidden">
+        <section class="w-full max-w-[360px] bg-white rounded-[40px] shadow-sm flex flex-col border border-gray-100 overflow-hidden relative z-10">
             <header class="p-6 border-b border-gray-50 flex items-center gap-3">
                 <div class="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></div>
                 <h2 class="font-extrabold text-migo-orange text-[10px] tracking-[0.2em] uppercase">Corrections</h2>
@@ -40,16 +42,22 @@
             <div class="flex-1 p-6 text-gray-700 text-sm" x-html="correction || 'Waiting for phrases...'"></div>
         </section>
 
-        <section class="flex-1 bg-white rounded-[40px] shadow-sm flex flex-col relative overflow-hidden border border-gray-100">
-            <header class="p-7 flex justify-between items-center">
+        <section class="flex-1 bg-white rounded-[40px] shadow-sm flex flex-col relative overflow-hidden border border-gray-100 z-20">
+            <header class="p-7 flex justify-between items-center relative z-50">
                 <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">Migo<span class="text-migo-orange">.</span></h1>
-                <div class="flex bg-gray-100 p-1.5 rounded-full relative">
+                
+                <div class="flex bg-gray-100 p-1.5 rounded-full relative transition-all duration-300 ease-in-out"
+                     :style="popups.config ? 'width: 400px; justify-content: space-between;' : 'width: 96px; justify-content: flex-end;'">
+                    
                     <button @click="popups.config = !popups.config" 
-                            class="w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ease-in-out z-20" 
-                            :class="popups.config ? 'bg-white shadow-sm text-migo-orange -translate-x-[345px]' : 'text-gray-400 hover:text-gray-600'">
+                            class="w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ease-in-out" 
+                            :class="popups.config ? 'bg-white shadow-sm text-migo-orange' : 'text-gray-400 hover:text-gray-600'">
                         <i data-lucide="message-square-text" class="w-5 h-5"></i>
                     </button>
-                    <button @click="popups.trans = !popups.trans" class="w-10 h-10 flex items-center justify-center rounded-full transition z-20" :class="popups.trans ? 'bg-white shadow-sm text-migo-orange' : 'text-gray-400 hover:text-gray-600'">
+
+                    <button @click="popups.trans = !popups.trans" 
+                            class="w-10 h-10 flex items-center justify-center rounded-full transition" 
+                            :class="popups.trans ? 'bg-white shadow-sm text-migo-orange' : 'text-gray-400 hover:text-gray-600'">
                         <i data-lucide="languages" class="w-5 h-5"></i>
                     </button>
                 </div>
@@ -69,43 +77,17 @@
                 <button @click="send()" class="w-14 h-14 bg-migo-green text-white rounded-[20px] flex items-center justify-center shadow-lg hover:brightness-105 active:scale-95 transition-all"><i data-lucide="arrow-right" class="w-6 h-6"></i></button>
             </div>
 
-            <div x-show="popups.config" x-cloak x-transition class="absolute top-24 right-[380px] w-[280px] bg-white rounded-[30px] popup-card z-[100] p-6 popup-arrow-top">
-                <h4 class="text-[10px] font-extrabold text-gray-400 tracking-widest uppercase mb-4">Nivel de Rigor</h4>
-                <div class="flex flex-col gap-2">
-                    <button class="w-full flex items-center gap-3 p-3 rounded-2xl bg-migo-green text-white font-bold text-sm shadow-md shadow-green-100"><span>🔒</span> Estricto (Bloqueo)</button>
-                    <button class="w-full flex items-center gap-3 p-3 rounded-2xl bg-gray-50 text-gray-600 font-semibold text-sm hover:bg-gray-100 transition"><span>🔓</span> No tan estricto</button>
-                    <button class="w-full flex items-center gap-3 p-3 rounded-2xl bg-migo-green text-white font-bold text-sm"><span>🍃</span> Normal</button>
-                    <hr class="my-2 border-gray-50">
-                    <button class="w-full flex items-center gap-3 p-3 rounded-2xl bg-gray-50 text-gray-600 font-semibold text-sm hover:bg-gray-100 transition"><span>✍️</span> Gramática (Formal)</button>
-                    <button class="w-full flex items-center gap-3 p-3 rounded-2xl bg-gray-50 text-gray-600 font-semibold text-sm hover:bg-gray-100 transition"><span>💼</span> Entrevista Trabajo</button>
-                    <button @click="resetApp()" class="w-full flex items-center gap-3 p-3 rounded-2xl bg-red-50 text-red-500 font-bold text-sm mt-2 border border-red-100 hover:bg-red-100 transition"><span>🔄</span> Reiniciar App</button>
-                </div>
-            </div>
-
-            <div x-show="popups.trans" x-cloak x-transition class="absolute top-24 right-6 w-[340px] bg-white rounded-[30px] popup-card z-[100] p-6 popup-arrow-top">
-                <div class="flex justify-between items-center mb-4">
-                    <h4 class="text-[10px] font-extrabold text-gray-400 tracking-widest uppercase">Translator / Traductor</h4>
-                    <button @click="popups.trans = false" class="text-red-400 hover:text-red-600 transition"><i data-lucide="x" class="w-4 h-4"></i></button>
-                </div>
-                <div class="mb-4">
-                    <div class="flex justify-between items-center mb-2 px-1"><span class="text-[10px] font-bold text-orange-400 uppercase tracking-tighter">Español > Inglés</span><i data-lucide="refresh-cw" class="w-3 h-3 text-gray-300"></i></div>
-                    <textarea class="w-full bg-green-50/30 border border-green-100 rounded-xl p-3 text-sm min-h-[70px] outline-none" placeholder="Escribe..."></textarea>
-                    <div class="mt-2 p-3 bg-gray-50 rounded-xl border border-dashed border-gray-200 text-xs text-gray-400 flex justify-between items-center font-bold">RESULT <i data-lucide="copy" class="w-4 h-4"></i></div>
-                </div>
-                <div>
-                    <div class="flex justify-between items-center mb-2 px-1"><span class="text-[10px] font-bold text-orange-400 uppercase tracking-tighter">English > Spanish</span><i data-lucide="refresh-cw" class="w-3 h-3 text-gray-300"></i></div>
-                    <textarea class="w-full bg-green-50/30 border border-green-100 rounded-xl p-3 text-sm min-h-[70px] outline-none" placeholder="Type..."></textarea>
-                    <div class="mt-2 p-3 bg-gray-50 rounded-xl border border-dashed border-gray-200 text-xs text-gray-400 flex justify-between items-center font-bold">RESULTADO <i data-lucide="copy" class="w-4 h-4"></i></div>
-                </div>
-            </div>
-
-            <div x-show="popups.user" x-cloak x-transition class="absolute bottom-4 left-2 w-[280px] bg-white rounded-[35px] popup-card z-[120] p-8 popup-arrow-left">
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center text-migo-orange font-black text-xl">S</div>
-                    <div>
-                        <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">User / Usuario</h4>
-                        <p class="font-bold text-gray-800 text-lg">Sergi Pérez</p>
+            <div x-show="popups.user" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-x-10"
+                 class="absolute bottom-4 left-[-1.5rem] w-[280px] bg-white rounded-[35px] popup-card z-[150] p-8 popup-arrow-left">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center text-migo-orange font-black text-xl">S</div>
+                        <div>
+                            <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">User / Usuario</h4>
+                            <p class="font-bold text-gray-800 text-lg leading-tight">Sergi Pérez</p>
+                        </div>
                     </div>
+                    <button @click="popups.user = false" class="text-gray-300 hover:text-red-500 transition"><i data-lucide="x" class="w-4 h-4"></i></button>
                 </div>
                 <div class="grid grid-cols-2 gap-4 mb-6">
                     <div>
@@ -120,6 +102,29 @@
                 <button @click="resetApp()" class="w-full py-4 rounded-2xl bg-red-50 text-red-500 font-extrabold text-sm hover:bg-red-100 transition">Reset / Reiniciar</button>
             </div>
 
+            <div x-show="popups.config" x-cloak x-transition class="absolute top-24 right-[380px] w-[280px] bg-white rounded-[30px] popup-card z-[100] p-6 popup-arrow-top">
+                <h4 class="text-[10px] font-extrabold text-gray-400 tracking-widest uppercase mb-4">Nivel de Rigor</h4>
+                <div class="flex flex-col gap-2">
+                    <button class="w-full flex items-center gap-3 p-3 rounded-2xl bg-migo-green text-white font-bold text-sm shadow-md"><span>🔒</span> Estricto (Bloqueo)</button>
+                    <button class="w-full flex items-center gap-3 p-3 rounded-2xl bg-migo-green text-white font-bold text-sm"><span>🍃</span> Normal</button>
+                    <hr class="my-2 border-gray-50">
+                    <button class="w-full flex items-center gap-3 p-3 rounded-2xl bg-gray-50 text-gray-600 font-semibold text-sm"><span>💼</span> Entrevista Trabajo</button>
+                    <button @click="resetApp()" class="w-full flex items-center gap-3 p-3 rounded-2xl bg-red-50 text-red-500 font-bold text-sm mt-2 border border-red-100"><span>🔄</span> Reiniciar App</button>
+                </div>
+            </div>
+
+            <div x-show="popups.trans" x-cloak x-transition class="absolute top-24 right-6 w-[340px] bg-white rounded-[30px] popup-card z-[100] p-6 popup-arrow-top">
+                <div class="flex justify-between items-center mb-4">
+                    <h4 class="text-[10px] font-extrabold text-gray-400 tracking-widest uppercase">Translator / Traductor</h4>
+                    <button @click="popups.trans = false" class="text-red-400 hover:text-red-600 transition"><i data-lucide="x" class="w-4 h-4"></i></button>
+                </div>
+                <div class="mb-4">
+                    <div class="flex justify-between items-center mb-2 px-1"><span class="text-[10px] font-bold text-orange-400 uppercase tracking-tighter">Español > Inglés</span></div>
+                    <textarea class="w-full bg-green-50/30 border border-green-100 rounded-xl p-3 text-sm min-h-[70px] outline-none" placeholder="Escribe..."></textarea>
+                    <div class="mt-2 p-3 bg-gray-50 rounded-xl border border-dashed border-gray-200 text-xs text-gray-400 flex justify-between items-center font-bold">RESULT <i data-lucide="copy" class="w-4 h-4"></i></div>
+                </div>
+            </div>
+
         </section>
     </main>
 
@@ -128,7 +133,7 @@
             return {
                 userInput: '', correction: '',
                 popups: { config: false, trans: false, user: false },
-                messages: [{ role: 'migo', text: '¡Efecto dinámico activado! El icono de modo ahora sigue a su ventana.' }],
+                messages: [{ role: 'migo', text: '¡Diseño dinámico listo! El fondo gris ahora acompaña al icono y la ventana de usuario nace desde la franja naranja.' }],
                 async send() {
                     if (!this.userInput.trim()) return;
                     this.messages.push({ role: 'user', text: this.userInput });
