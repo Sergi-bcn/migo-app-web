@@ -17,7 +17,6 @@
         [x-cloak] { display: none !important; }
         .popup-card { border: 1px solid #f1f5f9; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
         .popup-arrow-top::before { content: ''; position: absolute; top: -8px; right: 24px; width: 16px; height: 16px; background: white; transform: rotate(45deg); border-left: 1px solid #f1f5f9; border-top: 1px solid #f1f5f9; }
-        /* Pico de usuario en la parte inferior izquierda */
         .popup-arrow-user::before { content: ''; position: absolute; left: -8px; bottom: 30px; transform: rotate(45deg); width: 16px; height: 16px; background: white; border-left: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
     </style>
 </head>
@@ -88,7 +87,7 @@
 
             <div class="flex-1 mx-6 bg-gray-50/50 rounded-[35px] p-8 overflow-y-auto flex flex-col gap-5">
                 <template x-for="msg in messages">
-                    <div :class="msg.role === 'migo' ? 'self-start bg-migo-orange text-white rounded-bl-none' : 'self-end bg-white text-gray-700 shadow-sm rounded-br-none'" 
+                    <div :class="msg.role === 'user' ? 'self-start bg-white text-gray-700 shadow-sm rounded-bl-none' : 'self-end bg-migo-orange text-white rounded-br-none'" 
                          class="max-w-[75%] p-5 px-7 rounded-[28px] font-semibold text-[15px]" x-text="msg.text"></div>
                 </template>
             </div>
@@ -139,14 +138,20 @@
                     <button @click="popups.trans = false" class="text-red-400 hover:text-red-600 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
                 </div>
                 <div class="flex-1 flex flex-col gap-4 overflow-hidden">
-                    <div class="flex flex-col h-1/2">
-                        <div class="flex justify-between items-center mb-1 px-1"><span class="text-[10px] font-bold text-orange-400 uppercase">Español > Inglés</span><i data-lucide="refresh-cw" class="w-3 h-3 text-gray-300"></i></div>
-                        <textarea class="w-full flex-1 bg-green-50/30 border border-green-100 rounded-xl p-3 text-sm outline-none resize-none" placeholder="Escribe..."></textarea>
+                    <div class="flex flex-col h-1/2 relative group">
+                        <div class="flex justify-between items-center mb-1 px-1"><span class="text-[10px] font-bold text-orange-400 uppercase">Español > Inglés</span></div>
+                        <div class="relative flex-1">
+                            <textarea @keydown.enter.prevent="translate('es')" class="w-full h-full bg-green-50/30 border border-green-100 rounded-xl p-3 pr-10 text-sm outline-none resize-none" placeholder="Escribe..."></textarea>
+                            <button @click="translate('es')" class="absolute right-2 bottom-2 p-1 text-migo-green hover:scale-110 transition"><i data-lucide="arrow-right-circle" class="w-5 h-5"></i></button>
+                        </div>
                         <div class="mt-1 p-2 bg-gray-50 rounded-lg border border-dashed border-gray-200 text-[10px] text-gray-400 flex justify-between items-center font-bold">RESULT <i data-lucide="copy" class="w-3 h-3"></i></div>
                     </div>
-                    <div class="flex flex-col h-1/2">
-                        <div class="flex justify-between items-center mb-1 px-1"><span class="text-[10px] font-bold text-orange-400 uppercase">English > Spanish</span><i data-lucide="refresh-cw" class="w-3 h-3 text-gray-300"></i></div>
-                        <textarea class="w-full flex-1 bg-green-50/30 border border-green-100 rounded-xl p-3 text-sm outline-none resize-none" placeholder="Type..."></textarea>
+                    <div class="flex flex-col h-1/2 relative group">
+                        <div class="flex justify-between items-center mb-1 px-1"><span class="text-[10px] font-bold text-orange-400 uppercase">English > Spanish</span></div>
+                        <div class="relative flex-1">
+                            <textarea @keydown.enter.prevent="translate('en')" class="w-full h-full bg-green-50/30 border border-green-100 rounded-xl p-3 pr-10 text-sm outline-none resize-none" placeholder="Type..."></textarea>
+                            <button @click="translate('en')" class="absolute right-2 bottom-2 p-1 text-migo-green hover:scale-110 transition"><i data-lucide="arrow-right-circle" class="w-5 h-5"></i></button>
+                        </div>
                         <div class="mt-1 p-2 bg-gray-50 rounded-lg border border-dashed border-gray-200 text-[10px] text-gray-400 flex justify-between items-center font-bold">RESULTADO <i data-lucide="copy" class="w-3 h-3"></i></div>
                     </div>
                 </div>
@@ -161,11 +166,19 @@
                 userInput: '', correction: '',
                 popups: { config: false, trans: false, user: false },
                 config: { rigor: 'Normal', modo: 'Coloquial' },
-                messages: [{ role: 'migo', text: '¡Diseño equilibrado Sergi! Altura simétrica, cierre uniforme y pico de usuario en la esquina inferior.' }],
+                messages: [{ role: 'migo', text: '¡Hola Sergi! Ahora tus mensajes están a la izquierda y los míos a la derecha. También puedes traducir con la flecha o con Intro.' }],
                 async send() {
                     if (!this.userInput.trim()) return;
                     this.messages.push({ role: 'user', text: this.userInput });
                     this.userInput = '';
+                    // Simulación de respuesta de Migo
+                    setTimeout(() => {
+                        this.messages.push({ role: 'migo', text: 'Entendido. Estoy procesando tu mensaje en modo ' + this.config.modo + '.' });
+                    }, 600);
+                },
+                translate(lang) {
+                    console.log('Traduciendo desde:', lang);
+                    // Aquí iría la lógica de traducción
                 }
             }
         }
