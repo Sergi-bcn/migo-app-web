@@ -4,6 +4,11 @@ export default async function handler(req) {
   try {
     const { messages, modo, rigor } = await req.json();
 
+    // Verificación de seguridad interna
+    if (!process.env.GROQ_API_KEY) {
+      return new Response(JSON.stringify({ error: "Clave GROQ_API_KEY no configurada en Vercel" }), { status: 500 });
+    }
+
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -15,7 +20,7 @@ export default async function handler(req) {
         messages: [
           { 
             role: "system", 
-            content: `You are Migo, an English teacher. Mode: ${modo}. Rigor: ${rigor}. Respond in English. You MUST always answer with a valid JSON object: {"reply": "your message", "fix": "grammar correction if needed"}` 
+            content: `You are Migo, an English teacher. Mode: ${modo}. Rigor: ${rigor}. Respond in English. You MUST return a JSON object: {"reply": "...", "fix": "..."}` 
           },
           ...messages
         ],

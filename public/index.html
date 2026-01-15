@@ -143,13 +143,17 @@
                                 messages: this.messages.map(m => ({ role: m.role, content: m.text }))
                             })
                         });
-                        if (!response.ok) throw new Error('API Fail');
                         const data = await response.json();
-                        const content = typeof data.choices[0].message.content === 'string' ? JSON.parse(data.choices[0].message.content) : data.choices[0].message.content;
+                        if (data.error) throw new Error(data.error);
+                        
+                        const aiMsg = data.choices[0].message.content;
+                        const content = typeof aiMsg === 'string' ? JSON.parse(aiMsg) : aiMsg;
+                        
                         this.messages.push({ role: 'migo', text: content.reply });
                         if (content.fix) this.correction = content.fix;
                     } catch (e) {
-                        this.messages.push({ role: 'migo', text: 'Error connecting to Migo. Check Vercel Key.' });
+                        console.error('Migo Error:', e);
+                        this.messages.push({ role: 'migo', text: 'Error: ' + e.message });
                     } finally {
                         this.loading = false;
                         lucide.createIcons();
