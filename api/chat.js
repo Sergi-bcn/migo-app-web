@@ -18,7 +18,7 @@ export default async function handler(req) {
             content: `You are Migo, a helpful English teacher. 
             Mode: ${modo}. Rigor: ${rigor}. 
             Respond in English. 
-            Format: You MUST return a JSON object like this: {"reply": "your message", "fix": "short correction or empty"}` 
+            Format JSON: {"reply": "your response", "fix": "short correction if mistake, else empty"}` 
           },
           ...messages
         ],
@@ -31,6 +31,6 @@ export default async function handler(req) {
       headers: { 'Content-Type': 'application/json' }
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: "API Error", details: error.message }), { status: 500 });
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
 }
