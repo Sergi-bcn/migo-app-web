@@ -18,7 +18,6 @@
         .popup-card { border: 1px solid #f1f5f9; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
         .popup-arrow-top::before { content: ''; position: absolute; top: -8px; right: 24px; width: 16px; height: 16px; background: white; transform: rotate(45deg); border-left: 1px solid #f1f5f9; border-top: 1px solid #f1f5f9; }
         .popup-arrow-user::before { content: ''; position: absolute; left: -8px; bottom: 30px; transform: rotate(45deg); width: 16px; height: 16px; background: white; border-left: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
-        /* Suavizar el scroll */
         .scroll-smooth-custom { scroll-behavior: smooth; }
     </style>
 </head>
@@ -104,32 +103,18 @@
             <div x-show="popups.config" x-cloak x-transition 
                  class="absolute top-24 w-[280px] bg-white rounded-[30px] popup-card z-[100] p-6 popup-arrow-top transition-all duration-300"
                  :class="popups.trans ? 'right-[380px]' : 'right-14'">
-                
                 <div class="flex justify-between items-center mb-4">
                     <h4 class="text-[10px] font-extrabold text-gray-400 tracking-widest uppercase">Nivel de Rigor</h4>
                     <button @click="popups.config = false" class="text-red-400 hover:text-red-600 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
                 </div>
-
                 <div class="flex flex-col gap-2 mb-4">
-                    <button @click="config.rigor = 'Estricto'" 
-                            class="w-full p-3 rounded-2xl text-sm font-bold transition-all text-left flex items-center gap-2"
-                            :class="config.rigor === 'Estricto' ? 'bg-migo-green text-white shadow-md' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'">
-                        <span>🔒</span> Estricto
-                    </button>
-                    <button @click="config.rigor = 'Normal'" 
-                            class="w-full p-3 rounded-2xl text-sm font-bold transition-all text-left flex items-center gap-2"
-                            :class="config.rigor === 'Normal' ? 'bg-migo-green text-white shadow-md' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'">
-                        <span>🍃</span> Normal
-                    </button>
+                    <button @click="config.rigor = 'Estricto'" class="w-full p-3 rounded-2xl text-sm font-bold transition-all text-left flex items-center gap-2" :class="config.rigor === 'Estricto' ? 'bg-migo-green text-white shadow-md' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'"><span>🔒</span> Estricto</button>
+                    <button @click="config.rigor = 'Normal'" class="w-full p-3 rounded-2xl text-sm font-bold transition-all text-left flex items-center gap-2" :class="config.rigor === 'Normal' ? 'bg-migo-green text-white shadow-md' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'"><span>🍃</span> Normal</button>
                 </div>
-
                 <h4 class="text-[10px] font-extrabold text-gray-400 tracking-widest uppercase mb-3">Modo Conversación</h4>
                 <div class="flex flex-col gap-2">
                     <template x-for="m in ['Coloquial', 'Formal', 'Entrevista Trabajo', 'Viajes']">
-                        <button @click="config.modo = m" 
-                                class="w-full p-3 rounded-2xl text-[13px] font-bold transition-all text-left"
-                                :class="config.modo === m ? 'bg-migo-green text-white shadow-md' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'"
-                                x-text="m"></button>
+                        <button @click="config.modo = m" class="w-full p-3 rounded-2xl text-[13px] font-bold transition-all text-left" :class="config.modo === m ? 'bg-migo-green text-white shadow-md' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'" x-text="m"></button>
                     </template>
                 </div>
             </div>
@@ -141,24 +126,29 @@
                 </div>
                 <div class="flex-1 flex flex-col gap-4 overflow-hidden">
                     <div class="flex flex-col h-1/2 relative">
-                        <div class="flex justify-between items-center mb-1 px-1"><span class="text-[10px] font-bold text-orange-400 uppercase">Español > Inglés</span></div>
+                        <div class="flex justify-between items-center mb-1 px-1 text-[10px] font-bold text-orange-400 uppercase"><span>Español > Inglés</span></div>
                         <div class="relative flex-1">
-                            <textarea x-model="transTexts.es" @keydown.enter.prevent="translate('es')" class="w-full h-full bg-green-50/30 border border-green-100 rounded-xl p-3 pr-10 text-sm outline-none resize-none" placeholder="Escribe..."></textarea>
-                            <button @click="translate('es')" class="absolute right-2 bottom-2 p-1 text-migo-green hover:scale-110 transition"><i data-lucide="arrow-right-circle" class="w-5 h-5"></i></button>
+                            <textarea x-model="transTexts.es" @keydown.enter.prevent="runTranslation('es')" class="w-full h-full bg-green-50/30 border border-green-100 rounded-xl p-3 pr-10 text-sm outline-none resize-none" placeholder="Escribe..."></textarea>
+                            <button @click="runTranslation('es')" class="absolute right-2 bottom-2 p-1 text-migo-green hover:scale-110 transition"><i data-lucide="arrow-right-circle" class="w-5 h-5"></i></button>
                         </div>
-                        <div class="mt-1 p-2 bg-gray-50 rounded-lg border border-dashed border-gray-200 text-[10px] text-gray-400 flex justify-between items-center font-bold">RESULT <i data-lucide="copy" class="w-3 h-3"></i></div>
+                        <div class="mt-1 p-2 bg-gray-50 rounded-lg border border-dashed border-gray-200 text-[10px] text-gray-700 flex justify-between items-center font-bold">
+                            <span x-text="results.es || 'RESULTADO'"></span>
+                            <button @click="navigator.clipboard.writeText(results.es)" x-show="results.es"><i data-lucide="copy" class="w-3 h-3 text-gray-400"></i></button>
+                        </div>
                     </div>
                     <div class="flex flex-col h-1/2 relative">
-                        <div class="flex justify-between items-center mb-1 px-1"><span class="text-[10px] font-bold text-orange-400 uppercase">English > Spanish</span></div>
+                        <div class="flex justify-between items-center mb-1 px-1 text-[10px] font-bold text-orange-400 uppercase"><span>English > Spanish</span></div>
                         <div class="relative flex-1">
-                            <textarea x-model="transTexts.en" @keydown.enter.prevent="translate('en')" class="w-full h-full bg-green-50/30 border border-green-100 rounded-xl p-3 pr-10 text-sm outline-none resize-none" placeholder="Type..."></textarea>
-                            <button @click="translate('en')" class="absolute right-2 bottom-2 p-1 text-migo-green hover:scale-110 transition"><i data-lucide="arrow-right-circle" class="w-5 h-5"></i></button>
+                            <textarea x-model="transTexts.en" @keydown.enter.prevent="runTranslation('en')" class="w-full h-full bg-green-50/30 border border-green-100 rounded-xl p-3 pr-10 text-sm outline-none resize-none" placeholder="Type..."></textarea>
+                            <button @click="runTranslation('en')" class="absolute right-2 bottom-2 p-1 text-migo-green hover:scale-110 transition"><i data-lucide="arrow-right-circle" class="w-5 h-5"></i></button>
                         </div>
-                        <div class="mt-1 p-2 bg-gray-50 rounded-lg border border-dashed border-gray-200 text-[10px] text-gray-400 flex justify-between items-center font-bold">RESULTADO <i data-lucide="copy" class="w-3 h-3"></i></div>
+                        <div class="mt-1 p-2 bg-gray-50 rounded-lg border border-dashed border-gray-200 text-[10px] text-gray-700 flex justify-between items-center font-bold">
+                            <span x-text="results.en || 'RESULTADO'"></span>
+                            <button @click="navigator.clipboard.writeText(results.en)" x-show="results.en"><i data-lucide="copy" class="w-3 h-3 text-gray-400"></i></button>
+                        </div>
                     </div>
                 </div>
             </div>
-
         </section>
     </main>
 
@@ -169,35 +159,39 @@
                 popups: { config: false, trans: false, user: false },
                 config: { rigor: 'Normal', modo: 'Coloquial' },
                 transTexts: { es: '', en: '' },
-                messages: [{ role: 'migo', text: '¡Todo listo Sergi! El traductor ahora abre Google Translate y el chat baja automáticamente.' }],
+                results: { es: '', en: '' },
+                messages: [{ role: 'migo', text: '¡Traductor listo Sergi! Ahora puedes traducir directamente aquí usando el motor de Google.' }],
                 
                 async send() {
                     if (!this.userInput.trim()) return;
                     this.messages.push({ role: 'user', text: this.userInput });
                     this.userInput = '';
-                    
-                    setTimeout(() => {
-                        this.messages.push({ role: 'migo', text: 'Mensaje recibido. El scroll se ha ajustado automáticamente.' });
-                    }, 600);
+                    setTimeout(() => { this.messages.push({ role: 'migo', text: 'Respuesta automática de prueba.' }); }, 600);
                 },
 
-                translate(lang) {
+                async runTranslation(lang) {
                     const text = lang === 'es' ? this.transTexts.es : this.transTexts.en;
                     if (!text.trim()) return;
                     
                     const source = lang === 'es' ? 'es' : 'en';
                     const target = lang === 'es' ? 'en' : 'es';
-                    const url = `https://translate.google.com/?sl=${source}&tl=${target}&text=${encodeURIComponent(text)}&op=translate`;
                     
-                    window.open(url, '_blank');
+                    lang === 'es' ? this.results.es = 'Traduciendo...' : this.results.en = 'Translating...';
+
+                    try {
+                        const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${source}&tl=${target}&dt=t&q=${encodeURIComponent(text)}`);
+                        const data = await res.json();
+                        lang === 'es' ? this.results.es = data[0][0][0] : this.results.en = data[0][0][0];
+                    } catch (e) {
+                        lang === 'es' ? this.results.es = 'Error' : this.results.en = 'Error';
+                    }
+                    lucide.createIcons();
                 },
 
                 scrollToBottom() {
                     const container = document.getElementById('chat-container');
                     if (container) {
-                        setTimeout(() => {
-                            container.scrollTop = container.scrollHeight;
-                        }, 50);
+                        setTimeout(() => { container.scrollTop = container.scrollHeight; }, 50);
                     }
                 }
             }
