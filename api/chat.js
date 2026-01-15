@@ -15,10 +15,7 @@ export default async function handler(req) {
         messages: [
           { 
             role: "system", 
-            content: `You are Migo, a helpful English teacher. 
-            Mode: ${modo}. Rigor: ${rigor}. 
-            Respond in English. 
-            Format JSON: {"reply": "your response", "fix": "short correction if mistake, else empty"}` 
+            content: `You are Migo, an English teacher. Mode: ${modo}. Rigor: ${rigor}. Respond in English. You MUST always answer with a valid JSON object: {"reply": "your message", "fix": "grammar correction if needed"}` 
           },
           ...messages
         ],
