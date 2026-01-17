@@ -5,7 +5,7 @@ export default async function handler(req) {
     const { messages, modo, rigor } = await req.json();
 
     if (!process.env.GROQ_API_KEY) {
-      return new Response(JSON.stringify({ reply: "Clave API no configurada en Vercel." }), { status: 500 });
+      return new Response(JSON.stringify({ reply: "API Key missing in Vercel settings." }), { status: 500 });
     }
 
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -19,7 +19,7 @@ export default async function handler(req) {
         messages: [
           { 
             role: "system", 
-            content: `You are Migo, an English teacher. Mode: ${modo}. Rigor: ${rigor}. Respond in English. You MUST return a JSON object: {"reply": "your response", "fix": "correction"}` 
+            content: `You are Migo, an English teacher. Mode: ${modo}. Rigor: ${rigor}. Respond in English. You MUST return a JSON object: {"reply": "your response", "fix": "correction or empty"}` 
           },
           ...messages
         ],
@@ -28,11 +28,17 @@ export default async function handler(req) {
     });
 
     const data = await response.json();
-    // Enviamos solo el contenido del mensaje para evitar el error [object Object]
-    return new Response(data.choices[0].message.content, {
-      headers: { 'Content-Type': 'application/json' }
-    });
+    
+    // Verificamos si la estructura de Groq es correcta antes de enviar
+    if (data.choices && data.choices[0] && data.choices[0].message) {
+      return new Response(data.choices[0].message.content, {
+        headers: { 'Content-Type': 'application/json' }
+      });
+    } else {
+      throw new Error("Invalid response from Groq");
+    }
+
   } catch (error) {
-    return new Response(JSON.stringify({ reply: "Error: " + error.message }), { status: 500 });
+    return new Response(JSON.stringify({ reply: "Migo is having trouble: " + error.message }), { status: 500 });
   }
 }

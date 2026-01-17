@@ -137,11 +137,16 @@
                                 messages: this.messages.map(m => ({ role: m.role, content: m.text }))
                             })
                         });
-                        const content = await response.json();
-                        this.messages.push({ role: 'migo', text: content.reply });
-                        if (content.fix) this.correction = content.fix;
+                        const data = await response.json();
+                        // Manejo seguro de la respuesta
+                        if (data && data.reply) {
+                            this.messages.push({ role: 'migo', text: data.reply });
+                            if (data.fix) this.correction = data.fix;
+                        } else {
+                            throw new Error("Migo replied in a weird way.");
+                        }
                     } catch (e) {
-                        this.messages.push({ role: 'migo', text: 'Connection Error.' });
+                        this.messages.push({ role: 'migo', text: "Error: " + e.message });
                     } finally {
                         this.loading = false;
                         lucide.createIcons();
