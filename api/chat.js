@@ -15,11 +15,11 @@ export default async function handler(req) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
+        model: "llama3-8b-8192",
         messages: [
           { 
             role: "system", 
-            content: `You are Migo, an English teacher. Mode: ${modo}. Rigor: ${rigor}. Respond in English. You MUST return a JSON object: {"reply": "your response", "fix": "correction or empty"}` 
+            content: `You are Migo, an English teacher. Mode: ${modo}. Rigor: ${rigor}. Respond in English. You MUST return a JSON object: {"reply": "your message", "fix": "correction or empty"}` 
           },
           ...messages
         ],
@@ -29,16 +29,20 @@ export default async function handler(req) {
 
     const data = await response.json();
     
-    // Verificamos si la estructura de Groq es correcta antes de enviar
-    if (data.choices && data.choices[0] && data.choices[0].message) {
+    // Si Groq devuelve un error, lo enviamos al chat para saber qué es
+    if (data.error) {
+      return new Response(JSON.stringify({ reply: "Groq Error: " + data.error.message }), { status: 400 });
+    }
+
+    if (data.choices && data.choices[0]) {
       return new Response(data.choices[0].message.content, {
         headers: { 'Content-Type': 'application/json' }
       });
-    } else {
-      throw new Error("Invalid response from Groq");
     }
 
+    throw new Error("No choices in response");
+
   } catch (error) {
-    return new Response(JSON.stringify({ reply: "Migo is having trouble: " + error.message }), { status: 500 });
+    return new Response(JSON.stringify({ reply: "Migo Error: " + error.message }), { status: 500 });
   }
 }
