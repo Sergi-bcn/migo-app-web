@@ -8,10 +8,10 @@ export default async function handler(req) {
       return new Response(JSON.stringify({ reply: "API Key missing in Vercel settings." }), { status: 500 });
     }
 
-    // Mapeamos los mensajes para que los roles sean compatibles con Groq
+    // Mapeo de roles correcto para Groq
     const formattedMessages = messages.map(m => ({
       role: m.role === 'migo' ? 'assistant' : m.role,
-      content: m.content
+      content: m.content || m.text
     }));
 
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -21,7 +21,7 @@ export default async function handler(req) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: "llama3-8b-8192",
+        model: "llama-3.3-70b-versatile",
         messages: [
           { 
             role: "system", 

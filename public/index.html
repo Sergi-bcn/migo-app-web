@@ -142,7 +142,7 @@
                             this.messages.push({ role: 'migo', text: data.reply });
                             if (data.fix) this.correction = data.fix;
                         } else {
-                            throw new Error("Empty reply from Migo.");
+                            throw new Error("Empty reply.");
                         }
                     } catch (e) {
                         this.messages.push({ role: 'migo', text: "Error: " + e.message });
