@@ -5,7 +5,7 @@ export default async function handler(req) {
     const { messages, modo, rigor } = await req.json();
 
     if (!process.env.GROQ_API_KEY) {
-      return new Response(JSON.stringify({ reply: "API Key missing in Vercel settings." }), { status: 500 });
+      return new Response(JSON.stringify({ reply: "API Key missing." }), { status: 500 });
     }
 
     const formattedMessages = messages.map(m => ({
@@ -24,7 +24,16 @@ export default async function handler(req) {
         messages: [
           { 
             role: "system", 
-            content: `You are Migo, an English teacher. Mode: ${modo}. Rigor: ${rigor}. Respond in English. You MUST return a JSON object: {"reply": "your response", "fix": "correction or empty"}` 
+            content: `You are Migo, a friendly English teacher. Mode: ${modo}. Rigor: ${rigor}. 
+            CRITICAL RULE: If the user makes ANY grammar or spelling mistake, you MUST:
+            1. Set "hasError" to true.
+            2. In "reply", explain the mistake briefly and kindly in English, then tell them: "Please rewrite it correctly to continue!"
+            3. In "fix", provide ONLY the perfectly corrected sentence.
+            If there is NO mistake:
+            1. Set "hasError" to false.
+            2. Continue the conversation normally in "reply".
+            3. "fix" can be empty.
+            Format: {"reply": "...", "fix": "...", "hasError": true/false}` 
           },
           ...formattedMessages
         ],
@@ -33,19 +42,12 @@ export default async function handler(req) {
     });
 
     const data = await response.json();
-    
-    if (data.error) {
-      return new Response(JSON.stringify({ reply: "Groq Error: " + data.error.message }), { status: 400 });
-    }
-
     if (data.choices && data.choices[0]) {
       return new Response(data.choices[0].message.content, {
         headers: { 'Content-Type': 'application/json' }
       });
     }
-
-    throw new Error("No choices in response");
-
+    throw new Error("Invalid response");
   } catch (error) {
     return new Response(JSON.stringify({ reply: "Migo Error: " + error.message }), { status: 500 });
   }
