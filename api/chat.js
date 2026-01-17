@@ -8,7 +8,6 @@ export default async function handler(req) {
       return new Response(JSON.stringify({ reply: "API Key missing in Vercel settings." }), { status: 500 });
     }
 
-    // Mapeo de roles correcto para Groq
     const formattedMessages = messages.map(m => ({
       role: m.role === 'migo' ? 'assistant' : m.role,
       content: m.content || m.text
