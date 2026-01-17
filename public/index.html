@@ -85,35 +85,29 @@
             <div x-show="popups.config" x-cloak x-transition class="absolute top-24 w-[280px] bg-white rounded-[30px] popup-card z-[100] p-6 popup-arrow-top transition-all" :class="popups.trans ? 'right-[380px]' : 'right-14'">
                 <div class="flex justify-between items-center mb-4"><h4 class="text-[10px] font-extrabold text-gray-400 tracking-widest uppercase">Nivel de Rigor</h4><button @click="popups.config = false" class="text-red-400"><i data-lucide="x" class="w-5 h-5"></i></button></div>
                 <div class="flex flex-col gap-2 mb-4">
-                    <button @click="config.rigor = 'Estricto'" class="w-full p-3 rounded-2xl text-sm font-bold transition-all text-left flex items-center gap-2" :class="config.rigor === 'Estricto' ? 'bg-migo-green text-white shadow-md' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'"><span>🔒</span> Estricto</button>
-                    <button @click="config.rigor = 'Normal'" class="w-full p-3 rounded-2xl text-sm font-bold transition-all text-left flex items-center gap-2" :class="config.rigor === 'Normal' ? 'bg-migo-green text-white shadow-md' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'"><span>🍃</span> Normal</button>
+                    <button @click="config.rigor = 'Estricto'" class="w-full p-3 rounded-2xl text-sm font-bold text-left" :class="config.rigor === 'Estricto' ? 'bg-migo-green text-white shadow-md' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'">🔒 Estricto</button>
+                    <button @click="config.rigor = 'Normal'" class="w-full p-3 rounded-2xl text-sm font-bold text-left" :class="config.rigor === 'Normal' ? 'bg-migo-green text-white shadow-md' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'">🍃 Normal</button>
                 </div>
                 <h4 class="text-[10px] font-extrabold text-gray-400 tracking-widest uppercase mb-3">Modo Conversación</h4>
                 <div class="flex flex-col gap-2">
                     <template x-for="m in ['Coloquial', 'Formal', 'Entrevista Trabajo', 'Viajes']">
-                        <button @click="config.modo = m" class="w-full p-3 rounded-2xl text-[13px] font-bold transition-all text-left" :class="config.modo === m ? 'bg-migo-green text-white shadow-md' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'" x-text="m"></button>
+                        <button @click="config.modo = m" class="w-full p-3 rounded-2xl text-[13px] font-bold text-left" :class="config.modo === m ? 'bg-migo-green text-white shadow-md' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'" x-text="m"></button>
                     </template>
                 </div>
             </div>
 
             <div x-show="popups.trans" x-cloak x-transition class="absolute top-24 right-6 w-[340px] bg-white rounded-[30px] popup-card z-[100] p-6 popup-arrow-top flex flex-col h-[400px]">
-                <div class="flex justify-between items-center mb-4 flex-shrink-0"><h4 class="text-[10px] font-extrabold text-gray-400 tracking-widest uppercase">Traductor</h4><button @click="popups.trans = false" class="text-red-400 hover:text-red-600 transition"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+                <div class="flex justify-between items-center mb-4"><h4 class="text-[10px] font-extrabold text-gray-400 tracking-widest uppercase">Traductor</h4><button @click="popups.trans = false" class="text-red-400"><i data-lucide="x" class="w-5 h-5"></i></button></div>
                 <div class="flex-1 flex flex-col gap-4 overflow-hidden">
                     <div class="flex flex-col h-1/2 relative">
-                        <div class="mb-1 text-[10px] font-bold text-orange-400 uppercase">Español > Inglés</div>
-                        <div class="relative flex-1">
-                            <textarea x-model="transTexts.es" @keydown.enter.prevent="runTranslation('es')" class="w-full h-full bg-green-50/30 border border-green-100 rounded-xl p-3 text-sm outline-none resize-none" placeholder="Escribe..."></textarea>
-                            <button @click="runTranslation('es')" class="absolute right-2 bottom-2 text-migo-green"><i data-lucide="arrow-right-circle" class="w-5 h-5"></i></button>
-                        </div>
-                        <div class="mt-1 p-2 bg-gray-50 rounded-lg text-[10px] text-gray-700 font-bold" x-text="results.es || 'RESULTADO'"></div>
+                        <textarea x-model="transTexts.es" @keydown.enter.prevent="runTranslation('es')" class="w-full h-full bg-green-50/30 border border-green-100 rounded-xl p-3 text-sm outline-none resize-none" placeholder="Español..."></textarea>
+                        <button @click="runTranslation('es')" class="absolute right-2 bottom-2 text-migo-green"><i data-lucide="arrow-right-circle" class="w-5 h-5"></i></button>
+                        <div class="mt-1 p-2 bg-gray-50 rounded-lg text-[10px] font-bold" x-text="results.es || 'RESULTADO'"></div>
                     </div>
                     <div class="flex flex-col h-1/2 relative">
-                        <div class="mb-1 text-[10px] font-bold text-orange-400 uppercase">English > Spanish</div>
-                        <div class="relative flex-1">
-                            <textarea x-model="transTexts.en" @keydown.enter.prevent="runTranslation('en')" class="w-full h-full bg-green-50/30 border border-green-100 rounded-xl p-3 text-sm outline-none resize-none" placeholder="Type..."></textarea>
-                            <button @click="runTranslation('en')" class="absolute right-2 bottom-2 text-migo-green"><i data-lucide="arrow-right-circle" class="w-5 h-5"></i></button>
-                        </div>
-                        <div class="mt-1 p-2 bg-gray-50 rounded-lg text-[10px] text-gray-700 font-bold" x-text="results.en || 'RESULTADO'"></div>
+                        <textarea x-model="transTexts.en" @keydown.enter.prevent="runTranslation('en')" class="w-full h-full bg-green-50/30 border border-green-100 rounded-xl p-3 text-sm outline-none resize-none" placeholder="English..."></textarea>
+                        <button @click="runTranslation('en')" class="absolute right-2 bottom-2 text-migo-green"><i data-lucide="arrow-right-circle" class="w-5 h-5"></i></button>
+                        <div class="mt-1 p-2 bg-gray-50 rounded-lg text-[10px] font-bold" x-text="results.en || 'RESULTADO'"></div>
                     </div>
                 </div>
             </div>
@@ -143,17 +137,11 @@
                                 messages: this.messages.map(m => ({ role: m.role, content: m.text }))
                             })
                         });
-                        const data = await response.json();
-                        if (data.error) throw new Error(data.error);
-                        
-                        const aiMsg = data.choices[0].message.content;
-                        const content = typeof aiMsg === 'string' ? JSON.parse(aiMsg) : aiMsg;
-                        
+                        const content = await response.json();
                         this.messages.push({ role: 'migo', text: content.reply });
                         if (content.fix) this.correction = content.fix;
                     } catch (e) {
-                        console.error('Migo Error:', e);
-                        this.messages.push({ role: 'migo', text: 'Error: ' + e.message });
+                        this.messages.push({ role: 'migo', text: 'Connection Error.' });
                     } finally {
                         this.loading = false;
                         lucide.createIcons();
