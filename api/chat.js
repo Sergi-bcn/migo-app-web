@@ -8,6 +8,12 @@ export default async function handler(req) {
       return new Response(JSON.stringify({ reply: "API Key missing in Vercel settings." }), { status: 500 });
     }
 
+    // Mapeamos los mensajes para que los roles sean compatibles con Groq
+    const formattedMessages = messages.map(m => ({
+      role: m.role === 'migo' ? 'assistant' : m.role,
+      content: m.content
+    }));
+
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -19,9 +25,9 @@ export default async function handler(req) {
         messages: [
           { 
             role: "system", 
-            content: `You are Migo, an English teacher. Mode: ${modo}. Rigor: ${rigor}. Respond in English. You MUST return a JSON object: {"reply": "your message", "fix": "correction or empty"}` 
+            content: `You are Migo, an English teacher. Mode: ${modo}. Rigor: ${rigor}. Respond in English. You MUST return a JSON object: {"reply": "your response", "fix": "correction or empty"}` 
           },
-          ...messages
+          ...formattedMessages
         ],
         response_format: { type: "json_object" }
       })
@@ -29,7 +35,6 @@ export default async function handler(req) {
 
     const data = await response.json();
     
-    // Si Groq devuelve un error, lo enviamos al chat para saber qué es
     if (data.error) {
       return new Response(JSON.stringify({ reply: "Groq Error: " + data.error.message }), { status: 400 });
     }

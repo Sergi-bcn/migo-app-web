@@ -138,12 +138,11 @@
                             })
                         });
                         const data = await response.json();
-                        // El servidor ahora devuelve el objeto directamente o el error
                         if (data.reply) {
                             this.messages.push({ role: 'migo', text: data.reply });
                             if (data.fix) this.correction = data.fix;
                         } else {
-                            throw new Error("Empty reply");
+                            throw new Error("Empty reply from Migo.");
                         }
                     } catch (e) {
                         this.messages.push({ role: 'migo', text: "Error: " + e.message });
