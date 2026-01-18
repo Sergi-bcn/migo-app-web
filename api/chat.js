@@ -4,6 +4,9 @@ export default async function handler(req) {
   try {
     const { messages, modo, rigor } = await req.json();
 
+    // Filtramos los últimos mensajes para no sobrecargar la conexión
+    const lastMessages = messages.slice(-6);
+
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -15,46 +18,34 @@ export default async function handler(req) {
         messages: [
           { 
             role: "system", 
-            content: `You are Migo, a friendly English teacher. Mode: ${modo}. Rigor: ${rigor}. 
-            Respond ONLY in this JSON format: {"hasError": boolean, "reply": "string", "fix": "string"}` 
+            content: `You are Migo, a teacher. Mode: ${modo}. Rigor: ${rigor}. Respond ONLY JSON: {"hasError": boolean, "reply": "string", "fix": "string"}` 
           },
-          ...messages.map(m => ({
+          ...lastMessages.map(m => ({
             role: m.role === 'migo' ? 'assistant' : 'user',
             content: m.text
           }))
         ],
-        response_format: { type: "json_object" },
-        temperature: 0.7,
-        max_tokens: 1024
+        response_format: { type: "json_object" }
       })
     });
 
-    if (!response.ok) {
-        throw new Error(`API Error: ${response.status}`);
-    }
+    if (!response.ok) throw new Error('Groq API Offline');
 
     const data = await response.json();
     let content = data.choices[0].message.content;
 
-    // Limpieza de seguridad por si la IA envía texto basura
+    // Limpieza de seguridad por si envían texto extra
     const start = content.indexOf('{');
     const end = content.lastIndexOf('}') + 1;
-    if (start !== -1 && end !== -1) {
-      content = content.substring(start, end);
-    }
+    if (start !== -1 && end !== -1) content = content.substring(start, end);
 
     return new Response(content, {
       headers: { 'Content-Type': 'application/json' }
     });
 
   } catch (error) {
-    console.error("Migo Connection Error:", error);
     return new Response(
-      JSON.stringify({ 
-        reply: "Sorry, I'm having trouble connecting right now. Try again!", 
-        hasError: false, 
-        fix: "" 
-      }), 
+      JSON.stringify({ reply: "API Connection Error. Please check your Groq Key in Vercel.", hasError: false, fix: "" }), 
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
   }
