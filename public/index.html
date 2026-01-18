@@ -21,6 +21,7 @@
     </style>
 </head>
 <body class="bg-migo-bg h-screen flex overflow-hidden font-sans" x-data="migoApp()" x-init="lucide.createIcons(); $watch('messages', () => scrollToBottom())">
+    
     <nav class="w-16 bg-migo-orange h-full flex flex-col items-center py-8 flex-shrink-0 relative z-[200]">
         <div class="flex flex-col gap-6 items-center w-full">
             <button class="w-11 h-11 bg-white/20 rounded-2xl flex items-center justify-center text-white"><i data-lucide="home"></i></button>
@@ -28,14 +29,17 @@
         </div>
         <button @click="popups.user = !popups.user" class="mt-auto w-11 h-11 bg-white rounded-full flex items-center justify-center text-migo-orange font-black shadow-lg">S</button>
     </nav>
+
     <main class="flex-1 flex p-6 gap-6 overflow-hidden relative">
+        
         <section class="w-full max-w-[340px] bg-white rounded-[40px] shadow-sm flex flex-col border border-gray-100 overflow-hidden">
             <header class="p-6 border-b border-gray-50 flex items-center gap-3">
                 <div class="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></div>
                 <h2 class="font-extrabold text-migo-orange text-[10px] tracking-widest uppercase">Corrections</h2>
             </header>
-            <div class="flex-1 p-6 text-gray-600 font-medium leading-relaxed" x-text="correction || 'Waiting for errors...'"></div>
+            <div class="flex-1 p-6 text-gray-600 font-medium italic" x-text="correction || 'Waiting for errors...'"></div>
         </section>
+
         <section class="flex-1 bg-white rounded-[40px] shadow-sm flex flex-col relative border border-gray-100 overflow-hidden">
             <header class="p-7 flex justify-between items-center relative z-50">
                 <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">Migo<span class="text-migo-orange">.</span></h1>
@@ -44,62 +48,75 @@
                     <button @click="popups.trans = !popups.trans" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white transition ml-2"><i data-lucide="languages" class="w-5 h-5"></i></button>
                 </div>
             </header>
+
             <div id="chat-container" class="flex-1 mx-6 bg-gray-50/50 rounded-[35px] p-8 overflow-y-auto flex flex-col gap-5">
                 <template x-for="msg in messages">
                     <div :class="msg.role === 'user' ? 'bg-white text-gray-700 ml-auto' : 'bg-migo-orange text-white'" class="max-w-[85%] p-5 px-7 rounded-[28px] font-semibold text-[15px] shadow-sm" x-text="msg.text"></div>
                 </template>
             </div>
+
             <div class="p-8 flex gap-4 items-center">
                 <textarea x-model="userInput" @keydown.enter.prevent="send()" :disabled="loading" class="flex-1 bg-gray-50 border-none rounded-[25px] p-4 h-14 resize-none outline-none" placeholder="Type here..."></textarea>
-                <button @click="send()" :disabled="loading" class="w-14 h-14 bg-migo-green text-white rounded-2xl flex items-center justify-center shadow-lg"><i data-lucide="send"></i></button>
+                <button @click="send()" :disabled="loading" class="w-14 h-14 bg-migo-green text-white rounded-2xl flex items-center justify-center shadow-lg transition-transform hover:scale-105 active:scale-95"><i data-lucide="send"></i></button>
             </div>
-            <div x-show="popups.config" x-cloak class="absolute top-24 right-14 w-[280px] bg-white rounded-[30px] popup-card z-[100] p-6 popup-arrow-top">
+
+            <div x-show="popups.config" x-cloak class="absolute top-24 right-14 w-[280px] bg-white rounded-[30px] popup-card z-[100] p-6 popup-arrow-top" @click.away="popups.config = false">
                 <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-4 tracking-widest">Rigor</h4>
                 <div class="flex flex-col gap-2">
                     <button @click="config.rigor = 'Strict'" class="w-full p-3 rounded-2xl text-sm font-bold text-left" :class="config.rigor === 'Strict' ? 'bg-migo-green text-white' : 'bg-gray-50'">Strict</button>
                     <button @click="config.rigor = 'Normal'" class="w-full p-3 rounded-2xl text-sm font-bold text-left" :class="config.rigor === 'Normal' ? 'bg-migo-green text-white' : 'bg-gray-50'">Normal</button>
                 </div>
             </div>
-            <div x-show="popups.user" x-cloak class="fixed bottom-6 left-[80px] w-[280px] bg-white rounded-[35px] popup-card z-[300] p-8 popup-arrow-user">
+
+            <div x-show="popups.trans" x-cloak class="absolute top-24 right-6 w-[280px] bg-white rounded-[30px] popup-card z-[100] p-6 popup-arrow-top" @click.away="popups.trans = false">
+                <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-4 tracking-widest">Traductor</h4>
+                <div class="flex flex-col gap-3">
+                    <input type="text" placeholder="Español a Inglés..." class="w-full p-2 bg-gray-50 rounded-lg text-sm border-none outline-none">
+                    <div class="p-2 bg-migo-orange/10 rounded-lg text-[12px] text-migo-orange font-bold italic">Traducción rápida aquí...</div>
+                </div>
+            </div>
+
+            <div x-show="popups.user" x-cloak class="fixed bottom-6 left-[80px] w-[280px] bg-white rounded-[35px] popup-card z-[300] p-8 popup-arrow-user" @click.away="popups.user = false">
                 <p class="font-bold text-gray-800">Sergi Pérez</p>
                 <p class="text-[10px] text-migo-green font-bold uppercase" x-text="config.rigor"></p>
             </div>
+
         </section>
     </main>
+
     <script>
         function migoApp() {
             return {
                 userInput: '', loading: false, correction: '',
                 popups: { config: false, trans: false, user: false },
                 config: { rigor: 'Normal', modo: 'Colloquial' },
-                messages: [{ role: 'migo', text: 'Hello! I am Migo.' }],
+                messages: [{ role: 'migo', text: 'Hello! I am Migo. Ready to learn?' }],
                 async send() {
                     if (this.loading) return;
                     const text = this.userInput.trim();
                     if (!text) return;
+
                     this.messages.push({ role: 'user', text: text });
                     this.userInput = '';
                     this.loading = true;
+
                     try {
                         const response = await fetch('/api/chat', { 
                             method: 'POST', 
                             headers: { 'Content-Type': 'application/json' }, 
-                            body: JSON.stringify({ 
-                                rigor: this.config.rigor, 
-                                modo: this.config.modo, 
-                                messages: this.messages 
-                            }) 
+                            body: JSON.stringify({ rigor: this.config.rigor, modo: this.config.modo, messages: this.messages }) 
                         });
                         const data = await response.json();
                         this.messages.push({ role: 'migo', text: data.reply });
-                        // Actualizamos la ventana de correcciones
+                        
+                        // LÓGICA DE CORRECCIÓN
                         if (data.hasError) {
                             this.correction = data.fix;
                         } else {
                             this.correction = "Perfect! No mistakes found.";
                         }
                     } catch (e) { 
-                        this.messages.push({ role: 'migo', text: 'Connection error' }); 
+                        this.messages.push({ role: 'migo', text: 'Connection Error' }); 
                     } finally { 
                         this.loading = false; 
                         lucide.createIcons(); 

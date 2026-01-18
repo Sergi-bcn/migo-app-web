@@ -17,20 +17,15 @@ export default async function handler(req) {
         messages: [
           { 
             role: "system", 
-            content: `You are Migo, a helpful English teacher. Mode: ${modo}. Rigor: ${rigor}.
-            
-            TASK:
-            1. Analyze the user's last message for grammar or spelling mistakes.
-            2. If there's a mistake: set "hasError": true and in "fix" explain the error simply (e.g., "You wrote 'he go', but it should be 'he goes' because...").
-            3. If it's correct: set "hasError": false and "fix": "".
-            4. Always provide a natural "reply" to the conversation.
-
-            Respond ONLY in JSON: {"hasError": boolean, "reply": "string", "fix": "string"}` 
+            content: `You are Migo, a teacher. Mode: ${modo}. Rigor: ${rigor}. 
+            CRITICAL: Check user grammar/spelling. 
+            If error: set "hasError": true and explain why in "fix". 
+            If no error: "hasError": false, "fix": "".
+            Respond ONLY JSON: {"hasError": boolean, "reply": "string", "fix": "string"}` 
           },
           { role: "user", content: String(userText) }
         ],
-        response_format: { type: "json_object" },
-        temperature: 0.5
+        response_format: { type: "json_object" }
       })
     });
 
