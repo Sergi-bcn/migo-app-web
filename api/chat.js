@@ -4,8 +4,8 @@ export default async function handler(req) {
   try {
     const { messages, modo, rigor } = await req.json();
 
-    // Solo enviamos los últimos 4 mensajes para que la conexión sea rápida y no falle
-    const contextMessages = messages.slice(-4).map(m => ({
+    // Reducimos el historial al mínimo para asegurar que no haya errores de buffer
+    const minimalHistory = messages.slice(-3).map(m => ({
       role: m.role === 'migo' ? 'assistant' : 'user',
       content: m.text
     }));
@@ -23,18 +23,13 @@ export default async function handler(req) {
             role: "system", 
             content: `You are Migo, a teacher. Mode: ${modo}. Rigor: ${rigor}. Respond ONLY JSON: {"hasError": boolean, "reply": "string", "fix": "string"}` 
           },
-          ...contextMessages
+          ...minimalHistory
         ],
-        response_format: { type: "json_object" },
-        temperature: 0.6 // Bajamos la temperatura para que la respuesta sea más estable
+        response_format: { type: "json_object" }
       })
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Groq Error:', errorText);
-      throw new Error('API_KEY_OR_CONNECTION_ISSUE');
-    }
+    if (!response.ok) throw new Error('API_REJECTED');
 
     const data = await response.json();
     return new Response(data.choices[0].message.content, {
@@ -44,7 +39,7 @@ export default async function handler(req) {
   } catch (error) {
     return new Response(
       JSON.stringify({ 
-        reply: "Conexión inestable. Por favor, revisa la API KEY en Vercel.", 
+        reply: "Migo está descansando. Revisa la API KEY en el panel de Vercel.", 
         hasError: false, 
         fix: "" 
       }), 
