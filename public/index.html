@@ -15,11 +15,9 @@
     </script>
     <style>
         [x-cloak] { display: none !important; }
-        .popup-card { border: 1px solid #f1f5f9; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); background: white; width: 320px; }
-        .btn-mode { @apply w-full flex items-center gap-3 p-3 rounded-xl text-sm font-bold transition-all mb-2; border: 1px solid #f0f0f0; }
-        .btn-active { @apply bg-migo-green text-white border-migo-green shadow-md; }
-        .trans-box { @apply bg-[#f8fafc] border border-[#e2e8f0] rounded-2xl p-4 mb-4; }
-        .trans-label { @apply text-[10px] font-black uppercase tracking-tighter mb-2; }
+        .popup-card { border: 1px solid #f1f5f9; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); background: white; }
+        .popup-arrow-top::before { content: ''; position: absolute; top: -8px; right: 24px; width: 16px; height: 16px; background: white; transform: rotate(45deg); border-left: 1px solid #f1f5f9; border-top: 1px solid #f1f5f9; }
+        .popup-arrow-user::before { content: ''; position: absolute; left: -8px; bottom: 30px; transform: rotate(45deg); width: 16px; height: 16px; background: white; border-left: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
     </style>
 </head>
 <body class="bg-migo-bg h-screen flex overflow-hidden font-sans" x-data="migoApp()" x-init="lucide.createIcons(); $watch('messages', () => scrollToBottom())">
@@ -61,61 +59,29 @@
                 <button @click="send()" :disabled="loading" class="w-14 h-14 bg-migo-green text-white rounded-2xl flex items-center justify-center shadow-lg"><i data-lucide="send"></i></button>
             </div>
 
-            <div x-show="popups.config" x-cloak class="absolute top-24 right-14 bg-white rounded-[30px] popup-card z-[100] p-6 border border-gray-100" @click.away="popups.config = false">
-                <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-4 tracking-widest">Nivel de Rigor</h4>
-                <button @click="config.rigor = 'Strict'" class="btn-mode" :class="config.rigor === 'Strict' ? 'btn-active' : 'text-gray-500'">
-                    <i data-lucide="lock" class="w-4 h-4"></i> Estricto (Bloqueo)
-                </button>
-                <button @click="config.rigor = 'Normal'" class="btn-mode" :class="config.rigor === 'Normal' ? 'btn-active' : 'text-gray-500'">
-                    <i data-lucide="unlock" class="w-4 h-4"></i> No tan estricto
-                </button>
-
-                <h4 class="text-[10px] font-bold text-gray-400 uppercase my-4 tracking-widest">Estilo de Chat</h4>
-                <div class="space-y-1">
-                    <button @click="config.modo = 'Normal'" class="btn-mode" :class="config.modo === 'Normal' ? 'btn-active' : 'text-gray-500'"><i data-lucide="file-text" class="w-4 h-4"></i> Normal</button>
-                    <button @click="config.modo = 'Coloquial'" class="btn-mode" :class="config.modo === 'Coloquial' ? 'btn-active' : 'text-gray-500'"><i data-lucide="smile" class="w-4 h-4"></i> Coloquial</button>
-                    <button @click="config.modo = 'Formal'" class="btn-mode" :class="config.modo === 'Formal' ? 'btn-active' : 'text-gray-500'"><i data-lucide="book" class="w-4 h-4"></i> Gramática (Formal)</button>
-                    <button @click="config.modo = 'Business'" class="btn-mode" :class="config.modo === 'Business' ? 'btn-active' : 'text-gray-500'"><i data-lucide="briefcase" class="w-4 h-4"></i> Entrevista Trabajo</button>
-                    <button @click="config.modo = 'Travel'" class="btn-mode" :class="config.modo === 'Travel' ? 'btn-active' : 'text-gray-500'"><i data-lucide="plane" class="w-4 h-4"></i> Viajes</button>
+            <div x-show="popups.config" x-cloak class="absolute top-24 right-14 w-[280px] bg-white rounded-[30px] popup-card z-[100] p-6 popup-arrow-top" @click.away="popups.config = false">
+                <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-4 tracking-widest">Rigor</h4>
+                <div class="flex flex-col gap-2">
+                    <button @click="config.rigor = 'Strict'" class="w-full p-3 rounded-2xl text-sm font-bold text-left" :class="config.rigor === 'Strict' ? 'bg-migo-green text-white' : 'bg-gray-50'">Strict</button>
+                    <button @click="config.rigor = 'Normal'" class="w-full p-3 rounded-2xl text-sm font-bold text-left" :class="config.rigor === 'Normal' ? 'bg-migo-green text-white' : 'bg-gray-50'">Normal</button>
                 </div>
-
-                <button @click="window.location.reload()" class="w-full mt-4 p-3 rounded-xl text-red-500 font-bold text-xs flex items-center justify-center gap-2 border border-red-50 hover:bg-red-50 transition">
-                    <i data-lucide="refresh-cw" class="w-3 h-3"></i> Reiniciar App
-                </button>
             </div>
 
-            <div x-show="popups.trans" x-cloak class="absolute top-24 right-6 bg-white rounded-[40px] popup-card z-[100] p-8 border border-gray-100 shadow-2xl" @click.away="popups.trans = false" style="width: 400px;">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xs font-black text-gray-400 uppercase tracking-widest">Translator / Traductor</h2>
-                    <button @click="popups.trans = false" class="text-red-400"><i data-lucide="x" class="w-5 h-5"></i></button>
-                </div>
-
-                <div class="trans-box">
-                    <div class="flex justify-between trans-label text-migo-orange"><span>Español > Inglés</span> <i data-lucide="refresh-cw" class="w-3 h-3 opacity-30"></i></div>
-                    <textarea placeholder="Escribe..." class="w-full bg-transparent resize-none h-16 outline-none text-gray-600 font-bold text-sm"></textarea>
-                    <div class="border-t border-gray-100 my-3 pt-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-[9px] font-bold text-migo-green uppercase">Result</span>
-                            <i data-lucide="copy" class="w-4 h-4 text-gray-300"></i>
-                        </div>
-                        <div class="text-sm text-gray-400 mt-1 min-h-[20px]">...</div>
+            <div x-show="popups.trans" x-cloak class="absolute top-24 right-6 w-[320px] bg-white rounded-[35px] popup-card z-[100] p-7 popup-arrow-top" @click.away="popups.trans = false">
+                <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-5 tracking-widest text-center">Traductor Instantáneo</h4>
+                <div class="flex flex-col gap-4">
+                    <div class="relative">
+                        <textarea placeholder="Español a Inglés..." @keydown.enter.prevent="translate('es-en')" class="w-full p-4 bg-gray-50 rounded-[20px] text-sm outline-none resize-none h-20 pr-12"></textarea>
+                        <button @click="translate('es-en')" class="absolute bottom-3 right-3 w-8 h-8 bg-migo-orange text-white rounded-full flex items-center justify-center shadow-md"><i data-lucide="arrow-right" class="w-4 h-4"></i></button>
                     </div>
-                </div>
-
-                <div class="trans-box">
-                    <div class="flex justify-between trans-label text-migo-orange"><span>English > Spanish</span> <i data-lucide="refresh-cw" class="w-3 h-3 opacity-30"></i></div>
-                    <textarea placeholder="Type..." class="w-full bg-transparent resize-none h-16 outline-none text-gray-600 font-bold text-sm"></textarea>
-                    <div class="border-t border-gray-100 my-3 pt-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-[9px] font-bold text-migo-green uppercase">Resultado</span>
-                            <i data-lucide="copy" class="w-4 h-4 text-gray-300"></i>
-                        </div>
-                        <div class="text-sm text-gray-400 mt-1 min-h-[20px]">...</div>
+                    <div class="relative">
+                        <textarea placeholder="English to Spanish..." @keydown.enter.prevent="translate('en-es')" class="w-full p-4 bg-gray-50 rounded-[20px] text-sm outline-none resize-none h-20 pr-12"></textarea>
+                        <button @click="translate('en-es')" class="absolute bottom-3 right-3 w-8 h-8 bg-migo-green text-white rounded-full flex items-center justify-center shadow-md"><i data-lucide="arrow-right" class="w-4 h-4"></i></button>
                     </div>
                 </div>
             </div>
 
-            <div x-show="popups.user" x-cloak class="fixed bottom-6 left-[80px] w-[280px] bg-white rounded-[35px] popup-card z-[300] p-8 border border-gray-100">
+            <div x-show="popups.user" x-cloak class="fixed bottom-6 left-[80px] w-[280px] bg-white rounded-[35px] popup-card z-[300] p-8 popup-arrow-user">
                 <p class="font-bold text-gray-800">Sergi Pérez</p>
                 <p class="text-[10px] text-migo-green font-bold uppercase" x-text="config.rigor"></p>
             </div>
@@ -127,7 +93,7 @@
             return {
                 userInput: '', loading: false, correction: '',
                 popups: { config: false, trans: false, user: false },
-                config: { rigor: 'Normal', modo: 'Normal' },
+                config: { rigor: 'Normal', modo: 'Colloquial' },
                 messages: [{ role: 'migo', text: 'Hello! I am Migo.' }],
                 async send() {
                     if (this.loading) return;
@@ -150,6 +116,10 @@
                     } finally { 
                         this.loading = false; lucide.createIcons(); this.scrollToBottom();
                     }
+                },
+                translate(direction) {
+                    console.log("Traduciendo en dirección:", direction);
+                    // Aquí puedes añadir la lógica de traducción real
                 },
                 scrollToBottom() { const c = document.getElementById('chat-container'); if(c) setTimeout(()=>c.scrollTop = c.scrollHeight, 50); }
             }
