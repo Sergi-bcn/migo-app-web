@@ -4,15 +4,6 @@ export default async function handler(req) {
   try {
     const { messages, modo, rigor } = await req.json();
 
-    if (!process.env.GROQ_API_KEY) {
-      return new Response(JSON.stringify({ reply: "API Key missing." }), { status: 500 });
-    }
-
-    const formattedMessages = messages.map(m => ({
-      role: m.role === 'migo' ? 'assistant' : m.role,
-      content: m.content || m.text
-    }));
-
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -25,30 +16,33 @@ export default async function handler(req) {
           { 
             role: "system", 
             content: `You are Migo, a friendly English teacher. Mode: ${modo}. Rigor: ${rigor}. 
-            CRITICAL RULE: If the user makes ANY grammar or spelling mistake, you MUST:
-            1. Set "hasError" to true.
-            2. In "reply", explain the mistake briefly and kindly in English, then tell them: "Please rewrite it correctly to continue!"
-            3. In "fix", provide ONLY the perfectly corrected sentence.
-            If there is NO mistake:
-            1. Set "hasError" to false.
-            2. Continue the conversation normally in "reply".
-            3. "fix" can be empty.
-            Format: {"reply": "...", "fix": "...", "hasError": true/false}` 
+            ALWAYS respond in this EXACT JSON format:
+            {"hasError": boolean, "reply": "string", "fix": "string"}` 
           },
-          ...formattedMessages
+          ...messages.map(m => ({
+            role: m.role === 'migo' ? 'assistant' : 'user',
+            content: m.text
+          }))
         ],
         response_format: { type: "json_object" }
       })
     });
 
     const data = await response.json();
-    if (data.choices && data.choices[0]) {
-      return new Response(data.choices[0].message.content, {
-        headers: { 'Content-Type': 'application/json' }
-      });
+    let content = data.choices[0].message.content;
+
+    // LIMPIEZA DE RESPUESTA (Para evitar "Invalid response")
+    const start = content.indexOf('{');
+    const end = content.lastIndexOf('}') + 1;
+    if (start !== -1 && end !== -1) {
+      content = content.substring(start, end);
     }
-    throw new Error("Invalid response");
+
+    return new Response(content, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+
   } catch (error) {
-    return new Response(JSON.stringify({ reply: "Migo Error: " + error.message }), { status: 500 });
+    return new Response(JSON.stringify({ reply: "Error de conexión", hasError: false, fix: "" }), { status: 500 });
   }
 }
