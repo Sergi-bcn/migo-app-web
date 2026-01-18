@@ -5,11 +5,6 @@ export default async function handler(req) {
     const { messages, modo, rigor } = await req.json();
     const lastMessage = messages[messages.length - 1].text;
 
-    // Verificación interna: Si no hay API KEY, avisamos directamente
-    if (!process.env.GROQ_API_KEY) {
-      return new Response(JSON.stringify({ reply: "Falta la API KEY en Vercel Settings.", hasError: false, fix: "" }));
-    }
-
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -19,19 +14,32 @@ export default async function handler(req) {
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
         messages: [
-          { role: "system", content: `You are Migo, a teacher. JSON ONLY: {"hasError": false, "reply": "Hi!", "fix": ""}` },
+          { 
+            role: "system", 
+            content: `You are Migo, a teacher. Mode: ${modo}. Rigor: ${rigor}. 
+            Respond ONLY with this JSON structure: {"hasError": false, "reply": "Your message", "fix": ""}` 
+          },
           { role: "user", content: lastMessage }
         ],
-        response_format: { type: "json_object" }
+        response_format: { type: "json_object" },
+        temperature: 0.5
       })
     });
 
+    if (!response.ok) {
+      const err = await response.json();
+      return new Response(JSON.stringify({ reply: `Groq Error: ${err.error?.message || 'Invalid Key'}`, hasError: false, fix: "" }));
+    }
+
     const data = await response.json();
-    return new Response(JSON.stringify(data.choices[0].message.content), {
+    let content = data.choices[0].message.content;
+
+    // Retornamos el contenido tal cual, el frontend se encargará de leerlo
+    return new Response(content, {
       headers: { 'Content-Type': 'application/json' }
     });
 
   } catch (error) {
-    return new Response(JSON.stringify({ reply: "Error de conexión con Groq.", hasError: false, fix: "" }));
+    return new Response(JSON.stringify({ reply: "Connection failed. Please check GROQ_API_KEY in Vercel.", hasError: false, fix: "" }));
   }
 }
