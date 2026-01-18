@@ -3,7 +3,19 @@ export const config = { runtime: 'edge' };
 export default async function handler(req) {
   try {
     const { messages, modo, rigor } = await req.json();
-    const lastMessage = messages[messages.length - 1].text;
+    
+    // Obtenemos el último texto del usuario de forma ultra-segura
+    const lastMsg = messages[messages.length - 1];
+    const userText = lastMsg.text || lastMsg.content || "";
+
+    // Si por alguna razón el texto está vacío, evitamos enviar la petición para que Groq no de error
+    if (!userText.trim()) {
+      return new Response(JSON.stringify({ 
+        reply: "I'm sorry, I didn't hear anything. Could you type something?", 
+        hasError: false, 
+        fix: "" 
+      }));
+    }
 
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -16,30 +28,39 @@ export default async function handler(req) {
         messages: [
           { 
             role: "system", 
-            content: `You are Migo, a teacher. Mode: ${modo}. Rigor: ${rigor}. 
-            Respond ONLY with this JSON structure: {"hasError": false, "reply": "Your message", "fix": ""}` 
+            content: `You are Migo, a friendly English teacher. Mode: ${modo}. Rigor: ${rigor}. 
+            Respond ONLY in JSON format: {"hasError": boolean, "reply": "string", "fix": "string"}` 
           },
-          { role: "user", content: lastMessage }
+          { 
+            role: "user", 
+            content: userText // Aquí es donde Groq pedía el campo 'content'
+          }
         ],
         response_format: { type: "json_object" },
-        temperature: 0.5
+        temperature: 0.7
       })
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-      const err = await response.json();
-      return new Response(JSON.stringify({ reply: `Groq Error: ${err.error?.message || 'Invalid Key'}`, hasError: false, fix: "" }));
+      return new Response(JSON.stringify({ 
+        reply: "Migo is having a technical issue. Please try again.", 
+        hasError: false, 
+        fix: "" 
+      }));
     }
 
-    const data = await response.json();
-    let content = data.choices[0].message.content;
-
-    // Retornamos el contenido tal cual, el frontend se encargará de leerlo
-    return new Response(content, {
+    // Enviamos la respuesta de la IA al frontend
+    return new Response(data.choices[0].message.content, {
       headers: { 'Content-Type': 'application/json' }
     });
 
   } catch (error) {
-    return new Response(JSON.stringify({ reply: "Connection failed. Please check GROQ_API_KEY in Vercel.", hasError: false, fix: "" }));
+    return new Response(JSON.stringify({ 
+      reply: "Connection Error. Check your internet or API Key.", 
+      hasError: false, 
+      fix: "" 
+    }));
   }
 }
