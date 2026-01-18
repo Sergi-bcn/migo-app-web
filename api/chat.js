@@ -16,22 +16,27 @@ export default async function handler(req) {
           { 
             role: "system", 
             content: `You are Migo, a friendly English teacher. Mode: ${modo}. Rigor: ${rigor}. 
-            ALWAYS respond in this EXACT JSON format:
-            {"hasError": boolean, "reply": "string", "fix": "string"}` 
+            Respond ONLY in this JSON format: {"hasError": boolean, "reply": "string", "fix": "string"}` 
           },
           ...messages.map(m => ({
             role: m.role === 'migo' ? 'assistant' : 'user',
             content: m.text
           }))
         ],
-        response_format: { type: "json_object" }
+        response_format: { type: "json_object" },
+        temperature: 0.7,
+        max_tokens: 1024
       })
     });
+
+    if (!response.ok) {
+        throw new Error(`API Error: ${response.status}`);
+    }
 
     const data = await response.json();
     let content = data.choices[0].message.content;
 
-    // LIMPIEZA DE RESPUESTA (Para evitar "Invalid response")
+    // Limpieza de seguridad por si la IA envía texto basura
     const start = content.indexOf('{');
     const end = content.lastIndexOf('}') + 1;
     if (start !== -1 && end !== -1) {
@@ -43,6 +48,14 @@ export default async function handler(req) {
     });
 
   } catch (error) {
-    return new Response(JSON.stringify({ reply: "Error de conexión", hasError: false, fix: "" }), { status: 500 });
+    console.error("Migo Connection Error:", error);
+    return new Response(
+      JSON.stringify({ 
+        reply: "Sorry, I'm having trouble connecting right now. Try again!", 
+        hasError: false, 
+        fix: "" 
+      }), 
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
+    );
   }
 }
