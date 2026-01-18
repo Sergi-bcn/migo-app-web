@@ -18,9 +18,6 @@ export default async function handler(req) {
           { 
             role: "system", 
             content: `You are Migo, a teacher. Mode: ${modo}. Rigor: ${rigor}. 
-            CRITICAL: Check user grammar/spelling. 
-            If error: set "hasError": true and explain why in "fix". 
-            If no error: "hasError": false, "fix": "".
             Respond ONLY JSON: {"hasError": boolean, "reply": "string", "fix": "string"}` 
           },
           { role: "user", content: String(userText) }
