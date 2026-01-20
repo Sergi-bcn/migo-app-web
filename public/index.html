@@ -16,8 +16,8 @@
     <style>
         [x-cloak] { display: none !important; }
         .popup-card { border: 1px solid #f1f5f9; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); background: white; }
-        .popup-arrow-top::before { content: ''; position: absolute; top: -8px; right: 24px; width: 16px; height: 16px; background: white; transform: rotate(45deg); border-left: 1px solid #f1f5f9; border-top: 1px solid #f1f5f9; }
-        .popup-arrow-user::before { content: ''; position: absolute; left: -8px; bottom: 30px; transform: rotate(45deg); width: 16px; height: 16px; background: white; border-left: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
+        .btn-mode { @apply w-full flex items-center gap-3 p-3 rounded-xl text-sm font-bold transition-all mb-2 border border-gray-50; }
+        .btn-active { @apply bg-migo-green text-white border-migo-green shadow-md; }
     </style>
 </head>
 <body class="bg-migo-bg h-screen flex overflow-hidden font-sans" x-data="migoApp()" x-init="lucide.createIcons(); $watch('messages', () => scrollToBottom())">
@@ -39,7 +39,7 @@
             </header>
             <div class="flex-1 p-6 text-gray-400 italic" x-html="correction || 'Waiting for errors...'"></div>
             <template x-if="isBlocked">
-                <button @click="unblock()" class="m-6 p-4 bg-red-500 text-white rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-red-600 transition shadow-lg shadow-red-200">I Understand, Unblock</button>
+                <button @click="unblock()" class="m-6 p-4 bg-red-500 text-white rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-red-600 transition shadow-lg">I Understand, Unblock</button>
             </template>
         </section>
 
@@ -62,58 +62,51 @@
             <div class="p-8 flex gap-4 items-center">
                 <textarea x-model="userInput" @keydown.enter.prevent="send()" 
                     :disabled="isBlocked || loading"
-                    :placeholder="isBlocked ? 'Chat is blocked until unblocked...' : 'Type here...'"
-                    class="flex-1 border-none rounded-[25px] p-4 h-14 resize-none outline-none transition-all"
-                    :class="isBlocked ? 'bg-red-50 text-red-300' : 'bg-gray-50'"></textarea>
+                    class="flex-1 border-none rounded-[25px] p-4 h-14 resize-none outline-none transition-all bg-gray-50"></textarea>
                 <button @click="send()" :disabled="isBlocked || loading"
-                    class="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-all"
-                    :class="isBlocked ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-migo-green text-white hover:scale-105 active:scale-95'">
+                    class="w-14 h-14 bg-migo-green text-white rounded-2xl flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all">
                     <i data-lucide="send"></i>
                 </button>
             </div>
 
-            <div x-show="popups.config" x-cloak class="absolute top-24 right-14 w-[280px] bg-white rounded-[30px] popup-card z-[100] p-6 popup-arrow-top" @click.away="popups.config = false">
-                <div class="mb-6">
-                    <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-3 tracking-widest">Modo</h4>
-                    <div class="flex flex-wrap gap-2">
-                        <template x-for="m in [{n:'Colloquial', i:'smile'}, {n:'Formal', i:'book'}, {n:'Academic', i:'graduation-cap'}]">
-                            <button @click="config.modo = m.n" class="px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2" :class="config.modo === m.n ? 'bg-migo-orange text-white' : 'bg-gray-50 hover:bg-gray-100'">
-                                <i :data-lucide="m.i" class="w-3.5 h-3.5"></i>
-                                <span x-text="m.n"></span>
-                            </button>
-                        </template>
-                    </div>
+            <div x-show="popups.config" x-cloak class="absolute top-24 right-14 w-[300px] bg-white rounded-[35px] popup-card z-[100] p-6 border border-gray-50" @click.away="popups.config = false">
+                <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-4 tracking-widest">Nivel de Rigor</h4>
+                <div class="space-y-2 mb-6">
+                    <button @click="config.rigor = 'Strict'; unblock()" class="btn-mode" :class="config.rigor === 'Strict' ? 'btn-active' : 'text-gray-500'">
+                        <i data-lucide="lock" class="w-4 h-4"></i> Estricto (Bloqueo)
+                    </button>
+                    <button @click="config.rigor = 'Normal'; unblock()" class="btn-mode" :class="config.rigor === 'Normal' ? 'btn-active' : 'text-gray-500'">
+                        <i data-lucide="unlock" class="w-4 h-4"></i> No tan estricto
+                    </button>
                 </div>
-                <div>
-                    <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-3 tracking-widest">Rigor</h4>
-                    <div class="flex flex-col gap-2">
-                        <button @click="config.rigor = 'Strict'; unblock()" class="w-full p-3 rounded-2xl text-sm font-bold text-left transition flex items-center gap-2" :class="config.rigor === 'Strict' ? 'bg-migo-green text-white' : 'bg-gray-50 hover:bg-gray-100'">
-                            <i data-lucide="lock" class="w-4 h-4"></i> Strict
-                        </button>
-                        <button @click="config.rigor = 'Normal'; unblock()" class="w-full p-3 rounded-2xl text-sm font-bold text-left transition flex items-center gap-2" :class="config.rigor === 'Normal' ? 'bg-migo-green text-white' : 'bg-gray-50 hover:bg-gray-100'">
-                            <i data-lucide="unlock" class="w-4 h-4"></i> Normal
-                        </button>
-                    </div>
+
+                <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-4 tracking-widest">Estilo de Chat</h4>
+                <div class="space-y-1">
+                    <button @click="config.modo = 'Colloquial'" class="btn-mode" :class="config.modo === 'Colloquial' ? 'btn-active' : 'text-gray-500'"><i data-lucide="smile" class="w-4 h-4"></i> Coloquial</button>
+                    <button @click="config.modo = 'Formal'" class="btn-mode" :class="config.modo === 'Formal' ? 'btn-active' : 'text-gray-500'"><i data-lucide="book" class="w-4 h-4"></i> Formal</button>
+                    <button @click="config.modo = 'Academic'" class="btn-mode" :class="config.modo === 'Academic' ? 'btn-active' : 'text-gray-500'"><i data-lucide="graduation-cap" class="w-4 h-4"></i> Académico</button>
                 </div>
             </div>
 
-            <div x-show="popups.trans" x-cloak class="absolute top-24 right-6 w-[280px] bg-white rounded-[30px] popup-card z-[100] p-6 popup-arrow-top" @click.away="popups.trans = false">
-                <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-4 tracking-widest">Translator</h4>
+            <div x-show="popups.trans" x-cloak class="absolute top-24 right-6 w-[320px] bg-white rounded-[35px] popup-card z-[100] p-6 border border-gray-50" @click.away="popups.trans = false">
+                <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-5 tracking-widest">Translator</h4>
                 <div class="space-y-4">
-                    <div class="relative">
-                        <input type="text" placeholder="Spanish to English..." @keydown.enter="translate('es')" class="w-full p-3 bg-gray-50 rounded-xl text-sm outline-none border border-gray-100 focus:border-migo-orange transition pr-10">
-                        <button @click="translate('es')" class="absolute right-2 top-1.5 w-7 h-7 bg-migo-orange text-white rounded-lg flex items-center justify-center"><i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                    <div class="relative bg-gray-50 rounded-2xl p-4">
+                        <p class="text-[9px] font-bold text-migo-orange uppercase mb-2">Español > Inglés</p>
+                        <textarea placeholder="Escribe..." @keydown.enter.prevent="translate('es')" class="w-full bg-transparent text-sm outline-none resize-none h-12 pr-10"></textarea>
+                        <button @click="translate('es')" class="absolute right-3 bottom-3 w-8 h-8 bg-migo-orange text-white rounded-full flex items-center justify-center shadow-md"><i data-lucide="arrow-right" class="w-4 h-4"></i></button>
                     </div>
-                    <div class="p-3 bg-migo-orange/10 rounded-xl text-sm text-migo-orange font-bold italic">Ready...</div>
+                    <div class="relative bg-gray-50 rounded-2xl p-4">
+                        <p class="text-[9px] font-bold text-migo-green uppercase mb-2">English > Spanish</p>
+                        <textarea placeholder="Type..." @keydown.enter.prevent="translate('en')" class="w-full bg-transparent text-sm outline-none resize-none h-12 pr-10"></textarea>
+                        <button @click="translate('en')" class="absolute right-3 bottom-3 w-8 h-8 bg-migo-green text-white rounded-full flex items-center justify-center shadow-md"><i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                    </div>
                 </div>
             </div>
 
-            <div x-show="popups.user" x-cloak class="fixed bottom-6 left-[80px] w-[280px] bg-white rounded-[35px] popup-card z-[300] p-8 popup-arrow-user" @click.away="popups.user = false">
+            <div x-show="popups.user" x-cloak class="fixed bottom-6 left-[80px] w-[280px] bg-white rounded-[35px] popup-card z-[300] p-8 popup-arrow-user">
                 <p class="font-bold text-gray-800 text-lg">Sergi Pérez</p>
-                <div class="flex items-center gap-2 mt-1">
-                    <div class="w-2 h-2 bg-migo-green rounded-full"></div>
-                    <p class="text-[10px] text-migo-green font-bold uppercase" x-text="config.rigor"></p>
-                </div>
+                <p class="text-[10px] text-migo-green font-bold uppercase" x-text="config.rigor"></p>
             </div>
         </section>
     </main>
@@ -149,9 +142,7 @@
                     } catch (e) { 
                         this.messages.push({ role: 'migo', text: 'Connection Error' }); 
                     } finally { 
-                        this.loading = false; 
-                        lucide.createIcons(); 
-                        this.scrollToBottom();
+                        this.loading = false; lucide.createIcons(); this.scrollToBottom();
                     }
                 },
                 translate(dir) { console.log('Translate', dir); },

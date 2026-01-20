@@ -19,8 +19,8 @@ export default async function handler(req) {
             role: "system", 
             content: `You are Migo, a teacher. Mode: ${modo}. Rigor: ${rigor}. 
             Check user grammar/spelling. 
-            - If error: set "hasError": true, "fix": "Brief explanation", "blocked": true (only if rigor is Strict).
-            - If correct: set "hasError": false, "fix": "", "blocked": false.
+            - If error: "hasError": true, "fix": "Brief explanation", "blocked": true (only if rigor is Strict).
+            - If correct: "hasError": false, "fix": "", "blocked": false.
             Respond ONLY JSON: {"hasError": boolean, "reply": "string", "fix": "string", "blocked": boolean}` 
           },
           { role: "user", content: String(userText) }
