@@ -2,16 +2,17 @@
     <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-4 tracking-widest">Nivel de Rigor</h4>
     <div class="mb-6">
         <button @click="config.rigor = 'Strict'; unblock()" class="btn-mode-row" :class="config.rigor === 'Strict' ? 'active' : ''">
-            <span>Estricto (Bloqueo)</span> <i data-lucide="lock" class="w-4 h-4"></i>
+            <span>Estricto (Bloqueo)</span> <i data-lucide="lock"></i>
         </button>
         <button @click="config.rigor = 'Normal'; unblock()" class="btn-mode-row" :class="config.rigor === 'Normal' ? 'active' : ''">
-            <span>No tan estricto</span> <i data-lucide="unlock" class="w-4 h-4"></i>
+            <span>No tan estricto</span> <i data-lucide="unlock"></i>
         </button>
     </div>
+
     <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-4 tracking-widest">Estilo de Chat</h4>
     <div class="space-y-1">
-        <button @click="config.modo = 'Colloquial'" class="btn-mode-row" :class="config.modo === 'Colloquial' ? 'active' : ''"><span>Coloquial</span> <i data-lucide="smile" class="w-4 h-4"></i></button>
-        <button @click="config.modo = 'Formal'" class="btn-mode-row" :class="config.modo === 'Formal' ? 'active' : ''"><span>Formal</span> <i data-lucide="book" class="w-4 h-4"></i></button>
-        <button @click="config.modo = 'Academic'" class="btn-mode-row" :class="config.modo === 'Academic' ? 'active' : ''"><span>Académico</span> <i data-lucide="graduation-cap" class="w-4 h-4"></i></button>
+        <button @click="config.modo = 'Colloquial'" class="btn-mode-row" :class="config.modo === 'Colloquial' ? 'active' : ''"><span>Coloquial</span> <i data-lucide="smile"></i></button>
+        <button @click="config.modo = 'Formal'" class="btn-mode-row" :class="config.modo === 'Formal' ? 'active' : ''"><span>Formal</span> <i data-lucide="book"></i></button>
+        <button @click="config.modo = 'Academic'" class="btn-mode-row" :class="config.modo === 'Academic' ? 'active' : ''"><span>Académico</span> <i data-lucide="graduation-cap"></i></button>
     </div>
 </div>

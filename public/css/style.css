@@ -1,25 +1,27 @@
+/* Reset y Fuentes */
 [x-cloak] { display: none !important; }
+
+/* Estructura Principal */
 .sidebar-corrections { @apply w-full max-w-[340px] bg-white rounded-[40px] shadow-sm flex flex-col border border-gray-100 overflow-hidden; }
-.sidebar-header { @apply p-6 border-b border-gray-50 flex items-center gap-3; }
-.sidebar-header h2 { @apply font-extrabold text-[#ff9800] text-[10px] tracking-widest uppercase; }
-.status-dot { @apply w-2.5 h-2.5 rounded-full animate-pulse; }
-.sidebar-content { @apply flex-1 p-6 text-gray-400 italic text-[14px]; }
-.btn-unblock { @apply m-6 p-4 bg-red-500 text-white rounded-2xl font-bold text-xs uppercase tracking-widest; }
 .main-chat-area { @apply flex-1 bg-white rounded-[40px] shadow-sm flex flex-col relative border border-gray-100 overflow-hidden; }
-.chat-header { @apply p-7 flex justify-between items-center relative z-50; }
-.chat-header h1 { @apply text-3xl font-extrabold text-gray-800 tracking-tight; }
-.chat-header h1 span { @apply text-[#ff9800]; }
-.header-tools { @apply flex bg-gray-100 p-1.5 rounded-full; }
-.tool-btn { @apply w-10 h-10 flex items-center justify-center rounded-full hover:bg-white transition ml-2 shadow-sm; }
-.messages-container { @apply flex-1 mx-6 bg-gray-50/50 rounded-[35px] p-8 overflow-y-auto flex flex-col gap-5; }
-.msg-user { @apply bg-white text-gray-700 ml-auto max-w-[85%] p-5 px-7 rounded-[28px] font-semibold text-[15px] shadow-sm; }
-.msg-migo { @apply bg-[#ff9800] text-white max-w-[85%] p-5 px-7 rounded-[28px] font-semibold text-[15px] shadow-sm; }
-.input-area { @apply p-8 flex gap-4 items-center; }
-.input-area textarea { @apply flex-1 bg-gray-50 border-none rounded-[25px] p-4 h-14 resize-none outline-none; }
-.btn-send { @apply w-14 h-14 bg-[#4caf50] text-white rounded-2xl flex items-center justify-center shadow-lg; }
-.nav-icon { @apply w-11 h-11 bg-white/20 rounded-2xl flex items-center justify-center text-white; }
+
+/* Navbar Naranja */
+.nav-icon { @apply w-11 h-11 bg-white/20 rounded-2xl flex items-center justify-center text-white hover:bg-white/30 transition; }
 .profile-dot { @apply mt-auto w-11 h-11 bg-white rounded-full flex items-center justify-center text-[#ff9800] font-black shadow-lg; }
+
+/* Botones de las Ventanas (Verticales y con Icono a la derecha) */
 .btn-mode-row { @apply w-full flex items-center justify-between p-4 rounded-[22px] text-[14px] font-bold transition-all mb-2 border border-gray-100 text-gray-500 bg-white; }
-.btn-mode-row.active { @apply bg-[#4caf50] text-white border-[#4caf50] shadow-lg; }
-.popup-card { border: 1px solid #f1f5f9; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); background: white; }
-.popup-arrow-top::before { content: ''; @apply absolute -top-2 right-6 w-4 h-4 bg-white border-l border-t border-[#f1f5f9] rotate-45; }
+.btn-mode-row.active { @apply bg-[#4caf50] text-white border-[#4caf50] shadow-lg shadow-green-100; }
+.btn-mode-row i { @apply w-4 h-4; }
+
+/* Popups */
+.popup-card { @apply bg-white shadow-2xl border border-gray-50; }
+.popup-arrow-top::before { content: ''; @apply absolute -top-2 right-6 w-4 h-4 bg-white border-l border-t border-gray-50 rotate-45; }
+
+/* Chat Bubbles */
+.msg-user { @apply bg-white text-gray-700 ml-auto max-w-[85%] p-5 px-7 rounded-[28px] font-semibold text-[15px] shadow-sm border border-gray-50; }
+.msg-migo { @apply bg-[#ff9800] text-white max-w-[85%] p-5 px-7 rounded-[28px] font-semibold text-[15px] shadow-sm; }
+
+/* Input Area */
+.input-area textarea { @apply flex-1 bg-gray-50 border-none rounded-[25px] p-4 h-14 resize-none outline-none font-bold text-gray-600; }
+.btn-send { @apply w-14 h-14 bg-[#4caf50] text-white rounded-2xl flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all; }
