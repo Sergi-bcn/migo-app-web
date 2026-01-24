@@ -1,0 +1,7 @@
+.chat-window { flex: 1; background: white; border-radius: 40px; border: 1px solid #f3f4f6; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+.chat-header { padding: 1.75rem; display: flex; justify-content: space-between; align-items: center; }
+.chat-header h1 { font-size: 1.875rem; font-weight: 800; color: #1f2937; margin: 0; }
+.chat-header span { color: #ff9800; }
+.messages-area { flex: 1; margin: 0 1.5rem; background: rgba(249, 250, 251, 0.5); border-radius: 35px; padding: 2rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1.25rem; }
+.input-section { padding: 2rem; display: flex; gap: 1rem; align-items: center; }
+.input-section textarea { flex: 1; background: #f9fafb; border: none; border-radius: 25px; padding: 1rem; height: 56px; resize: none; outline: none; font-weight: 700; color: #4b5563; }

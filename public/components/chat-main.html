@@ -1,0 +1,18 @@
+<div class="chat-window">
+    <header class="chat-header">
+        <h1>Migo<span>.</span></h1>
+        <div class="flex bg-gray-100 p-1.5 rounded-full">
+            <button @click="popups.config = !popups.config" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white transition ml-2 shadow-sm border-none cursor-pointer"><i data-lucide="settings" class="w-5 h-5 text-gray-600"></i></button>
+            <button @click="popups.trans = !popups.trans" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white transition ml-2 shadow-sm border-none cursor-pointer"><i data-lucide="languages" class="w-5 h-5 text-gray-600"></i></button>
+        </div>
+    </header>
+    <div id="chat-scroll" class="messages-area">
+        <template x-for="msg in messages">
+            <div :class="msg.role === 'user' ? 'chat-msg-user' : 'chat-msg-migo'" x-text="msg.text"></div>
+        </template>
+    </div>
+    <div class="input-section">
+        <textarea x-model="userInput" @keydown.enter.prevent="send()" :disabled="isBlocked || loading" placeholder="Escribe aquí..."></textarea>
+        <button @click="send()" class="w-14 h-14 bg-[#4caf50] text-white rounded-2xl flex items-center justify-center shadow-lg border-none cursor-pointer hover:scale-105 transition-transform"><i data-lucide="send"></i></button>
+    </div>
+</div>
