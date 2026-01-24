@@ -1,0 +1,6 @@
+<div x-show="popups.user" x-cloak class="fixed bottom-12 left-20 w-[260px] bg-white rounded-[35px] popup-card z-[300] p-8 popup-arrow-user" @click.away="popups.user = false">
+    <p class="font-bold text-gray-800 text-lg">Sergi Pérez</p>
+    <p class="text-[10px] text-migo-green font-bold uppercase mt-1" x-text="'Mode: ' + config.modo"></p>
+    <hr class="my-4 border-gray-50">
+    <button class="text-xs font-bold text-gray-400 hover:text-red-500 transition">Log Out</button>
+</div>

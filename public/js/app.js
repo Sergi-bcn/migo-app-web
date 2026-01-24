@@ -12,33 +12,35 @@ function migoApp() {
         popups: { config: false, trans: false, user: false },
         config: { rigor: 'Normal', modo: 'Colloquial' },
         messages: [{ role: 'migo', text: 'Hello! I am Migo. Ready to learn?' }],
+        
         async init() {
+            // Carga de todos los módulos independientes
+            await loadComponent('corrections-container', '/components/corrections.html');
             await loadComponent('config-modal-container', '/components/config-modal.html');
             await loadComponent('trans-modal-container', '/components/trans-modal.html');
+            await loadComponent('user-modal-container', '/components/user-modal.html');
+            
             this.$watch('messages', () => this.scrollToBottom());
         },
+        // ... misma lógica de send() y unblock() de las versiones anteriores ...
         async send() {
-            const text = this.userInput.trim();
-            if (!text || this.loading || this.isBlocked) return;
-            this.messages.push({ role: 'user', text: text });
+            if (!this.userInput.trim() || this.loading || this.isBlocked) return;
+            const text = this.userInput;
+            this.messages.push({ role: 'user', text });
             this.userInput = ''; this.loading = true;
             try {
-                const response = await fetch('/api/chat', { 
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify({ rigor: this.config.rigor, modo: this.config.modo, messages: this.messages }) 
+                const res = await fetch('/api/chat', {
+                    method: 'POST',
+                    body: JSON.stringify({ ...this.config, messages: this.messages })
                 });
-                const data = await response.json();
+                const data = await res.json();
                 this.messages.push({ role: 'migo', text: data.reply });
-                if (data.hasError) {
-                    this.correction = `<div class="bg-red-50 p-5 rounded-[25px] border border-red-100"><b class="text-red-500 block mb-1 uppercase text-[10px]">Correction</b><div class="text-gray-800 font-bold">${data.fix}</div></div>`;
-                } else { this.correction = "Perfect! No mistakes."; }
-                if (data.blocked && this.config.rigor === 'Strict') { this.isBlocked = true; }
-            } catch (e) { this.messages.push({ role: 'migo', text: 'Error' }); }
-            finally { this.loading = false; lucide.createIcons(); this.scrollToBottom(); }
+                this.correction = data.hasError ? `<div class="bg-red-50 p-4 rounded-3xl border border-red-100 text-gray-800 font-bold">${data.fix}</div>` : "Perfect!";
+                if (data.blocked && this.config.rigor === 'Strict') this.isBlocked = true;
+            } catch (e) { console.error(e); }
+            finally { this.loading = false; this.scrollToBottom(); if(window.lucide) lucide.createIcons(); }
         },
         unblock() { this.isBlocked = false; this.correction = ''; },
-        translate(dir) { console.log('Translate', dir); },
         scrollToBottom() { const c = document.getElementById('chat-container'); if(c) setTimeout(()=>c.scrollTop = c.scrollHeight, 50); }
     }
 }
