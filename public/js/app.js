@@ -8,10 +8,10 @@ async function loadComponent(id, url) {
 
 function migoApp() {
     return {
-        userInput: '', loading: false, correction: '', 
+        userInput: '', loading: false, correction: '',
         popups: { config: false, trans: false, user: false },
         config: { rigor: 'Normal', modo: 'Colloquial' },
-        messages: [{ role: 'migo', text: 'Hello! I am Migo. Ready? / ¡Hola! Soy Migo. ¿Listo?' }],
+        messages: [{ role: 'migo', text: 'Hello! Ready? / ¡Hola! ¿Listo?' }],
 
         async init() {
             await Promise.all([
@@ -23,7 +23,11 @@ function migoApp() {
                 loadComponent('mw-popup-user', '/components/user-modal.html')
             ]);
         },
-        togglePopup(name) { this.popups[name] = !this.popups[name]; },
+
+        togglePopup(name) {
+            this.popups[name] = !this.popups[name];
+        },
+
         async send() {
             if (!this.userInput.trim() || this.loading) return;
             const text = this.userInput;
