@@ -29,21 +29,41 @@ function migoApp() {
 
         async send() {
             if (!this.userInput.trim() || this.loading || this.isBlocked) return;
+            
             const text = this.userInput;
             this.messages.push({ role: 'user', text });
-            this.userInput = ''; this.loading = true;
+            this.userInput = ''; 
+            this.loading = true;
+
             try {
-                const res = await fetch('/api/chat', {
+                const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ...this.config, messages: this.messages })
+                    body: JSON.stringify({ 
+                        rigor: this.config.rigor,
+                        modo: this.config.modo,
+                        messages: this.messages 
+                    })
                 });
-                const data = await res.json();
+
+                if (!response.ok) throw new Error('Error en la API');
+
+                const data = await response.json();
+                
+                // Actualizar mensajes y correcciones
                 this.messages.push({ role: 'migo', text: data.reply });
                 this.correction = data.hasError ? `<div class="fix-card">${data.fix}</div>` : "Perfect!";
-                if (data.blocked && this.config.rigor === 'Strict') this.isBlocked = true;
-            } catch (e) { console.error(e); }
-            finally { this.loading = false; if(window.lucide) lucide.createIcons(); }
+                
+                if (data.blocked && this.config.rigor === 'Strict') {
+                    this.isBlocked = true;
+                }
+            } catch (e) {
+                console.error('Chat Error:', e);
+                this.messages.push({ role: 'migo', text: 'Lo siento, hubo un error en la conexión.' });
+            } finally {
+                this.loading = false;
+                if(window.lucide) lucide.createIcons();
+            }
         },
         unblock() { this.isBlocked = false; this.correction = ''; }
     }
