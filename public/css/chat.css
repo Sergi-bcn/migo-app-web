@@ -8,7 +8,8 @@
     overflow: hidden; 
     position: relative; 
     box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-    margin-left: -25px; /* Ampliado hacia la izquierda para ganar espacio */
+    /* Ajuste para ganar terreno a la izquierda manteniendo el gap */
+    margin-left: -15px; 
 }
 .chat-msg-user, .chat-msg-migo {
     align-self: flex-start;

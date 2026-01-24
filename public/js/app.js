@@ -23,17 +23,24 @@ function migoApp() {
                 loadComponent('mw-popup-trans', '/components/trans-modal.html'),
                 loadComponent('mw-popup-user', '/components/user-modal.html')
             ]);
+            this.$watch('messages', () => {
+                const el = document.getElementById('chat-scroll');
+                if(el) setTimeout(() => el.scrollTop = el.scrollHeight, 50);
+            });
         },
 
         async translate(sl, tl, text) {
             if (!text.trim()) return;
+            // API gratuita de Google Translate (Client gtx)
             const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURI(text)}`;
             try {
                 const res = await fetch(url);
                 const data = await res.json();
                 if (tl === 'en') this.resEN = data[0][0][0];
                 else this.resES = data[0][0][0];
-            } catch (e) { console.error("Translate Error", e); }
+            } catch (e) {
+                console.error("Error en Traducción:", e);
+            }
         },
 
         async send() {
