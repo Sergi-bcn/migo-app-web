@@ -1,17 +1,17 @@
-<div x-show="popups.trans" x-cloak class="popup-base" style="top: 6rem; right: 2rem; width: 320px;" @click.away="popups.trans = false">
-    <h4 class="text-[10px] font-extrabold text-gray-400 uppercase mb-4 tracking-widest text-center">Traductor Instantáneo</h4>
+<div x-show="popups.trans" x-cloak class="trans-popup" @click.away="popups.trans = false">
+    <h4 class="text-[10px] font-extrabold text-gray-400 uppercase mb-4 tracking-widest text-center">Translator</h4>
     
     <div class="trans-box">
         <span class="trans-label">Español</span>
-        <textarea class="trans-text" placeholder="Escribe para traducir..."></textarea>
-    </div>
-
-    <div class="flex justify-center my-2 text-gray-300">
-        <i data-lucide="arrow-down-up" class="w-4 h-4"></i>
+        <textarea class="trans-area" placeholder="Escribe para traducir..."></textarea>
     </div>
 
     <div class="trans-box">
-        <span class="trans-label">English (AI)</span>
-        <textarea class="trans-text" readonly placeholder="Traducción automática..." style="color: #ff9800;"></textarea>
+        <span class="trans-label" style="color: #4caf50;">English</span>
+        <textarea class="trans-area" readonly placeholder="Migo translates..." style="color: #4caf50;"></textarea>
     </div>
+    
+    <button class="w-full bg-gray-50 hover:bg-gray-100 py-3 rounded-2xl text-[10px] font-black uppercase text-gray-400 tracking-tighter transition border-none cursor-pointer">
+        Copy Translation
+    </button>
 </div>
