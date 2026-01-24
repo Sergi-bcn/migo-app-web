@@ -1,29 +1,25 @@
-<div x-show="popups.config" x-cloak class="config-popup" @click.away="popups.config = false">
-    <div class="config-section">
-        <p class="config-title">Nivel de Rigor</p>
-        <div class="config-grid">
-            <button @click="config.rigor = 'Strict'; unblock()" :class="config.rigor === 'Strict' ? 'active' : ''" class="mode-card">
-                <i data-lucide="shield-check" class="w-5 h-5 mb-1"></i>
-                <span>Strict</span>
-            </button>
-            <button @click="config.rigor = 'Normal'; unblock()" :class="config.rigor === 'Normal' ? 'active' : ''" class="mode-card">
-                <i data-lucide="zap" class="w-5 h-5 mb-1"></i>
-                <span>Normal</span>
-            </button>
-        </div>
+<div x-show="popups.config" x-cloak class="config-popup">
+    <div class="flex justify-between items-center mb-4">
+        <h4 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">Modo de Conversación</h4>
+        <button @click="popups.config = false" class="text-gray-300 hover:text-gray-500 transition-colors">
+            <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
     </div>
     
-    <div class="config-section mt-4">
-        <p class="config-title">Estilo de Chat</p>
-        <div class="config-grid">
-            <button @click="config.modo = 'Colloquial'" :class="config.modo === 'Colloquial' ? 'active' : ''" class="mode-card">
-                <i data-lucide="message-circle" class="w-5 h-5 mb-1"></i>
-                <span>Coloquial</span>
-            </button>
-            <button @click="config.modo = 'Formal'" :class="config.modo === 'Formal' ? 'active' : ''" class="mode-card">
-                <i data-lucide="briefcase" class="w-5 h-5 mb-1"></i>
-                <span>Formal</span>
-            </button>
+    <div class="space-y-4">
+        <div>
+            <p class="config-label">Nivel de Rigor</p>
+            <div class="grid grid-cols-2 gap-2">
+                <button @click="config.rigor = 'Strict'; unblock()" :class="config.rigor === 'Strict' ? 'active' : ''" class="mode-card">Strict</button>
+                <button @click="config.rigor = 'Normal'; unblock()" :class="config.rigor === 'Normal' ? 'active' : ''" class="mode-card">Normal</button>
+            </div>
+        </div>
+        <div>
+            <p class="config-label">Estilo</p>
+            <div class="grid grid-cols-2 gap-2">
+                <button @click="config.modo = 'Colloquial'" :class="config.modo === 'Colloquial' ? 'active' : ''" class="mode-card">Coloquial</button>
+                <button @click="config.modo = 'Formal'" :class="config.modo === 'Formal' ? 'active' : ''" class="mode-card">Formal</button>
+            </div>
         </div>
     </div>
 </div>
