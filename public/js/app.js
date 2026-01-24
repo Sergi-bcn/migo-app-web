@@ -1,4 +1,12 @@
-// ... funciones de carga inicial ...
+async function loadComponent(id, url) {
+    try {
+        const res = await fetch(url);
+        if (res.ok) {
+            document.getElementById(id).innerHTML = await res.text();
+            if (window.lucide) lucide.createIcons();
+        }
+    } catch (e) { console.error("Error cargando componente:", id, e); }
+}
 
 function migoApp() {
     return {
@@ -9,22 +17,20 @@ function migoApp() {
         messages: [{ role: 'migo', text: 'Hello! I am Migo. Ready to learn?' }],
 
         async init() {
-            await Promise.all([
-                loadComponent('mw-navbar', '/components/navbar.html'),
-                loadComponent('mw-corrections', '/components/corrections.html'),
-                loadComponent('mw-chat', '/components/chat-main.html'),
-                loadComponent('mw-popup-config', '/components/config-modal.html'),
-                loadComponent('mw-popup-trans', '/components/trans-modal.html'),
-                loadComponent('mw-popup-user', '/components/user-modal.html')
-            ]);
+            // Cargamos todo al iniciar
+            await loadComponent('mw-navbar', '/components/navbar.html');
+            await loadComponent('mw-corrections', '/components/corrections.html');
+            await loadComponent('mw-chat', '/components/chat-main.html');
+            await loadComponent('mw-popup-config', '/components/config-modal.html');
+            await loadComponent('mw-popup-trans', '/components/trans-modal.html');
+            await loadComponent('mw-popup-user', '/components/user-modal.html');
         },
 
-        // Lógica corregida: abre/cierra individualmente permitiendo que todas estén abiertas
         togglePopup(name) {
+            // Cambia el estado individualmente permitiendo que varias estén abiertas
             this.popups[name] = !this.popups[name];
         },
 
-        // Resto de funciones (translate, send, unblock) se mantienen idénticas
         async translate(sl, tl, text) {
             if (!text.trim()) return;
             const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURI(text)}`;
@@ -33,7 +39,7 @@ function migoApp() {
                 const data = await res.json();
                 if (tl === 'en') this.resEN = data[0][0][0];
                 else this.resES = data[0][0][0];
-            } catch (e) { console.error("Translate Error", e); }
+            } catch (e) { console.error("Error", e); }
         },
 
         async send() {
