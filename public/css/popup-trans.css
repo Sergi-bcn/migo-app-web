@@ -1,0 +1,29 @@
+.trans-popup {
+    position: absolute;
+    top: 6rem;
+    right: 2rem;
+    width: 320px;
+    background: white;
+    border-radius: 35px;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+    border: 1px solid #f1f5f9;
+    padding: 1.5rem;
+    z-index: 100;
+}
+.trans-box {
+    background: #f8fafc;
+    border-radius: 20px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #f1f5f9;
+}
+.trans-area {
+    width: 100%;
+    background: transparent;
+    border: none;
+    font-weight: 700;
+    color: #1e293b;
+    outline: none;
+    resize: none;
+    height: 60px;
+}
