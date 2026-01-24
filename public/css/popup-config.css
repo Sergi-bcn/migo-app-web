@@ -1,6 +1,17 @@
-.config-popup { position: absolute; top: 5.5rem; right: 5rem; width: 280px; background: white; border-radius: 35px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 1px solid #f1f5f9; padding: 1.5rem; z-index: 500; }
-.config-title { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #94a3b8; margin-bottom: 12px; letter-spacing: 0.05em; }
-.config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.mode-card { background: #f8fafc; border: 2px solid transparent; border-radius: 20px; padding: 12px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: all 0.2s; color: #64748b; font-weight: 700; font-size: 12px; }
+.config-popup { 
+    position: absolute; 
+    top: 5.5rem; 
+    right: 25rem; /* Separada de la de traducción (que está en right: 2rem) */
+    width: 280px; 
+    background: white; 
+    border-radius: 35px; 
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1); 
+    border: 1px solid #f1f5f9; 
+    padding: 1.5rem; 
+    z-index: 500; 
+}
+.config-section { margin-bottom: 1rem; }
+.config-title { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #94a3b8; margin-bottom: 10px; }
+.config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mode-card { background: #f8fafc; border: 2px solid transparent; border-radius: 18px; padding: 10px; display: flex; flex-direction: column; align-items: center; cursor: pointer; color: #64748b; font-weight: 700; font-size: 11px; }
 .mode-card.active { background: #fff7ed; border-color: #ff9800; color: #ff9800; }
-.mode-card:hover:not(.active) { background: #f1f5f9; }

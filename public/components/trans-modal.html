@@ -1,25 +1,28 @@
-<div x-show="popups.trans" x-cloak class="trans-popup" @click.away="popups.trans = false">
-    <h4 class="text-[10px] font-extrabold text-gray-400 uppercase mb-4 text-center tracking-widest">Google Translator Engine</h4>
+<div x-show="popups.trans" x-cloak class="trans-popup">
+    <div class="flex justify-between items-center mb-4">
+        <h4 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">Translator Engine</h4>
+        <button @click="popups.trans = false" class="text-gray-300 hover:text-gray-500"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
     
-    <div class="trans-box">
-        <span class="trans-label">Español ➔ Inglés</span>
-        <div class="relative">
-            <textarea class="trans-area" x-model="transES" @keydown.enter.prevent="translate('es', 'en', transES)" placeholder="Escribe e Intro..."></textarea>
-            <button @click="translate('es', 'en', transES)" class="trans-send-btn bg-[#ff9800]">
-                <i data-lucide="arrow-right" class="w-4 h-4 text-white"></i>
+    <div class="trans-group">
+        <div class="trans-input-wrapper">
+            <span class="trans-tag">Español</span>
+            <textarea class="trans-area text-base" x-model="transES" @keydown.enter.prevent="translate('es', 'en', transES)" placeholder="Escribe algo..."></textarea>
+            <button @click="translate('es', 'en', transES)" class="trans-action-btn">
+                <i data-lucide="arrow-right" class="w-5 h-5"></i>
             </button>
         </div>
-        <div class="res-box text-[#ff9800]" x-show="resEN" x-text="resEN"></div>
+        <div class="trans-result text-base" x-show="resEN" x-text="resEN"></div>
     </div>
 
-    <div class="trans-box">
-        <span class="trans-label" style="color: #4caf50;">English ➔ Español</span>
-        <div class="relative">
-            <textarea class="trans-area" x-model="transEN" @keydown.enter.prevent="translate('en', 'es', transEN)" placeholder="Type and Enter..."></textarea>
-            <button @click="translate('en', 'es', transEN)" class="trans-send-btn bg-[#4caf50]">
-                <i data-lucide="arrow-right" class="w-4 h-4 text-white"></i>
+    <div class="trans-group">
+        <div class="trans-input-wrapper">
+            <span class="trans-tag">English</span>
+            <textarea class="trans-area text-base" x-model="transEN" @keydown.enter.prevent="translate('en', 'es', transEN)" placeholder="Type something..."></textarea>
+            <button @click="translate('en', 'es', transEN)" class="trans-action-btn">
+                <i data-lucide="arrow-right" class="w-5 h-5"></i>
             </button>
         </div>
-        <div class="res-box text-[#4caf50]" x-show="resES" x-text="resES"></div>
+        <div class="trans-result text-base" x-show="resES" x-text="resES"></div>
     </div>
 </div>

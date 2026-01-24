@@ -25,6 +25,11 @@ function migoApp() {
             ]);
         },
 
+        // Nueva función para permitir apertura múltiple
+        togglePopup(name) {
+            this.popups[name] = !this.popups[name];
+        },
+
         async translate(sl, tl, text) {
             if (!text.trim()) return;
             const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURI(text)}`;
@@ -49,7 +54,7 @@ function migoApp() {
                 });
                 const data = await res.json();
                 this.messages.push({ role: 'migo', text: data.reply });
-                this.correction = data.hasError ? `<div class="fix-card">${data.fix}</div>` : "Perfecto!";
+                this.correction = data.hasError ? `<div class="fix-card">${data.fix}</div>` : "¡Perfecto!";
                 if (data.blocked && this.config.rigor === 'Strict') this.isBlocked = true;
             } finally { this.loading = false; lucide.createIcons(); }
         },
