@@ -1,6 +1,14 @@
-<div x-show="popups.user" x-cloak class="fixed bottom-12 left-20 w-[260px] bg-white rounded-[35px] popup-card z-[300] p-8 popup-arrow-user" @click.away="popups.user = false">
-    <p class="font-bold text-gray-800 text-lg">Sergi Pérez</p>
-    <p class="text-[10px] text-migo-green font-bold uppercase mt-1" x-text="'Mode: ' + config.modo"></p>
-    <hr class="my-4 border-gray-50">
-    <button class="text-xs font-bold text-gray-400 hover:text-red-500 transition">Log Out</button>
+<div x-show="popups.user" x-cloak class="popup-base user-popup" @click.away="popups.user = false">
+    <div class="flex items-center gap-3 mb-3">
+        <div class="w-10 h-10 bg-[#ff9800] rounded-full flex items-center justify-center text-white font-black">S</div>
+        <div>
+            <p class="text-sm font-bold text-gray-800 m-0">Sergi Pérez</p>
+            <p class="text-[10px] text-green-500 font-bold uppercase m-0">En línea</p>
+        </div>
+    </div>
+    <hr class="border-gray-50 my-3">
+    <div class="space-y-2">
+        <p class="text-[10px] font-bold text-gray-400 uppercase m-0">Modo Actual</p>
+        <p class="text-xs font-bold text-gray-700 m-0" x-text="config.modo"></p>
+    </div>
 </div>

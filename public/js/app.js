@@ -1,3 +1,4 @@
+// public/js/app.js
 async function loadMiniWeb(id, url) {
     const res = await fetch(url);
     if (res.ok) {
@@ -19,7 +20,8 @@ function migoApp() {
                 loadMiniWeb('miniweb-corrections', '/components/corrections.html'),
                 loadMiniWeb('miniweb-chat', '/components/chat-main.html'),
                 loadMiniWeb('miniweb-config', '/components/config-modal.html'),
-                loadMiniWeb('miniweb-trans', '/components/trans-modal.html')
+                loadMiniWeb('miniweb-trans', '/components/trans-modal.html'),
+                loadMiniWeb('miniweb-user', '/components/user-modal.html')
             ]);
             this.$watch('messages', () => {
                 const el = document.getElementById('chat-scroll');
@@ -31,9 +33,8 @@ function migoApp() {
             if (!this.userInput.trim() || this.loading || this.isBlocked) return;
             
             const text = this.userInput;
-            this.messages.push({ role: 'user', text });
-            this.userInput = ''; 
-            this.loading = true;
+            this.messages.push({ role: 'user', text }); // Se renderizará a la izquierda por CSS
+            this.userInput = ''; this.loading = true;
 
             try {
                 const response = await fetch('/api/chat', {
@@ -46,23 +47,16 @@ function migoApp() {
                     })
                 });
 
-                if (!response.ok) throw new Error('Error en la API');
-
                 const data = await response.json();
-                
-                // Actualizar mensajes y correcciones
                 this.messages.push({ role: 'migo', text: data.reply });
-                this.correction = data.hasError ? `<div class="fix-card">${data.fix}</div>` : "Perfect!";
+                this.correction = data.hasError ? `<div class="fix-card">${data.fix}</div>` : "¡Perfecto!";
                 
-                if (data.blocked && this.config.rigor === 'Strict') {
-                    this.isBlocked = true;
-                }
+                if (data.blocked && this.config.rigor === 'Strict') this.isBlocked = true;
             } catch (e) {
-                console.error('Chat Error:', e);
-                this.messages.push({ role: 'migo', text: 'Lo siento, hubo un error en la conexión.' });
+                console.error(e);
             } finally {
                 this.loading = false;
-                if(window.lucide) lucide.createIcons();
+                lucide.createIcons();
             }
         },
         unblock() { this.isBlocked = false; this.correction = ''; }

@@ -1,4 +1,11 @@
-.migo-popup { position: absolute; background: white; border-radius: 35px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid #f1f5f9; z-index: 100; padding: 1.5rem; transition: 0.2s; }
-.migo-popup::before { content: ''; position: absolute; top: -8px; right: 24px; width: 16px; height: 16px; background: white; border-left: 1px solid #f1f5f9; border-top: 1px solid #f1f5f9; transform: rotate(45deg); }
-.mode-row { width: 100%; display: flex; items: center; justify-content: space-between; padding: 1rem; border-radius: 22px; font-size: 14px; font-weight: 700; border: 1px solid #f3f4f6; background: white; color: #6b7280; cursor: pointer; margin-bottom: 0.5rem; }
-.mode-row.active { background: #4caf50; color: white; border-color: #4caf50; box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2); }
+/* public/css/modals.css */
+.popup-base { position: absolute; background: white; border-radius: 35px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid #f1f5f9; z-index: 100; padding: 1.5rem; }
+
+/* Ventana de Usuario que emerge del botón S */
+.user-popup { position: fixed; bottom: 85px; left: 75px; width: 220px; border-radius: 30px; }
+.user-popup::before { content: ''; position: absolute; bottom: -8px; left: 20px; width: 16px; height: 16px; background: white; transform: rotate(45deg); border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
+
+/* Cajas del Traductor */
+.trans-box { background: #f8fafc; border-radius: 20px; padding: 1rem; margin-bottom: 1rem; border: 1px solid #f1f5f9; }
+.trans-label { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #64748b; margin-bottom: 5px; display: block; }
+.trans-text { width: 100%; background: transparent; border: none; font-weight: 700; color: #1e293b; outline: none; resize: none; }
