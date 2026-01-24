@@ -46,8 +46,12 @@ function migoApp() {
             } finally { 
                 this.loading = false; 
                 if(window.lucide) lucide.createIcons();
-                setTimeout(() => { document.getElementById('chat-scroll').scrollTop = 99999; }, 100);
+                setTimeout(() => { 
+                    const chat = document.getElementById('chat-scroll');
+                    if(chat) chat.scrollTop = chat.scrollHeight; 
+                }, 100);
             }
-        }
+        },
+        unblock() { this.isBlocked = false; this.correction = ''; }
     }
 }
