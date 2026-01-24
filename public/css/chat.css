@@ -1,14 +1,14 @@
 .chat-window { 
     flex: 1; 
     background: white; 
-    border-radius: 40px 0 0 40px; /* Redondeado solo a la izquierda para un look moderno */
+    border-radius: 40px; 
     border: 1px solid #f3f4f6; 
-    border-right: none; /* Quitamos borde derecho */
     display: flex; 
     flex-direction: column; 
     overflow: hidden; 
     position: relative; 
-    box-shadow: -4px 4px 6px -1px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    margin-left: -25px; /* Ampliado hacia la izquierda para ganar espacio */
 }
 .chat-msg-user, .chat-msg-migo {
     align-self: flex-start;

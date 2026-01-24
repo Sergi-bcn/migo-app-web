@@ -9,7 +9,7 @@ async function loadComponent(id, url) {
 function migoApp() {
     return {
         userInput: '', loading: false, correction: '', isBlocked: false,
-        transES: '', transEN: '', // Variables para el traductor
+        transES: '', transEN: '', resES: '', resEN: '',
         popups: { config: false, trans: false, user: false },
         config: { rigor: 'Normal', modo: 'Colloquial' },
         messages: [{ role: 'migo', text: 'Hello! I am Migo. Ready to learn?' }],
@@ -23,15 +23,17 @@ function migoApp() {
                 loadComponent('mw-popup-trans', '/components/trans-modal.html'),
                 loadComponent('mw-popup-user', '/components/user-modal.html')
             ]);
-            this.$watch('messages', () => {
-                const el = document.getElementById('chat-scroll');
-                if(el) setTimeout(() => el.scrollTop = el.scrollHeight, 50);
-            });
         },
 
-        async translate(type) {
-            console.log("Traduciendo:", type);
-            // Aquí iría la llamada a tu API de traducción
+        async translate(sl, tl, text) {
+            if (!text.trim()) return;
+            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURI(text)}`;
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                if (tl === 'en') this.resEN = data[0][0][0];
+                else this.resES = data[0][0][0];
+            } catch (e) { console.error("Translate Error", e); }
         },
 
         async send() {
@@ -49,8 +51,7 @@ function migoApp() {
                 this.messages.push({ role: 'migo', text: data.reply });
                 this.correction = data.hasError ? `<div class="fix-card">${data.fix}</div>` : "Perfect!";
                 if (data.blocked && this.config.rigor === 'Strict') this.isBlocked = true;
-            } catch (e) { console.error(e); }
-            finally { this.loading = false; lucide.createIcons(); }
+            } finally { this.loading = false; if(window.lucide) lucide.createIcons(); }
         },
         unblock() { this.isBlocked = false; this.correction = ''; }
     }

@@ -1,43 +1,17 @@
 .migo-nav { 
-    width: 64px; 
-    background: #ff9800; 
-    height: 100vh; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; /* Centra horizontalmente */
-    justify-content: flex-start; 
-    padding: 2rem 0; 
-    flex-shrink: 0; 
-    z-index: 200; 
-    position: relative; 
+    width: 64px; background: #ff9800; height: 100vh; display: flex; 
+    flex-direction: column; align-items: center; padding: 2rem 0; z-index: 200; 
 }
 .nav-icon { 
-    width: 44px; 
-    height: 44px; 
-    background: rgba(255,255,255,0.2); 
-    border-radius: 16px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    color: white; 
-    border: none; 
-    cursor: pointer; 
-    margin-bottom: 1.5rem; 
-    transition: 0.2s; 
+    width: 44px; height: 44px; background: rgba(255,255,255,0.2); 
+    border-radius: 16px; display: flex; align-items: center; justify-content: center; 
+    color: white; border: none; cursor: pointer; margin-bottom: 1.5rem; 
 }
 .user-dot { 
     margin-top: auto; 
-    width: 44px; 
-    height: 44px; 
-    background: white; 
-    border-radius: 50%; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    color: #ff9800; 
-    font-weight: 900; 
-    box-shadow: 0 10px 15px rgba(0,0,0,0.1); 
-    border: none; 
-    cursor: pointer; 
-    margin-bottom: 3rem; 
+    width: 44px; height: 44px; background: white; border-radius: 50%; 
+    display: flex; align-items: center; justify-content: center; 
+    color: #ff9800; font-weight: 900; box-shadow: 0 10px 15px rgba(0,0,0,0.1); 
+    border: none; cursor: pointer; 
+    margin-bottom: 1.2rem; /* Bajado más el icono con margen de seguridad */
 }

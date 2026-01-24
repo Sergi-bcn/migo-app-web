@@ -1,29 +1,25 @@
 <div x-show="popups.trans" x-cloak class="trans-popup" @click.away="popups.trans = false">
-    <h4 class="text-[10px] font-extrabold text-gray-400 uppercase mb-4 tracking-widest text-center">Traductor Migo</h4>
+    <h4 class="text-[10px] font-extrabold text-gray-400 uppercase mb-4 text-center tracking-widest">Google Engine</h4>
     
-    <div class="trans-box relative">
+    <div class="trans-box">
         <span class="trans-label">Español ➔ Inglés</span>
-        <textarea 
-            class="trans-area" 
-            placeholder="Escribe y pulsa Intro..."
-            x-model="transES"
-            @keydown.enter.prevent="translate('es-en')"
-        ></textarea>
-        <button @click="translate('es-en')" class="trans-send-btn bg-[#ff9800]">
-            <i data-lucide="arrow-right" class="w-4 h-4 text-white"></i>
-        </button>
+        <div class="relative">
+            <textarea class="trans-area" x-model="transES" @keydown.enter.prevent="translate('es', 'en', transES)" placeholder="Escribe e Intro..."></textarea>
+            <button @click="translate('es', 'en', transES)" class="trans-send-btn bg-[#ff9800]">
+                <i data-lucide="arrow-right" class="w-4 h-4 text-white"></i>
+            </button>
+        </div>
+        <div class="res-box text-[#ff9800]" x-show="resEN" x-text="resEN"></div>
     </div>
 
-    <div class="trans-box relative">
+    <div class="trans-box">
         <span class="trans-label" style="color: #4caf50;">English ➔ Español</span>
-        <textarea 
-            class="trans-area" 
-            placeholder="Type and press Enter..."
-            x-model="transEN"
-            @keydown.enter.prevent="translate('en-es')"
-        ></textarea>
-        <button @click="translate('en-es')" class="trans-send-btn bg-[#4caf50]">
-            <i data-lucide="arrow-right" class="w-4 h-4 text-white"></i>
-        </button>
+        <div class="relative">
+            <textarea class="trans-area" x-model="transEN" @keydown.enter.prevent="translate('en', 'es', transEN)" placeholder="Type and Enter..."></textarea>
+            <button @click="translate('en', 'es', transEN)" class="trans-send-btn bg-[#4caf50]">
+                <i data-lucide="arrow-right" class="w-4 h-4 text-white"></i>
+            </button>
+        </div>
+        <div class="res-box text-[#4caf50]" x-show="resES" x-text="resES"></div>
     </div>
 </div>
