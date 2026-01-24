@@ -1,7 +1,8 @@
-.trans-popup { position: absolute; top: 5.5rem; right: 2rem; width: 340px; background: white; border-radius: 35px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); border: 1px solid #f1f5f9; padding: 1.5rem; z-index: 500; }
-.trans-box { background: #f8fafc; border-radius: 20px; padding: 1.25rem; margin-bottom: 1rem; border: 1px solid #f3f4f6; }
-.trans-label { font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block; }
-.trans-area { width: 100%; background: transparent; border: none; font-weight: 700; color: #334155; outline: none; resize: none; height: 55px; font-size: 14px; padding-right: 40px; }
-.trans-send-btn { position: absolute; right: 0; bottom: 8px; width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; transition: 0.2s; }
-.trans-send-btn:hover { transform: scale(1.1); }
-.res-box { margin-top: 10px; padding: 12px; background: white; border-radius: 15px; font-size: 13px; font-weight: 800; border: 1px dashed #e2e8f0; min-height: 20px; }
+.trans-popup { position: absolute; top: 5.5rem; right: 2rem; width: 340px; background: white; border-radius: 35px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); border: 1px solid #f1f5f9; padding: 1.5rem; z-index: 500; }
+.trans-group { margin-bottom: 1.25rem; }
+.trans-input-wrapper { background: #f8fafc; border-radius: 22px; padding: 1rem; border: 1px solid #f1f5f9; position: relative; }
+.trans-tag { font-size: 9px; font-weight: 800; text-transform: uppercase; color: #94a3b8; display: block; margin-bottom: 4px; }
+.trans-area { width: 100%; background: transparent; border: none; font-weight: 700; color: #334155; outline: none; resize: none; height: 45px; font-size: 13px; padding-right: 40px; }
+.trans-action-btn { position: absolute; right: 12px; bottom: 12px; width: 32px; height: 32px; border-radius: 50%; background: #ff9800; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.trans-action-btn:hover { transform: scale(1.1); background: #e68900; }
+.trans-result { margin-top: 8px; padding: 12px; background: #fffaf0; border-radius: 15px; font-size: 13px; font-weight: 700; color: #ff9800; border: 1px solid #ffedd5; cursor: pointer; }

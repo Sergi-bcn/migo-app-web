@@ -1,18 +1,29 @@
-<div x-show="popups.config" x-cloak class="absolute top-24 right-14 w-[300px] bg-white rounded-[35px] popup-card z-[100] p-6 popup-arrow-top" @click.away="popups.config = false">
-    <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-4 tracking-widest">Nivel de Rigor</h4>
-    <div class="mb-6">
-        <button @click="config.rigor = 'Strict'; unblock()" class="btn-mode-row" :class="config.rigor === 'Strict' ? 'active' : ''">
-            <span>Estricto (Bloqueo)</span> <i data-lucide="lock"></i>
-        </button>
-        <button @click="config.rigor = 'Normal'; unblock()" class="btn-mode-row" :class="config.rigor === 'Normal' ? 'active' : ''">
-            <span>No tan estricto</span> <i data-lucide="unlock"></i>
-        </button>
+<div x-show="popups.config" x-cloak class="config-popup" @click.away="popups.config = false">
+    <div class="config-section">
+        <p class="config-title">Nivel de Rigor</p>
+        <div class="config-grid">
+            <button @click="config.rigor = 'Strict'; unblock()" :class="config.rigor === 'Strict' ? 'active' : ''" class="mode-card">
+                <i data-lucide="shield-check" class="w-5 h-5 mb-1"></i>
+                <span>Strict</span>
+            </button>
+            <button @click="config.rigor = 'Normal'; unblock()" :class="config.rigor === 'Normal' ? 'active' : ''" class="mode-card">
+                <i data-lucide="zap" class="w-5 h-5 mb-1"></i>
+                <span>Normal</span>
+            </button>
+        </div>
     </div>
-
-    <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-4 tracking-widest">Estilo de Chat</h4>
-    <div class="space-y-1">
-        <button @click="config.modo = 'Colloquial'" class="btn-mode-row" :class="config.modo === 'Colloquial' ? 'active' : ''"><span>Coloquial</span> <i data-lucide="smile"></i></button>
-        <button @click="config.modo = 'Formal'" class="btn-mode-row" :class="config.modo === 'Formal' ? 'active' : ''"><span>Formal</span> <i data-lucide="book"></i></button>
-        <button @click="config.modo = 'Academic'" class="btn-mode-row" :class="config.modo === 'Academic' ? 'active' : ''"><span>Académico</span> <i data-lucide="graduation-cap"></i></button>
+    
+    <div class="config-section mt-4">
+        <p class="config-title">Estilo de Chat</p>
+        <div class="config-grid">
+            <button @click="config.modo = 'Colloquial'" :class="config.modo === 'Colloquial' ? 'active' : ''" class="mode-card">
+                <i data-lucide="message-circle" class="w-5 h-5 mb-1"></i>
+                <span>Coloquial</span>
+            </button>
+            <button @click="config.modo = 'Formal'" :class="config.modo === 'Formal' ? 'active' : ''" class="mode-card">
+                <i data-lucide="briefcase" class="w-5 h-5 mb-1"></i>
+                <span>Formal</span>
+            </button>
+        </div>
     </div>
 </div>

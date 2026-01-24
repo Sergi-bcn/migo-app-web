@@ -8,15 +8,9 @@
     overflow: hidden; 
     position: relative; 
     box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-    /* Ajuste para ganar terreno a la izquierda manteniendo el gap */
-    margin-left: -15px; 
+    /* Desplazamiento a la izquierda para simetría total */
+    margin-left: -50px; 
 }
-.chat-msg-user, .chat-msg-migo {
-    align-self: flex-start;
-    max-width: 80%;
-    padding: 1.25rem 1.75rem;
-    border-radius: 28px;
-    font-weight: 600;
-}
+.chat-msg-user, .chat-msg-migo { align-self: flex-start; max-width: 80%; padding: 1.25rem 1.75rem; border-radius: 28px; font-weight: 600; }
 .chat-msg-user { background: white; color: #374151; border: 1px solid #f1f5f9; }
 .chat-msg-migo { background: #ff9800; color: white; }
