@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo - Bilingüe</title>
+    <title>Migo - Bilingüe / Bilingual</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/navbar.css">
@@ -16,9 +16,9 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>[x-cloak] { display: none !important; } body { background: #f0f2f5; font-family: 'Quicksand', sans-serif; }</style>
 </head>
-<body x-data="migoApp()" x-init="init()" class="h-screen flex overflow-hidden">
+<body x-data="migoApp()" x-init="init()" class="h-screen flex overflow-hidden w-full">
     <div id="mw-navbar"></div>
-    <main class="flex-1 flex p-6 pr-0 gap-8 overflow-hidden relative w-full">
+    <main class="flex-1 flex p-6 pr-0 gap-8 overflow-hidden relative w-full max-w-none">
         <div id="mw-corrections"></div>
         <div id="mw-chat" class="flex-1 flex flex-col relative h-full w-full"></div>
         

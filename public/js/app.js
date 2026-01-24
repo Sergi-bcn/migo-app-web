@@ -12,10 +12,7 @@ function migoApp() {
         transES: '', transEN: '', resES: '', resEN: '',
         popups: { config: false, trans: false, user: false },
         config: { rigor: 'Normal', modo: 'Colloquial' },
-        messages: [{ 
-            role: 'migo', 
-            text: 'Hello! I am Migo. Ready to learn? / ¡Hola! Soy Migo. ¿Listo para aprender?' 
-        }],
+        messages: [{ role: 'migo', text: 'Hello! I am Migo. Ready? / ¡Hola! Soy Migo. ¿Listo?' }],
 
         async init() {
             await Promise.all([
@@ -45,7 +42,6 @@ function migoApp() {
                 });
                 const data = await res.json();
                 this.messages.push({ role: 'migo', text: data.reply });
-                // Mensaje de corrección bilingüe
                 this.correction = data.hasError ? `<div class="fix-card">${data.fix}</div>` : "Perfect! / ¡Perfecto!";
             } finally { 
                 this.loading = false; 
