@@ -1,28 +1,18 @@
 <div x-show="popups.trans" x-cloak class="trans-popup">
     <div class="flex justify-between items-center mb-4">
-        <h4 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">Translator Engine</h4>
+        <h4 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">Translator / Traductor</h4>
         <button @click="popups.trans = false" class="text-gray-300 hover:text-gray-500"><i data-lucide="x" class="w-4 h-4"></i></button>
     </div>
-    
-    <div class="trans-group">
-        <div class="trans-input-wrapper">
-            <span class="trans-tag">Español</span>
-            <textarea class="trans-area text-base" x-model="transES" @keydown.enter.prevent="translate('es', 'en', transES)" placeholder="Escribe algo..."></textarea>
-            <button @click="translate('es', 'en', transES)" class="trans-action-btn">
-                <i data-lucide="arrow-right" class="w-5 h-5"></i>
-            </button>
+    <div class="space-y-4">
+        <div class="space-y-2">
+            <p class="text-[9px] font-bold text-gray-400 uppercase">Spanish / Español</p>
+            <textarea x-model="transES" @input="translate('es', 'en', transES)" class="w-full p-3 bg-gray-50 rounded-2xl text-xs font-bold border-none focus:ring-2 focus:ring-[#ff9800]" placeholder="Escribe aquí..."></textarea>
+            <div class="p-3 bg-blue-50 text-blue-700 rounded-2xl text-xs font-bold min-h-[40px]" x-text="resEN || 'Translation...'"></div>
         </div>
-        <div class="trans-result text-base" x-show="resEN" x-text="resEN"></div>
-    </div>
-
-    <div class="trans-group">
-        <div class="trans-input-wrapper">
-            <span class="trans-tag">English</span>
-            <textarea class="trans-area text-base" x-model="transEN" @keydown.enter.prevent="translate('en', 'es', transEN)" placeholder="Type something..."></textarea>
-            <button @click="translate('en', 'es', transEN)" class="trans-action-btn">
-                <i data-lucide="arrow-right" class="w-5 h-5"></i>
-            </button>
+        <div class="space-y-2 border-t pt-4">
+            <p class="text-[9px] font-bold text-gray-400 uppercase">English / Inglés</p>
+            <textarea x-model="transEN" @input="translate('en', 'es', transEN)" class="w-full p-3 bg-gray-50 rounded-2xl text-xs font-bold border-none focus:ring-2 focus:ring-[#ff9800]" placeholder="Type here..."></textarea>
+            <div class="p-3 bg-orange-50 text-orange-700 rounded-2xl text-xs font-bold min-h-[40px]" x-text="resES || 'Traducción...'"></div>
         </div>
-        <div class="trans-result text-base" x-show="resES" x-text="resES"></div>
     </div>
 </div>

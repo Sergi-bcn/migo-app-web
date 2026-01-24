@@ -1,7 +1,8 @@
 .chat-window { 
     flex: 1; 
+    width: 100%;
     background: white; 
-    border-radius: 40px !important; /* Obliga a redondear las 4 esquinas */
+    border-radius: 40px !important; 
     border: 1px solid #f3f4f6; 
     display: flex; 
     flex-direction: column; 
