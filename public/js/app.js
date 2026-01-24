@@ -8,8 +8,7 @@ async function loadComponent(id, url) {
 
 function migoApp() {
     return {
-        userInput: '', loading: false, correction: '', isBlocked: false,
-        transES: '', transEN: '', resES: '', resEN: '',
+        userInput: '', loading: false, correction: '', 
         popups: { config: false, trans: false, user: false },
         config: { rigor: 'Normal', modo: 'Colloquial' },
         messages: [{ role: 'migo', text: 'Hello! I am Migo. Ready? / ¡Hola! Soy Migo. ¿Listo?' }],
@@ -24,13 +23,9 @@ function migoApp() {
                 loadComponent('mw-popup-user', '/components/user-modal.html')
             ]);
         },
-
-        togglePopup(name) {
-            this.popups[name] = !this.popups[name];
-        },
-
+        togglePopup(name) { this.popups[name] = !this.popups[name]; },
         async send() {
-            if (!this.userInput.trim() || this.loading || this.isBlocked) return;
+            if (!this.userInput.trim() || this.loading) return;
             const text = this.userInput;
             this.messages.push({ role: 'user', text });
             this.userInput = ''; this.loading = true;
@@ -45,13 +40,9 @@ function migoApp() {
                 this.correction = data.hasError ? `<div class="fix-card">${data.fix}</div>` : "Perfect! / ¡Perfecto!";
             } finally { 
                 this.loading = false; 
-                if(window.lucide) lucide.createIcons();
-                setTimeout(() => { 
-                    const chat = document.getElementById('chat-scroll');
-                    if(chat) chat.scrollTop = chat.scrollHeight; 
-                }, 100);
+                lucide.createIcons();
+                setTimeout(() => { document.getElementById('chat-scroll').scrollTop = 99999; }, 100);
             }
-        },
-        unblock() { this.isBlocked = false; this.correction = ''; }
+        }
     }
 }

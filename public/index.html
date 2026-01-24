@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo - Full Width</title>
+    <title>Migo - Bilingual Full Access</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/navbar.css">
@@ -14,13 +14,18 @@
     <link rel="stylesheet" href="/css/popup-config.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <style>[x-cloak] { display: none !important; } body { background: #f0f2f5; font-family: 'Quicksand', sans-serif; }</style>
+    <style>
+        [x-cloak] { display: none !important; } 
+        body { background: #f0f2f5; font-family: 'Quicksand', sans-serif; margin: 0; padding: 0; width: 100vw; overflow: hidden; }
+        /* Forzamos que el main ocupe TODO el espacio visual */
+        main { width: 100% !important; max-width: none !important; margin: 0 !important; }
+    </style>
 </head>
-<body x-data="migoApp()" x-init="init()" class="h-screen flex overflow-hidden w-full">
+<body x-data="migoApp()" x-init="init()" class="h-screen flex">
     <div id="mw-navbar"></div>
-    <main class="flex-1 flex gap-8 overflow-hidden relative w-full h-full p-0">
-        <div id="mw-corrections" class="pl-6 pt-6 pb-6"></div>
-        <div id="mw-chat" class="flex-1 h-full pt-6 pb-6 pr-6"></div>
+    <main class="flex-1 flex p-6 pr-0 gap-8 overflow-hidden relative h-full">
+        <div id="mw-corrections"></div>
+        <div id="mw-chat" class="flex-1 h-full flex flex-col min-w-0"></div>
         
         <div id="mw-popup-config"></div>
         <div id="mw-popup-trans"></div>
