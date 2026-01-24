@@ -1,24 +1,22 @@
 <div x-show="popups.user" x-cloak class="user-popup">
     <div class="flex justify-between items-start mb-4">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-[#ff9800] rounded-full flex items-center justify-center text-white font-black">S</div>
+            <div class="w-10 h-10 bg-[#ff9800] rounded-full flex items-center justify-center text-white font-black text-lg">S</div>
             <div>
                 <p class="text-sm font-bold text-gray-800 m-0">Sergi Pérez</p>
-                <p class="text-[9px] text-green-500 font-extrabold m-0 uppercase">Premium</p>
+                <p class="text-[9px] text-green-500 font-extrabold uppercase m-0">Enero 2026</p>
             </div>
         </div>
-        <button @click="popups.user = false" class="text-gray-300 hover:text-gray-500 transition-colors">
-            <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
+        <button @click="popups.user = false" class="text-gray-300 hover:text-gray-500"><i data-lucide="x" class="w-4 h-4"></i></button>
     </div>
-    <div class="border-t pt-3 space-y-2">
-        <div class="flex justify-between text-[10px] font-bold">
-            <span class="text-gray-400">MODO</span>
-            <span class="text-gray-700" x-text="config.modo"></span>
+    <div class="border-t border-gray-100 pt-3 space-y-3">
+        <div class="flex justify-between items-center">
+            <p class="text-[9px] font-black text-gray-400 uppercase">Rigor</p>
+            <p class="text-xs font-bold text-[#ff9800]" x-text="config.rigor"></p>
         </div>
-        <div class="flex justify-between text-[10px] font-bold">
-            <span class="text-gray-400">INGRESO</span>
-            <span class="text-gray-700">Enero 2026</span>
+        <div class="flex justify-between items-center">
+            <p class="text-[9px] font-black text-gray-400 uppercase">Modo Activo</p>
+            <p class="text-xs font-bold text-gray-700" x-text="config.modo"></p>
         </div>
     </div>
 </div>
