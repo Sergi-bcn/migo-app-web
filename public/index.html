@@ -3,57 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo - Versión Modular Estable</title>
+    <title>Migo - Arquitectura Modular</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/corrections.css">
+    <link rel="stylesheet" href="/css/chat.css">
+    <link rel="stylesheet" href="/css/modals.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script>
-        tailwind.config = {
-            theme: { extend: { colors: { migo: { orange: '#ff9800', green: '#4caf50', bg: '#f0f2f5' } }, fontFamily: { sans: ['Quicksand', 'sans-serif'] } } }
-        }
-    </script>
+    <style>[x-cloak] { display: none !important; } body { background: #f0f2f5; font-family: 'Quicksand', sans-serif; }</style>
 </head>
-<body class="bg-migo-bg h-screen flex overflow-hidden font-sans" x-data="migoApp()" x-init="init()">
-    
-    <nav class="w-16 bg-migo-orange h-full flex flex-col items-center py-8 flex-shrink-0 relative z-[200]">
-        <div class="flex flex-col gap-6 items-center w-full">
-            <button class="nav-icon"><i data-lucide="home"></i></button>
-            <button class="nav-icon"><i data-lucide="book-open"></i></button>
-        </div>
-        <button @click="popups.user = !popups.user" class="profile-dot absolute bottom-12">S</button>
-    </nav>
-
+<body x-data="migoApp()" x-init="init()" class="h-screen flex overflow-hidden">
+    <div id="miniweb-navbar"></div>
     <main class="flex-1 flex p-6 gap-6 overflow-hidden relative">
-        <div id="corrections-container" class="h-full flex"></div>
-
-        <section class="main-chat-area">
-            <header class="chat-header">
-                <h1>Migo<span>.</span></h1>
-                <div class="header-tools">
-                    <button @click="popups.config = !popups.config" class="tool-btn"><i data-lucide="settings"></i></button>
-                    <button @click="popups.trans = !popups.trans" class="tool-btn"><i data-lucide="languages"></i></button>
-                </div>
-            </header>
-
-            <div id="chat-container" class="messages-container">
-                <template x-for="msg in messages">
-                    <div :class="msg.role === 'user' ? 'msg-user' : 'msg-migo'" x-text="msg.text"></div>
-                </template>
-            </div>
-
-            <div class="input-area">
-                <textarea x-model="userInput" @keydown.enter.prevent="send()" :disabled="isBlocked || loading"></textarea>
-                <button @click="send()" class="btn-send"><i data-lucide="send"></i></button>
-            </div>
-
-            <div id="config-modal-container"></div>
-            <div id="trans-modal-container"></div>
-            <div id="user-modal-container"></div>
-        </section>
+        <div id="miniweb-corrections"></div>
+        <div id="miniweb-chat" class="flex-1 flex flex-col relative"></div>
+        <div id="miniweb-config"></div>
+        <div id="miniweb-trans"></div>
     </main>
-
     <script src="/js/app.js"></script>
 </body>
 </html>

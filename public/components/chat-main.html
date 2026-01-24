@@ -1,18 +1,18 @@
 <div class="chat-window">
-    <header class="chat-header">
-        <h1>Migo<span>.</span></h1>
+    <header class="p-7 flex justify-between items-center">
+        <h1 class="text-3xl font-extrabold text-gray-800 m-0">Migo<span class="text-[#ff9800]">.</span></h1>
         <div class="flex bg-gray-100 p-1.5 rounded-full">
-            <button @click="popups.config = !popups.config" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white transition ml-2 shadow-sm border-none cursor-pointer"><i data-lucide="settings" class="w-5 h-5 text-gray-600"></i></button>
-            <button @click="popups.trans = !popups.trans" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white transition ml-2 shadow-sm border-none cursor-pointer"><i data-lucide="languages" class="w-5 h-5 text-gray-600"></i></button>
+            <button @click="popups.config = !popups.config" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white transition ml-2 border-none cursor-pointer"><i data-lucide="settings" class="w-5 h-5 text-gray-600"></i></button>
+            <button @click="popups.trans = !popups.trans" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white transition ml-2 border-none cursor-pointer"><i data-lucide="languages" class="w-5 h-5 text-gray-600"></i></button>
         </div>
     </header>
-    <div id="chat-scroll" class="messages-area">
+    <div id="chat-scroll" class="flex-1 mx-6 bg-[#f9fafb]/50 rounded-[35px] p-8 overflow-y-auto flex flex-col gap-5">
         <template x-for="msg in messages">
-            <div :class="msg.role === 'user' ? 'chat-msg-user' : 'chat-msg-migo'" x-text="msg.text"></div>
+            <div :class="msg.role === 'user' ? 'chat-bubble-user' : 'chat-bubble-migo'" x-text="msg.text"></div>
         </template>
     </div>
-    <div class="input-section">
-        <textarea x-model="userInput" @keydown.enter.prevent="send()" :disabled="isBlocked || loading" placeholder="Escribe aquí..."></textarea>
-        <button @click="send()" class="w-14 h-14 bg-[#4caf50] text-white rounded-2xl flex items-center justify-center shadow-lg border-none cursor-pointer hover:scale-105 transition-transform"><i data-lucide="send"></i></button>
+    <div class="p-8 flex gap-4 items-center">
+        <textarea x-model="userInput" @keydown.enter.prevent="send()" :disabled="isBlocked || loading" class="flex-1 bg-gray-50 border-none rounded-[25px] p-4 h-14 resize-none outline-none font-bold text-gray-600" placeholder="Escribe aquí..."></textarea>
+        <button @click="send()" class="w-14 h-14 bg-[#4caf50] text-white rounded-2xl flex items-center justify-center shadow-lg border-none cursor-pointer hover:scale-105 transition"><i data-lucide="send"></i></button>
     </div>
 </div>

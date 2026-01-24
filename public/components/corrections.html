@@ -1,10 +1,10 @@
-<section class="sidebar-corrections h-full" :class="isBlocked ? 'ring-2 ring-red-100' : ''">
-    <header class="p-6 border-b border-gray-50 flex items-center gap-3">
-        <div class="status-dot" :class="isBlocked ? 'bg-red-500' : 'bg-migo-green'"></div>
-        <h2 class="font-extrabold text-migo-orange text-[10px] tracking-widest uppercase" x-text="isBlocked ? 'Attention' : 'Corrections'"></h2>
+<section class="sidebar-errors">
+    <header class="error-header">
+        <div class="status-light" :class="isBlocked ? 'bg-red-500 animate-pulse' : 'bg-[#4caf50]'"></div>
+        <h2 x-text="isBlocked ? 'Attention' : 'Corrections'"></h2>
     </header>
-    <div class="sidebar-content" x-html="correction || 'Waiting for errors...'"></div>
+    <div class="correction-content" x-html="correction || 'Waiting for errors...'"></div>
     <template x-if="isBlocked">
-        <button @click="unblock()" class="btn-unblock">Unblock</button>
+        <button @click="unblock()" class="m-6 p-4 bg-red-500 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest border-none cursor-pointer shadow-lg">Unblock</button>
     </template>
 </section>

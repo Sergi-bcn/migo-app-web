@@ -1,13 +1,8 @@
-// Función para cargar "mini-webs" de forma independiente
-async function injectModule(id, htmlUrl) {
-    try {
-        const response = await fetch(htmlUrl);
-        if (!response.ok) throw new Error(`Error cargando ${htmlUrl}`);
-        const html = await response.text();
-        document.getElementById(id).innerHTML = html;
-        if (window.lucide) lucide.createIcons(); // Activar iconos tras inyectar
-    } catch (err) {
-        console.error(err);
+async function loadMiniWeb(id, url) {
+    const res = await fetch(url);
+    if (res.ok) {
+        document.getElementById(id).innerHTML = await res.text();
+        if (window.lucide) lucide.createIcons();
     }
 }
 
@@ -16,22 +11,19 @@ function migoApp() {
         userInput: '', loading: false, correction: '', isBlocked: false,
         popups: { config: false, trans: false, user: false },
         config: { rigor: 'Normal', modo: 'Colloquial' },
-        messages: [{ role: 'migo', text: 'Hello! Ready to learn?' }],
+        messages: [{ role: 'migo', text: 'Hello! I am Migo. Ready to learn?' }],
 
         async init() {
-            // El index.html llama a las otras "webs" (componentes)
             await Promise.all([
-                injectModule('mod-navbar', '/components/navbar.html'),
-                injectModule('mod-corrections', '/components/corrections.html'),
-                injectModule('mod-chat-main', '/components/chat-main.html'),
-                injectModule('mod-config', '/components/config-modal.html'),
-                injectModule('mod-trans', '/components/trans-modal.html'),
-                injectModule('mod-user', '/components/user-modal.html')
+                loadMiniWeb('miniweb-navbar', '/components/navbar.html'),
+                loadMiniWeb('miniweb-corrections', '/components/corrections.html'),
+                loadMiniWeb('miniweb-chat', '/components/chat-main.html'),
+                loadMiniWeb('miniweb-config', '/components/config-modal.html'),
+                loadMiniWeb('miniweb-trans', '/components/trans-modal.html')
             ]);
-
             this.$watch('messages', () => {
                 const el = document.getElementById('chat-scroll');
-                if (el) setTimeout(() => el.scrollTop = el.scrollHeight, 50);
+                if(el) setTimeout(() => el.scrollTop = el.scrollHeight, 50);
             });
         },
 
@@ -48,14 +40,10 @@ function migoApp() {
                 });
                 const data = await res.json();
                 this.messages.push({ role: 'migo', text: data.reply });
-                this.correction = data.hasError ? `<div class="fix-box">${data.fix}</div>` : "Perfect!";
+                this.correction = data.hasError ? `<div class="fix-card">${data.fix}</div>` : "Perfect!";
                 if (data.blocked && this.config.rigor === 'Strict') this.isBlocked = true;
-            } catch (e) { 
-                this.messages.push({ role: 'migo', text: "Error de conexión." });
-            } finally { 
-                this.loading = false; 
-                if(window.lucide) lucide.createIcons(); 
-            }
+            } catch (e) { console.error(e); }
+            finally { this.loading = false; if(window.lucide) lucide.createIcons(); }
         },
         unblock() { this.isBlocked = false; this.correction = ''; }
     }
