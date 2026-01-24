@@ -1,19 +1,18 @@
-
-
 .chat-window { 
     flex: 1; 
     background: white; 
-    border-radius: 40px; 
+    border-radius: 40px 0 0 40px; /* Redondeado solo a la izquierda para un look moderno */
     border: 1px solid #f3f4f6; 
+    border-right: none; /* Quitamos borde derecho */
     display: flex; 
     flex-direction: column; 
     overflow: hidden; 
-    position: relative; /* Clave para que el traductor flote aquí */
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    position: relative; 
+    box-shadow: -4px 4px 6px -1px rgba(0,0,0,0.05);
 }
 .chat-msg-user, .chat-msg-migo {
-    align-self: flex-start; /* Ambos a la izquierda como pediste */
-    max-width: 85%;
+    align-self: flex-start;
+    max-width: 80%;
     padding: 1.25rem 1.75rem;
     border-radius: 28px;
     font-weight: 600;

@@ -1,17 +1,29 @@
 <div x-show="popups.trans" x-cloak class="trans-popup" @click.away="popups.trans = false">
-    <h4 class="text-[10px] font-extrabold text-gray-400 uppercase mb-4 tracking-widest text-center">Translator</h4>
+    <h4 class="text-[10px] font-extrabold text-gray-400 uppercase mb-4 tracking-widest text-center">Traductor Migo</h4>
     
-    <div class="trans-box">
-        <span class="trans-label">Español</span>
-        <textarea class="trans-area" placeholder="Escribe para traducir..."></textarea>
+    <div class="trans-box relative">
+        <span class="trans-label">Español ➔ Inglés</span>
+        <textarea 
+            class="trans-area" 
+            placeholder="Escribe y pulsa Intro..."
+            x-model="transES"
+            @keydown.enter.prevent="translate('es-en')"
+        ></textarea>
+        <button @click="translate('es-en')" class="trans-send-btn bg-[#ff9800]">
+            <i data-lucide="arrow-right" class="w-4 h-4 text-white"></i>
+        </button>
     </div>
 
-    <div class="trans-box">
-        <span class="trans-label" style="color: #4caf50;">English</span>
-        <textarea class="trans-area" readonly placeholder="Migo translates..." style="color: #4caf50;"></textarea>
+    <div class="trans-box relative">
+        <span class="trans-label" style="color: #4caf50;">English ➔ Español</span>
+        <textarea 
+            class="trans-area" 
+            placeholder="Type and press Enter..."
+            x-model="transEN"
+            @keydown.enter.prevent="translate('en-es')"
+        ></textarea>
+        <button @click="translate('en-es')" class="trans-send-btn bg-[#4caf50]">
+            <i data-lucide="arrow-right" class="w-4 h-4 text-white"></i>
+        </button>
     </div>
-    
-    <button class="w-full bg-gray-50 hover:bg-gray-100 py-3 rounded-2xl text-[10px] font-black uppercase text-gray-400 tracking-tighter transition border-none cursor-pointer">
-        Copy Translation
-    </button>
 </div>
