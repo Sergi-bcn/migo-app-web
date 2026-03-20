@@ -27,3 +27,5 @@ desktop.ini        # Windows
 
 # Logs
 *.log
+.vercel
+.env*.local

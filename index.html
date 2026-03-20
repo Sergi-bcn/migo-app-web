@@ -3,31 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migo App | Modular Version</title>
+    <title>Migo App | Modular</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <div id="app"></div>
+    <div id="app">
+        <h1 style="text-align:center; margin-top:50px;">Cargando Migo App...</h1>
+    </div>
 
     <script type="module">
         import { renderNavbar } from './modules/Navbar.js';
         import { renderHero } from './modules/Hero.js';
-        import { renderFeatures } from './modules/Features.js';
 
-        const app = document.getElementById('app');
-
-        // Inyectamos los módulos en orden
-        app.innerHTML = `
-            ${renderNavbar()}
-            <main>
-                ${renderHero()}
-                ${renderFeatures()}
-            </main>
-        `;
-
-        // Activamos los iconos
-        lucide.createIcons();
+        try {
+            const app = document.getElementById('app');
+            app.innerHTML = `
+                ${renderNavbar()}
+                <main>
+                    ${renderHero()}
+                </main>
+            `;
+            lucide.createIcons();
+        } catch (error) {
+            console.error("Error al cargar módulos:", error);
+            document.getElementById('app').innerHTML = "<h1>Error de conexión con módulos</h1>";
+        }
     </script>
 </body>
 </html>
